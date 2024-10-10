@@ -20,11 +20,11 @@ const ContactForm = () => {
                 validate={values => {
                     const errors: FormikErrors<ContactFormValues> = {};
                     if (!values.email) {
-                        errors.email = 'Required';
+                        errors.email = 'Verplicht';
                     } else if (
                         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
                     ) {
-                        errors.email = 'Invalid email address';
+                        errors.email = 'Ongeldige mailadres';
                     }
                     return errors;
                 }}

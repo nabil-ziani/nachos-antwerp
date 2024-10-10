@@ -38,7 +38,7 @@ const MiniCart = () => {
             </div>
             <ul className="woocommerce-mini-cart cart_list product_list_widget">
                 {CartData.items.map((item, key) => (
-                    <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`}>
+                    <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`} key={key}>
                         <a href="#." className="remove remove_from_cart_button" aria-label="Remove this item" onClick={(e) => removeFromCart(e, key)}>×</a>
                         <Link href="/product">
                             <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />

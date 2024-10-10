@@ -1,258 +1,358 @@
 {
     "categories": [
         {
-            "name": "Main dishes",
-            "slug": "main-dishes",
+            "name": "Voorgerechten",
+            "slug": "voorgerechten",
             "subtitle": "Menu",
-            "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+            "description": "",
             "items": [
                 {
                     "image": "/img/menu/1.jpg",
-                    "title": "Paella with seafood",
-                    "price": "6.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/2.jpg",
-                    "title": "Boiled crayfish",
-                    "price": "7.50",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/3.jpg",
-                    "title": "Сasserole",
-                    "price": "4.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/4.jpg",
-                    "title": "King burger",
-                    "price": "11.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/5.jpg",
-                    "title": "Pizza margherita",
-                    "price": "12.00",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/6.jpg",
-                    "title": "Сasserole",
-                    "price": "9.00",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/2.jpg",
-                    "title": "Paella with seafood",
-                    "price": "1.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "title": "Wings",
+                    "price": "6.95",
+                    "currency": "€",
+                    "text": "6 stuks"
                 },
                 {
                     "image": "/img/menu/1.jpg",
-                    "title": "Boiled crayfish",
+                    "title": "Hot wings",
+                    "price": "7.95",
+                    "currency": "€",
+                    "text": "6 stuks"
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Tenders",
+                    "price": "7.50",
+                    "currency": "€",
+                    "text": "4 stuks"
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Hot Tenders",
+                    "price": "7.50",
+                    "currency": "€",
+                    "text": "4 stuks"
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Cickenitos",
+                    "price": "7.50",
+                    "currency": "€",
+                    "text": "5 stuks"
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Jalapeño Bites",
+                    "price": "6.00",
+                    "currency": "€",
+                    "text": "6 stuks"
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Nacho's",
+                    "price": "5.95",
+                    "currency": "€",
+                    "text": "Nacho's met verse Guacamole"
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Loaded Nacho's Small",
+                    "price": "6.45",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Loaded Fries Small",
+                    "price": "6.45",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Quesadilla Small",
+                    "price": "7.50",
+                    "currency": "€",
+                    "text": "..."
+                }
+            ]
+        },
+        {
+            "name": "Bijgerechten",
+            "slug": "bijgerechten",
+            "subtitle": "Menu",
+            "description": "",
+            "items": [
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Frieten",
+                    "price": "4.00",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "American Potatoes",
+                    "price": "5.00",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Zoete Aardappelfriet",
+                    "price": "5.30",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Frieten met kaassaus",
+                    "price": "6.00",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Hot American Potatoes",
                     "price": "5.50",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Windens",
+                    "price": "5.00",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Sweet American Potatoes",
+                    "price": "5.50",
+                    "currency": "€",
+                    "text": "Nacho's met verse Guacamole"
+                },
+                {
+                    "image": "/img/menu/1.jpg",
+                    "title": "Loaded Potatoes Small",
+                    "price": "8.50",
+                    "currency": "€",
+                    "text": "..."
                 }
             ]
         },
         {
-            "name": "Salads",
-            "slug": "salads",
+            "name": "Hoofdgerechten",
+            "slug": "hoofdgerechten",
             "subtitle": "Menu",
-            "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+            "description": "",
             "items": [
                 {
-                    "image": "/img/menu/6.jpg",
-                    "title": "King burger",
-                    "price": "16.00",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/4.jpg",
-                    "title": "Berry cocktail",
-                    "price": "3.00",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "image": "/img/menu/3.jpg",
+                    "title": "Burrito",
+                    "price": "12.95",
+                    "currency": "€",
+                    "text": "Salsa, guacamole en je keuze aan vlees, op een basis van groenten en rijst."
                 },
                 {
                     "image": "/img/menu/5.jpg",
-                    "title": "Сasserole",
-                    "price": "2.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "title": "Taco Large (4 stuks)",
+                    "price": "15.95",
+                    "currency": "€",
+                    "text": "Taco's gevuld met vlees, mozzarella, en lagen van salsa, guacamole en zure room."
                 },
                 {
-                    "image": "/img/menu/1.jpg",
-                    "title": "Boiled crayfish",
-                    "price": "9.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "image": "/img/menu/4.jpg",
+                    "title": "Quesadilla",
+                    "price": "11.95",
+                    "currency": "€",
+                    "text": "Start met een basis van zure room en gesmolten mozzarella, gevolgd door je keuze aan vlees, maïs en pico de gallo."
+                },
+                {
+                    "image": "/img/menu/3.jpg",
+                    "title": "Loaded Nacho's",
+                    "price": "13.95",
+                    "currency": "€",
+                    "text": "Krokante nacho’s met maïs, pico de gallo en gesmolten cheddar, afgemaakt met salsa, zure room en guacamole."
                 },
                 {
                     "image": "/img/menu/2.jpg",
-                    "title": "Paella with seafood",
+                    "title": "Burrito Bowl",
+                    "price": "12.95",
+                    "currency": "€",
+                    "text": "Een basis van rijst en jouw favoriete vlees, afgemaakt met 4 toppings naar keuze en de klassieke salsa, zure room en guacamole."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Loaded Fries",
+                    "price": "12.95",
+                    "currency": "€",
+                    "text": "Knapperige frietjes met maïs, pico de gallo en gesmolten cheddar."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Loaded Potatoes",
+                    "price": "12.95",
+                    "currency": "€",
+                    "text": "Keuze uit normaal of hot (jalapenos), pulled chicken, gehakt (+1€), vegetarisch"
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Loaded Windens",
+                    "price": "14.95",
+                    "currency": "€",
+                    "text": "Keuze uit normaal of hot (jalapenos), pulled chicken, gehakt (+1€), vegetarisch"
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Loaded Sweet Potatoe Fries",
+                    "price": "14.95",
+                    "currency": "€",
+                    "text": "Keuze uit normaal of hot (jalapenos), pulled chicken, gehakt (+1€), vegetarisch"
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Loaded Hot Potatoes",
+                    "price": "13.95",
+                    "currency": "€",
+                    "text": "Keuze uit normaal of hot (jalapenos), pulled chicken, gehakt (+1€), vegetarisch"
+                }
+            ]
+        },
+        {
+            "name": "Kindermenu's",
+            "slug": "kindermenus",
+            "subtitle": "Menu",
+            "description": "",
+            "items": [
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Nuggets kindermenu",
+                    "price": "9.50",
+                    "currency": "€",
+                    "text": "Nuggets met friet en drank incl. speeltje"
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Taco kindermenu",
+                    "price": "8.00",
+                    "currency": "€",
+                    "text": "Mini taco met drank incl. speeltje"
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Burrito kindermenu",
+                    "price": "8.00",
+                    "currency": "€",
+                    "text": "Mini burrito met drank incl. speeltje"
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Quesadilla kindermenu",
+                    "price": "8.00",
+                    "currency": "€",
+                    "text": "Mini quesadilla met drank incl. speeltje"
+                }
+            ]
+        },
+        {
+            "name": "Desserts & Dranken",
+            "slug": "desserts-drinks",
+            "subtitle": "Menu",
+            "description": "",
+            "items": [
+                {
+                    "image": "/img/menu/5.jpg",
+                    "title": "Jarritos",
+                    "price": "4.20",
+                    "currency": "€",
+                    "text": "Pineapple, Watermelon, Mexican Cola, Fruit Punch, Guava, Strawberry, Mengo, Mandarin, Lime"
+                },
+                {
+                    "image": "/img/menu/6.jpg",
+                    "title": "Spa bruiswater",
+                    "price": "2.00",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/6.jpg",
+                    "title": "Moelleux - lava cake",
                     "price": "7.50",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/3.jpg",
-                    "title": "King burger",
-                    "price": "8.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/4.jpg",
-                    "title": "Pizza margherita",
-                    "price": "16.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/2.jpg",
-                    "title": "Berry cocktail",
-                    "price": "10.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "currency": "€",
+                    "text": "Met ijs en slagroom en rood fruit"
                 }
             ]
         },
         {
-            "name": "Drinks",
-            "slug": "drinks",
+            "name": "Sauzen",
+            "slug": "sauzen",
             "subtitle": "Menu",
-            "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
+            "description": "",
             "items": [
                 {
-                    "image": "/img/menu/3.jpg",
-                    "title": "King burger",
-                    "price": "1.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/5.jpg",
-                    "title": "Paella with seafood",
-                    "price": "0.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
                     "image": "/img/menu/4.jpg",
-                    "title": "Boiled crayfish",
+                    "title": "Guacamole",
                     "price": "2.50",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/3.jpg",
-                    "title": "Pizza margherita",
-                    "price": "16.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/2.jpg",
-                    "title": "King burger",
-                    "price": "12.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "currency": "€",
+                    "text": "..."
                 },
                 {
                     "image": "/img/menu/4.jpg",
-                    "title": "Berry cocktail",
-                    "price": "7.00",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/5.jpg",
-                    "title": "Boiled crayfish",
-                    "price": "4.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/6.jpg",
-                    "title": "Pizza margherita",
-                    "price": "16.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                }
-            ]
-        },
-        {
-            "name": "Desserts",
-            "slug": "desserts",
-            "subtitle": "Menu",
-            "description": "Consectetur numquam poro nemo veniam<br>eligendi rem adipisci quo modi.",
-            "items": [
-                {
-                    "image": "/img/menu/5.jpg",
-                    "title": "Paella with seafood",
-                    "price": "12.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/6.jpg",
-                    "title": "Boiled crayfish",
-                    "price": "14.50",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/3.jpg",
-                    "title": "King burger",
-                    "price": "16.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/2.jpg",
-                    "title": "Pizza margherita",
-                    "price": "1.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/1.jpg",
-                    "title": "Сasserole",
-                    "price": "5.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
-                },
-                {
-                    "image": "/img/menu/5.jpg",
-                    "title": "Paella with seafood",
-                    "price": "4.40",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "title": "Zure room (gekruid)",
+                    "price": "2.50",
+                    "currency": "€",
+                    "text": "..."
                 },
                 {
                     "image": "/img/menu/4.jpg",
-                    "title": "Boiled crayfish",
-                    "price": "34.99",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "title": "Salsa Rojo",
+                    "price": "2.50",
+                    "currency": "€",
+                    "text": "..."
                 },
                 {
-                    "image": "/img/menu/6.jpg",
-                    "title": "Pizza margherita",
-                    "price": "12.00",
-                    "currency": "$",
-                    "text": "Lorem, ipsum, dolor, amet, consectetur, adipisicing elit."
+                    "image": "/img/menu/4.jpg",
+                    "title": "Jalapeño Ranch",
+                    "price": "2.50",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Chipotle Mayo",
+                    "price": "2.50",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Ketchup",
+                    "price": "0.70",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Mayonaise",
+                    "price": "0.70",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Zoetzuur",
+                    "price": "0.70",
+                    "currency": "€",
+                    "text": "..."
+                },
+                {
+                    "image": "/img/menu/4.jpg",
+                    "title": "Siracha Mayo",
+                    "price": "2.00",
+                    "currency": "€",
+                    "text": "..."
                 }
             ]
         }
