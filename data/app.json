@@ -3,7 +3,7 @@
         "siteName": "Nacho's Antwerp",
         "siteDescription": "Mexicaans Restaurant in Berchem, Diksmuidelaan",
         "bgImage": "/img/bg.jpg",
-        "formspreeURL": "https://formspree.io/f/YOUR_FORM_ID",
+        "formspreeURL": "https://formspree.io/f/mlderqde",
         "mailchimp": {
             "url": "https://YOUR_MAILCHIMP_COMPANY.us21.list-manage.com/subscribe/post?u=YOUR_MAILCHIMP_FORM_UID&amp;id=YOUR_MAILCHIMP_FORM_ID&amp;f_id=YOUR_MAILCHIMP_FORM_FID",
             "key": "YOUR_MAILCHIMP_KEY"
@@ -31,19 +31,19 @@
         "menu": [
             {
                 "label": "Home",
-                "link": "/"
+                "link": "#home"
             },
             {
                 "label": "About",
-                "link": "/about"
+                "link": "#about"
             },
             {
                 "label": "Menu",
-                "link": "/menu"
+                "link": "#menu"
             },
             {
                 "label": "Contact",
-                "link": "/contact"
+                "link": "#contact"
             }
         ]
     },

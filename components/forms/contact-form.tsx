@@ -1,7 +1,15 @@
 "use client";
 
-import { Formik } from 'formik';
+import { Formik, FormikErrors } from 'formik';
 import AppData from "@/data/app.json";
+
+interface ContactFormValues {
+    email: string
+    phone: string
+    first_name: string
+    last_name: string
+    message: string
+}
 
 const ContactForm = () => {
     return (
@@ -10,49 +18,52 @@ const ContactForm = () => {
             <Formik
                 initialValues={{ email: '', phone: '', first_name: '', last_name: '', message: '' }}
                 validate={values => {
-                    const errors = {};
+                    const errors: FormikErrors<ContactFormValues> = {};
                     if (!values.email) {
-                        // errors.email = 'Required';
+                        errors.email = 'Required';
                     } else if (
                         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
                     ) {
-                        // errors.email = 'Invalid email address';
+                        errors.email = 'Invalid email address';
                     }
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    const form = document.getElementById("contactForm");
-                    const status = document.getElementById("contactFormStatus");
+                    const form = document.getElementById("contactForm") as HTMLFormElement
+                    const status = document.getElementById("contactFormStatus")
                     const data = new FormData();
 
-                    data.append('first_name', values.first_name);
-                    data.append('last_name', values.last_name);
-                    data.append('email', values.email);
-                    data.append('phone', values.phone);
-                    data.append('message', values.message);
+                    data.append('first_name', values.first_name)
+                    data.append('last_name', values.last_name)
+                    data.append('email', values.email)
+                    data.append('phone', values.phone)
+                    data.append('message', values.message)
 
-                    fetch(form.action, {
-                        method: 'POST',
-                        body: data,
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    }).then(response => {
-                        if (response.ok) {
-                            status.innerHTML = "<h5>Thanks for your submission!</h5>"
-                            form.reset()
-                        } else {
-                            response.json().then(data => {
-                                if (Object.hasOwn(data, 'errors')) {
-                                    status.innerHTML = "<h5 style='color:red;'>" + data["errors"].map(error => error["message"]).join(", ") + "</h5>"
-                                } else {
-                                    status.innerHTML = "<h5 style='color:red;'>Oops! There was a problem submitting your form</h5>"
-                                }
-                            })
-                        }
-                    }).catch(error => {
-                        status.innerHTML = "<h5 style='color:red;'>Oops! There was a problem submitting your form</h5>"
-                    });
+                    if (form && status) {
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: data,
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        }).then(response => {
+                            if (response.ok) {
+                                status.innerHTML = "<h5>Bedankt voor je bericht!</h5>"
+                                form.reset()
+                            } else {
+                                response.json().then(data => {
+                                    if (Object.hasOwn(data, 'errors')) {
+                                        status.innerHTML = "<h5 style='color:red;'>" + data["errors"].map((error: any) => error["message"]).join(", ") + "</h5>"
+                                    } else {
+                                        status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het versturen van je bericht</h5>"
+                                    }
+                                })
+                            }
+                        }).catch(error => {
+                            console.log(error)
+                            status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het versturen van je bericht</h5>"
+                        })
+                    }
 
                     setSubmitting(false);
                 }}
@@ -74,7 +85,7 @@ const ContactForm = () => {
                                     type="text"
                                     placeholder="Voornaam"
                                     name="first_name"
-                                    required="required"
+                                    required={true}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.first_name}
@@ -85,7 +96,7 @@ const ContactForm = () => {
                                     type="text"
                                     placeholder="Familienaam"
                                     name="last_name"
-                                    required="required"
+                                    required={true}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.last_name}
@@ -96,7 +107,7 @@ const ContactForm = () => {
                                     type="tel"
                                     placeholder="Telefoon"
                                     name="phone"
-                                    required="required"
+                                    required={true}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.phone}
@@ -107,7 +118,7 @@ const ContactForm = () => {
                                     type="email"
                                     placeholder="Email"
                                     name="email"
-                                    required="required"
+                                    required={true}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.email}
@@ -117,11 +128,11 @@ const ContactForm = () => {
                                 <textarea
                                     placeholder="Bericht"
                                     name="message"
-                                    required="required"
+                                    required={true}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.message}
-                                    rows="4"
+                                    rows={4}
                                 />
                             </div>
                         </div>

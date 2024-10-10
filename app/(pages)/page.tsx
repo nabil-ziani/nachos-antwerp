@@ -26,7 +26,7 @@ const MenuFiltered = dynamic(() => import("@/components/menu/menu-filtered"), { 
 
 export const metadata = {
   title: {
-    default: "Nacho's Antwerp",
+    default: "Home",
   },
   description: AppData.settings.siteDescription,
 }
