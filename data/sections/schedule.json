@@ -3,22 +3,22 @@
         "url": "/img/menu/4.jpg",
         "alt": "cover"
     },
-    "subtitle": "About us",
-    "title": "Working hours",
-    "description": "Rolorem, beatae dolorum, praesentium itaque et quam quaerat.",
+    "subtitle": "Over ons",
+    "title": "Openingstijden",
+    "description": "Kom langs en geniet van onze authentieke Mexicaanse gerechten!",
     "button1": {
         "link": "/menu",
-        "label": "Reservation"
+        "label": "Bekijk Menu"
     },
     "button2": {
         "link": "/contact",
-        "label": "Contact us"
+        "label": "Contacteer ons"
     },
     "items": [
         {
-            "label": "Sunday to Tuesday",
+            "label": "Zondag tot Donderdag",
             "from": {
-                "hours": "09",
+                "hours": "17",
                 "minutes": "00"
             },
             "to": {
@@ -27,13 +27,13 @@
             }
         },
         {
-            "label": "Friday to Saturday",
+            "label": "Vrijdag en Zaterdag",
             "from": {
-                "hours": "11",
+                "hours": "17",
                 "minutes": "00"
             },
             "to": {
-                "hours": "19",
+                "hours": "00",
                 "minutes": "00"
             }
         }

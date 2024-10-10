@@ -8,7 +8,6 @@ const NotFound = () => {
             <Header />
 
             <div id="tst-dynamic-banner" className="tst-dynamic-banner">
-
                 {/* banner -*/}
                 <div className="tst-banner">
                     <div className="tst-cover-frame" style={{ "overflow": "hidden" }}>
@@ -20,10 +19,10 @@ const NotFound = () => {
                             <div className="tst-main-title-frame">
                                 <div className="tst-main-title text-center">
                                     <div className="tst-suptitle tst-suptitle-center tst-suptitle-mobile-center tst-text-shadow tst-white-2 tst-mb-15">404</div>
-                                    <h1 className="tst-white-2 tst-text-shadow tst-mb-30">Oops! Where are we?</h1>
-                                    <div className="tst-text tst-text-shadow tst-text-lg tst-white-2 tst-mb-30">Page not Found! The page you are looking for was moved,<br /> removed, renamed or might never existed.</div>
+                                    <h1 className="tst-white-2 tst-text-shadow tst-mb-30">Oeps!</h1>
+                                    <div className="tst-text tst-text-shadow tst-text-lg tst-white-2 tst-mb-30">Pagina niet gevonden! De pagina die je zoekt is verplaatst,<br /> verwijderd, hernoemd of heeft mogelijks nooit bestaan.</div>
                                     <Link href="/" className="tst-btn">
-                                        <span>Back to homepage</span>
+                                        <span>Terug naar de hoofdpagina</span>
                                     </Link>
                                 </div>
                             </div>
@@ -31,7 +30,6 @@ const NotFound = () => {
                     </div>
                 </div>
                 {/* banner end */}
-
             </div>
 
             <Footer />

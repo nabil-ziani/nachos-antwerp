@@ -1,9 +1,9 @@
 {
-    "title": "Get in touch!",
+    "title": "Neem contact op!",
     "subtitle": "Contact",
-    "description": "Quaerat debitis, vel, sapiente dicta sequi <br>labore porro pariatur harum expedita.",
+    "description": "Heb je vragen of wil je een reservering maken?<br> Neem gerust contact met ons op.",
     "button": {
-        "label": "Reservation",
+        "label": "Maak Reservatie",
         "link": "/contact"
     },
     "map": {

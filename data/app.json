@@ -1,7 +1,7 @@
 {
     "settings": {
-        "siteName": "Tastycs",
-        "siteDescription": "Cafe & Restaurant React Next.JS Template",
+        "siteName": "Nacho's Antwerp",
+        "siteDescription": "Mexicaans Restaurant in Berchem, Diksmuidelaan",
         "bgImage": "/img/bg.jpg",
         "formspreeURL": "https://formspree.io/f/YOUR_FORM_ID",
         "mailchimp": {
@@ -9,17 +9,17 @@
             "key": "YOUR_MAILCHIMP_KEY"
         },
         "mapbox": {
-            "AccessToken": "YOUR_MAPBOX_ACCESS_TOKEN_KEY",
+            "AccessToken": "pk.eyJ1IjoibmFiaWwtemlhbmkiLCJhIjoiY20yM2h0aHN2MDVuMTJrczZ1cHh3cGl6MCJ9.sEiMshKAd0O_3Zr0v96scQ",
             "style": "mapbox://styles/mapbox/dark-v11",
             "zoom": 15,
-            "long": -79.394900,
-            "lat": 43.643102
+            "long": 4.444210,
+            "lat": 51.195570
         },
         "openTable": {
             "actionUrl": "//www.opentable.com/restaurant-search.aspx",
             "restaurantID": "YOUR_OPENTABLE_RESTAURANT_ID",
             "geoID": "15",
-            "lang": "en-US"
+            "lang": "nl-BE"
         },
         "perPage": 6
     },
@@ -242,22 +242,22 @@
     },
     "social": [
         {
-            "link": "https://facebook.com",
+            "link": "https://www.facebook.com/profile.php?id=61550605400792",
             "title": "Facebook",
             "icon": "fab fa-facebook-f"
         },
         {
-            "link": "https://instagram.com",
+            "link": "https://www.instagram.com/nachosantwerp",
             "title": "Instagram",
             "icon": "fab fa-instagram"
         },
         {
-            "link": "https://twitter.com",
+            "link": "#",
             "title": "Twitter",
             "icon": "fab fa-twitter"
         },
         {
-            "link": "https://youtube.com",
+            "link": "#",
             "title": "Youtube",
             "icon": "fab fa-youtube"
         }

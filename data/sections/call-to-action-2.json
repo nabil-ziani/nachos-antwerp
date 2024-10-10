@@ -1,17 +1,13 @@
 {
-    "subtitle": "Good offer",
-    "title": "Pay for one <br>Get two!",
-    "description": "Quaerat debitis, vel, sapiente dicta sequi <br>labore porro pariatur harum expedita.",
+    "subtitle": "Speciale Aanbieding",
+    "title": "Bestel<br> Krijg 10% korting",
+    "description": "Bestel via onze website en ontvang 10% korting! <br>Profiteer nu van deze aanbieding!",
     "image": {
         "url": "/img/burger.png",
         "alt": "burger"
     },
     "button1": {
-        "link": "https://www.apple.com/ua/app-store/",
-        "label": "Get now"
-    },
-    "button2": {
-        "link": "https://play.google.com/store",
-        "label": "Reservation"
+        "link": "/menu-2",
+        "label": "Bestel Nu"
     }
 }

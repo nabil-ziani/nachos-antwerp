@@ -1,22 +1,22 @@
 {
-    "subtitle": "Features",
-    "title": "Why people choose us?",
-    "description": "Porro eveniet, autem ipsam vitae consequatur!",
+    "subtitle": "Onze troeven",
+    "title": "Waarom kiezen mensen voor ons?",
+    "description": "Ontdek wat ons onderscheidt en waarom klanten blijven terugkomen voor meer.",
     "items": [
         {
             "icon": "/img/icons/1.svg",
-            "title": "Menu for every taste",
-            "text": "Dolor sit amet, consectetur adipisicing elit et molestias possimus"
+            "title": "Een menu voor elke smaak",
+            "text": "Of je nu houdt van pittige smaken of milde gerechten, ons gevarieerd menu heeft iets voor iedereen."
         },
         {
             "icon": "/img/icons/2.svg",
-            "title": "Always fresh ingredients",
-            "text": "Assumenda possimus eaque illo iste, autem. Porro eveniet autem"
+            "title": "Altijd verse ingrediënten",
+            "text": "Wij gebruiken alleen de meest verse producten om de authentieke smaken van Mexico tot leven te brengen."
         },
         {
             "icon": "/img/icons/3.svg",
-            "title": "Experienced chefs",
-            "text": "Rolorem, beatae dolorum, praesentium itaque et quam quaerat"
+            "title": "Vakkundige chefs",
+            "text": "Onze vakkundige chefs bereiden elk gerecht met liefde en oog voor detail, zodat je kunt genieten van de perfecte Mexicaanse smaak."
         }
     ]
 }

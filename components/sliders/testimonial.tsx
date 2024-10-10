@@ -36,24 +36,22 @@ const TestimonialSlider = () => {
                   <div className="tst-quote">"</div>
                   <h5 className="tst-mb-30" dangerouslySetInnerHTML={{ __html: item.title }} />
                   <p className="tst-text" dangerouslySetInnerHTML={{ __html: item.text }} />
-                  <div className="tst-spacer-sm"></div>
-                  <div className="tst-testimonial-bottom">
+                  {/* <div className="tst-spacer-sm"></div> */}
+                  {/* <div className="tst-testimonial-bottom">
                     <div className="tst-visitor">
                       <img src={item.image} alt={item.name} />
                       <h6>{item.name}</h6>
                     </div>
                     <div className="tst-date">{item.date}</div>
-                  </div>
+                  </div> */}
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
           {/* testimonials slider end */}
-
         </div>
 
         <div className="col-lg-12">
-
           {/* slider navigation */}
           <div className="tst-slider-navigation">
             <Link href={Data.button.link} className="tst-btn tst-anima-link">{Data.button.label}</Link>

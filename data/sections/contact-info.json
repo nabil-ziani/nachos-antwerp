@@ -1,22 +1,22 @@
 {
-    "subtitle": "Have a questions?",
-    "title": "Contact Us",
-    "description": "Quaerat debitis, vel, sapiente dicta sequi labore porro pariatur harum expedita.",
+    "subtitle": "Heb je vragen?",
+    "title": "Contacteer Ons",
+    "description": "We helpen je graag! Neem contact met ons op voor vragen, reserveringen of meer informatie.",
     "items": [
         {
             "icon": "/img/icons/4.svg",
-            "title": "Write Us",
-            "text": "<a href='mailto:info@tastyc.com'>info@tastyc.com</a><br/><a href='mailto:reservation@tastyc.com'>reservation@tastyc.com</a>"
+            "title": "Stuur ons een e-mail",
+            "text": "<a href='mailto:info@nachosantwerp.be'>info@nachosantwerp.be</a><br/>"
         },
         {
             "icon": "/img/icons/5.svg",
-            "title": "Call Us",
-            "text": "<a href='tel:+76 (094) 754 43 71'>+76 (094) 754 43 71</a><br/><a href='tel:+76 (093) 753 43 72'>+76 (093) 753 43 72</a>"
+            "title": "Bel ons op",
+            "text": "<a href='tel:+32 467 07 18 74'>+32 467 07 18 74</a>"
         },
         {
             "icon": "/img/icons/6.svg",
-            "title": "Visit Us",
-            "text": "Canada, Toronto, North Avenue 31B"
+            "title": "Bezoek ons",
+            "text": "Diksmuidelaan 170, 2600 Antwerpen"
         }
     ]
 }

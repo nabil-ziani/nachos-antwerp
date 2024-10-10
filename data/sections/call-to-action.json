@@ -1,19 +1,14 @@
 {
-    "subtitle": "Mobile application",
-    "title": "Download <br>our application",
-    "description": "Quaerat debitis, vel, sapiente dicta sequi <br>labore porro pariatur harum expedita.",
+    "subtitle": "Online bestellen",
+    "title": "Bestel<br>eenvoudig online",
+    "description": "Of je nu kiest voor afhalen of levering, je kunt onze authentieke Mexicaanse gerechten online bestellen en thuis van de smaak genieten.",
     "image": {
         "url": "/img/phone.png",
         "alt": "phone"
     },
     "button1": {
-        "icon": "fab fa-app-store",
-        "link": "https://www.apple.com/ua/app-store/",
-        "label": "Appstore"
-    },
-    "button2": {
-        "icon": "fab fa-google-play",
-        "link": "https://play.google.com/store",
-        "label": "Playmarket"
+        "icon": "fas fa-shopping-bag",
+        "link": "/menu",
+        "label": "Bekijk menu"
     }
 }

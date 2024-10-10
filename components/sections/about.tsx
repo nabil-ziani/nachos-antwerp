@@ -2,7 +2,7 @@
 
 import AppData from "@/data/app.json"
 import Data from "@/data/sections/about.json"
-import Link from "next/link"
+// import Link from "next/link"
 
 import { useState } from 'react'
 
@@ -21,7 +21,7 @@ const AboutSection = () => {
                         <h3 className="tst-mb-30" dangerouslySetInnerHTML={{ __html: Data.title }} />
                         <p className="tst-text tst-mb-30" dangerouslySetInnerHTML={{ __html: Data.description }} />
 
-                        <Link href={Data.button.link} className="tst-btn tst-anima-link tst-mr-30">{Data.button.label}</Link>
+                        {/* <Link href={Data.button.link} className="tst-btn tst-anima-link tst-mr-30">{Data.button.label}</Link> */}
 
                         {AppData.social.map((item, key) => (
                             <a href={item.link} className="tst-icon-link" title={item.title} key={`about-social-item-${key}`}><i className={item.icon}></i></a>

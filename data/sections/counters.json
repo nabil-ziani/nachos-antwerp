@@ -1,24 +1,24 @@
 {
     "items": [
         {
-            "value": "200",
-            "value_after": "+",
-            "label": "Visitors daily"
+            "value": "2023",
+            "value_after": "",
+            "label": "Opening"
         },
         {
-            "value": "400",
+            "value": "50",
             "value_after": "+",
-            "label": "Deliveries monthly"
+            "label": "Dagelijkse bestellingen"
+        },
+        {
+            "value": "22",
+            "value_after": "+",
+            "label": "Gerechten"
         },
         {
             "value": "100",
             "value_after": "%",
-            "label": "Positive feedback"
-        },
-        {
-            "value": "40",
-            "value_after": "+",
-            "label": "Awards and honors"
+            "label": "Positieve feedback"
         }
     ]
 }

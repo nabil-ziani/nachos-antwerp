@@ -29,7 +29,6 @@ const CallToActionThreeSection = () => {
                 <div className="container">
                     <div className="row align-items-center">
                         <div className="col-lg-6">
-
                             {/* text */}
                             <div className="tst-cta-frame">
                                 <div className="tst-cta">
@@ -44,7 +43,6 @@ const CallToActionThreeSection = () => {
                                 </div>
                             </div>
                             {/* text end */}
-
                         </div>
                     </div>
                 </div>

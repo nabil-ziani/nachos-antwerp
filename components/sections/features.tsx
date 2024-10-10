@@ -5,7 +5,6 @@ const FeaturesOneSection = () => {
         <>
             {/* features */}
             <div className="row">
-
                 <div className="col-lg-12">
                     {/* title */}
                     <div className="text-center">
@@ -27,7 +26,6 @@ const FeaturesOneSection = () => {
                         {/* icon box end */}
                     </div>
                 ))}
-
             </div>
             {/* features end */}
         </>

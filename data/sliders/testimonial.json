@@ -1,66 +1,45 @@
 {
-    "subtitle": "Testimonials",
-    "title": "What Our visitors say",
-    "description": "Porro eveniet, autem ipsam corrupti consectetur cum. <br>Repudiandae dignissimos fugiat sit nam.",
+    "subtitle": "Klanten reviews",
+    "title": "Wat onze gasten zeggen",
+    "description": "Lees de ervaringen van onze tevreden klanten. <br>Wij zijn trots op de kwaliteit van ons eten en de service!",
     "button": {
         "link": "/about",
-        "label": "More about us"
+        "label": "Meer Over Ons"
     },
     "items": [
         {
-            "title": "It was very delicious!",
-            "name": "Emma Newman",
-            "image": "/img/faces/1.jpg",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi dolorem? Voluptates rem magnam nesciunt ullam hic error sed, minus, accusantium inventore ex reprehenderit ipsum aperiam libero ut, laudantium delectus deleniti debitis quas dolore quos. Accusamus ea saepe, veniam. Nemo.",
+            "title": "Waauwwww!",
+            "name": "",
+            "image": "",
+            "text": "Waauwwww echt wauw. Als het kon gaf ik 10 sterren. Jullie moeten de tacos met kip proberen!! Ook de loaded fries echt to die for! Kan niet wachten om weer te bestellen.",
             "date": "02.02.21"
         },
         {
-            "title": "I'm delighted!",
-            "name": "Viktoria Freeman",
-            "image": "/img/faces/2.jpg",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi dolorem? Voluptates rem magnam nesciunt ullam hic error sed, minus, accusantium inventore ex reprehenderit ipsum aperiam libero ut, laudantium delectus deleniti debitis quas dolore quos. Accusamus ea saepe, veniam. Nemo.",
+            "title": "Kei lekker en vers!",
+            "name": "",
+            "image": "",
+            "text": "Kei lekker en vers. toffe uitbaters! 1 keer te laat mr ze hebben dat mooi opgelost. Dat doen de meesten niet.",
             "date": "02.02.21"
         },
         {
-            "title": "I will visit again.",
-            "name": "Paul Trueman",
-            "image": "/img/faces/3.jpg",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi dolorem? Voluptates rem magnam nesciunt ullam hic error sed, minus, accusantium inventore ex reprehenderit ipsum aperiam libero ut, laudantium delectus deleniti debitis quas dolore quos. Accusamus ea saepe, veniam. Nemo.",
+            "title": "Ik bestel opnieuw!",
+            "name": "",
+            "image": "",
+            "text": "zeer lekker eten! je proefde dat de kip lekker was, dat was geen twijfel over. ze werken met lekkere, verse producten. Heerlijk! al de 2e keer dat ik bij jullie bestel, en het zal zeker niet de laatste zijn!",
             "date": "02.02.21"
         },
         {
-            "title": "The best restaurant!",
-            "name": "Oscar Oldman",
-            "image": "/img/faces/4.jpg",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi dolorem? Voluptates rem magnam nesciunt ullam hic error sed, minus, accusantium inventore ex reprehenderit ipsum aperiam libero ut, laudantium delectus deleniti debitis quas dolore quos. Accusamus ea saepe, veniam. Nemo.",
+            "title": "10/10!",
+            "name": "",
+            "image": "",
+            "text": "We hebben 2x op korte tijd besteld omdat het zo lekker was! Super proper, eten kwam warm aan, vriendelijke bezorgers, en 10 op 10 voor de kwaliteit van het eten.",
             "date": "02.02.21"
         },
         {
-            "title": "It was very delicious!",
-            "name": "Emma Newman",
-            "image": "/img/faces/1.jpg",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi dolorem? Voluptates rem magnam nesciunt ullam hic error sed, minus, accusantium inventore ex reprehenderit ipsum aperiam libero ut, laudantium delectus deleniti debitis quas dolore quos. Accusamus ea saepe, veniam. Nemo.",
-            "date": "02.02.21"
-        },
-        {
-            "title": "I'm delighted!",
-            "name": "Viktoria Freeman",
-            "image": "/img/faces/2.jpg",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi dolorem? Voluptates rem magnam nesciunt ullam hic error sed, minus, accusantium inventore ex reprehenderit ipsum aperiam libero ut, laudantium delectus deleniti debitis quas dolore quos. Accusamus ea saepe, veniam. Nemo.",
-            "date": "02.02.21"
-        },
-        {
-            "title": "I will visit again.",
-            "name": "Paul Trueman",
-            "image": "/img/faces/3.jpg",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi dolorem? Voluptates rem magnam nesciunt ullam hic error sed, minus, accusantium inventore ex reprehenderit ipsum aperiam libero ut, laudantium delectus deleniti debitis quas dolore quos. Accusamus ea saepe, veniam. Nemo.",
-            "date": "02.02.21"
-        },
-        {
-            "title": "The best restaurant!",
-            "name": "Oscar Oldman",
-            "image": "/img/faces/4.jpg",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi dolorem? Voluptates rem magnam nesciunt ullam hic error sed, minus, accusantium inventore ex reprehenderit ipsum aperiam libero ut, laudantium delectus deleniti debitis quas dolore quos. Accusamus ea saepe, veniam. Nemo.",
+            "title": "Eindelijk!",
+            "name": "",
+            "image": "",
+            "text": "Eindelijk lekker Mexicaans eten in Antwerpen!",
             "date": "02.02.21"
         }
     ]

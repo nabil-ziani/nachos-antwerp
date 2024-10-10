@@ -62,8 +62,8 @@ export default async function HomePage() {
                 heading={
                   {
                     "subtitle": "Menu",
-                    "title": "Our Menu",
-                    "description": "Porro eveniet, autem ipsam vitae consequatur!"
+                    "title": "Ons Menu",
+                    "description": "Geniet van authentieke Mexicaanse smaken met onze heerlijke gerechten!"
                   }
                 }
                 categories={MenuData.categories}
@@ -76,7 +76,7 @@ export default async function HomePage() {
           <div className="tst-content-box">
             <div className="container tst-p-60-60">
               <TestimonialSlider />
-              <Divider onlyBottom={0} />
+              {/* <Divider onlyBottom={0} /> */}
               {/* <Suspense fallback={<div>Loading...</div>}>
                 <LatestPostsSection posts={posts} />
               </Suspense>
