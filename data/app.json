@@ -31,62 +31,58 @@
         "menu": [
             {
                 "label": "Home",
-                "link": "/",
-                "children": 0
+                "link": "/"
             },
             {
                 "label": "About",
-                "link": "/about",
-                "children": 0
+                "link": "/about"
             },
             {
                 "label": "Menu",
-                "link": "/menu",
-                "children": 0
+                "link": "/menu"
             },
             {
                 "label": "Contact",
-                "link": "/contact",
-                "children": 0
+                "link": "/contact"
             }
         ]
     },
     "footer": {
         "logo": {
             "url": "/img/logo-sm-white.png",
-            "alt": "Tastycs"
+            "alt": "Logo"
         },
         "about": {
-            "title": "About us",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita repudiandae neque illum aspernatur fugiat maiores id magni, modi, quaerat vitae. Consectetur adipisicing elit.",
+            "title": "Over ons",
+            "text": "Bij Nacho's Antwerp serveren we met passie authentieke Mexicaanse gerechten, bereid met de beste ingrediënten en veel zorg. Kom langs voor een onvergetelijke culinaire ervaring.",
             "button": {
                 "link": "/menu",
-                "label": "Our Menu"
+                "label": "Ons Menu"
             }
         },
         "contact": {
-            "title": "Contact info",
+            "title": "Contact",
             "items": [
                 {
-                    "label": "Call",
-                    "value": "+76 (094) 754 43 7I"
+                    "label": "Bel ons",
+                    "value": "+32 467 07 18 74"
                 },
                 {
-                    "label": "Write",
-                    "value": "your.email.inbox@here.com"
+                    "label": "E-mail",
+                    "value": "info@nachosantwerp.be"
                 },
                 {
-                    "label": "Find us",
-                    "value": "Canada, Toronto, North Avenue 31B"
+                    "label": "Locatie",
+                    "value": "Diksmuidelaan 170, 2600 Antwerpen"
                 }
             ],
             "button": {
                 "link": "/contact",
-                "label": "Contact Us"
+                "label": "Contacteer Ons"
             }
         },
         "gallery": {
-            "title": "Gallery",
+            "title": "Sfeerfoto's",
             "items": [
                 {
                     "image": "/img/menu/1.jpg",
@@ -108,13 +104,9 @@
                     "image": "/img/menu/5.jpg",
                     "alt": "Gallery Image"
                 }
-            ],
-            "button": {
-                "link": "/history",
-                "label": "See more"
-            }
+            ]
         },
-        "copy": "© 2024 Tastycs. All rights reserved."
+        "copy": "© 2024 Nacho's Antwerp."
     },
     "social": [
         {

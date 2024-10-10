@@ -14,37 +14,21 @@ import ReservationForm from "@/components/forms/reservation-form";
 
 const Header = () => {
     const [mobileMenu, setMobileMenu] = useState(false);
-    const [openSubMenu, setOpenSubMenu] = useState(false);
     const [miniCart, setMiniCart] = useState(false);
     const [reservationPopup, setReservationPopup] = useState(false);
     const asPath = usePathname();
-
-    const isPathActive = (path: string) => {
-        return (asPath.endsWith(path) == true && path !== '/') || asPath === path;
-    }
-
-    const handleSubMenuClick = (index: any, e: any) => {
-        if (window !== undefined) {
-            if (window.innerWidth <= 992) {
-                e.preventDefault();
-                setOpenSubMenu(openSubMenu === index ? false : index);
-            }
-        }
-    }
 
     useEffect(() => {
         // close mobile menu
         setMobileMenu(false);
         setMiniCart(false);
         setReservationPopup(false);
-        setOpenSubMenu(false);
-    }, [asPath]);
+    }, [asPath])
 
+    // Search what this does
     useEffect(() => {
-        if (isPathActive("onepage")) {
-            Menu();
-        }
-    }, []);
+        Menu()
+    }, [])
 
     return (
         <>
@@ -59,40 +43,12 @@ const Header = () => {
                         </Link>
                         {/* menu */}
                         <nav className={`${mobileMenu ? "tst-active" : ""}`}>
-                            {isPathActive("onepage") ? (
-                                <ul>
-                                    {AppData.header.onepage.map((item, index) => (
-                                        <li key={`header-menu-onepage-item-${index}`} className={index == 0 ? "current-menu-item" : ""}><a data-no-swup href={item.link}>{item.label}</a></li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <ul>
-                                    {AppData.header.menu.map((item, index) => (
-                                        <li className={`${item.children !== 0 ? "menu-item-has-children" : ""} ${isPathActive(item.link) ? "current-menu-item" : ""}`} key={`header-menu-item-${index}`}>
-                                            <Link href={item.link} onClick={(item.children.length > 0) ? (e) => handleSubMenuClick(index, e) : null}>
-                                                {item.label}
-                                            </Link>
-                                            {item.children.length > 0 && (
-                                                <ul className={openSubMenu === index ? 'tst-active' : ''}>
-                                                    {item.children.map((subitem, subIndex) => (
-                                                        <li key={`header-submenu-item-${subIndex}`} className={isPathActive(subitem.link) ? "tst-active" : ""}>
-                                                            {subitem.link == '/onepage' ? (
-                                                                <a href={subitem.link} target="_blank">
-                                                                    {subitem.label}
-                                                                </a>
-                                                            ) : (
-                                                                <Link href={subitem.link}>
-                                                                    {subitem.label}
-                                                                </Link>
-                                                            )}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
+
+                            <ul>
+                                {AppData.header.menu.map((item, index) => (
+                                    <li key={`header-menu-onepage-item-${index}`} className={index == 0 ? "current-menu-item" : ""}><a data-no-swup href={item.link}>{item.label}</a></li>
+                                ))}
+                            </ul>
                         </nav>
                         {/* menu end */}
                         {/* top bar right */}

@@ -9,7 +9,7 @@ import "yet-another-react-lightbox/styles.css";
 
 import Link from "next/link";
 
-const FooterGalleryModule = ({ items, button }: any) => {
+const FooterGalleryModule = ({ items }: any) => {
     const [img, setImg] = useState(false);
     const [imgValue, setImgValue] = useState<any>([]);
 
@@ -32,7 +32,6 @@ const FooterGalleryModule = ({ items, button }: any) => {
                 ))}
             </Swiper>
             <div className="tst-gallery-nav">
-                <Link href={button.link} className="tst-label tst-color tst-anima-link">{button.label}</Link>
                 <div className="tst-fg-nav">
                     <div className="tst-slider-btn tst-fg-prev"><i className="fas fa-arrow-left"></i></div>
                     <div className="tst-slider-btn tst-fg-next"><i className="fas fa-arrow-right"></i></div>

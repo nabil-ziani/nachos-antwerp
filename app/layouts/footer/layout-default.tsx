@@ -61,7 +61,7 @@ const DefaultFooter = () => {
                         <div className="col-lg-4">
                             <div className="tst-mb-60">
                                 <h5 className="tst-mb-30 tst-text-shadow" dangerouslySetInnerHTML={{ __html: AppData.footer.gallery.title }} />
-                                <FooterGallery items={AppData.footer.gallery.items} button={AppData.footer.gallery.button} />
+                                <FooterGallery items={AppData.footer.gallery.items} />
                             </div>
                         </div>
                     </div>
