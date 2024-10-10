@@ -20,9 +20,8 @@ const Header = () => {
     const asPath = usePathname();
 
     const isPathActive = (path: string) => {
-        // return (asPath.endsWith(path) == 1 && path !== '/') || asPath === path;
-        return true
-    };
+        return (asPath.endsWith(path) == true && path !== '/') || asPath === path;
+    }
 
     const handleSubMenuClick = (index: any, e: any) => {
         if (window !== undefined) {
@@ -31,7 +30,7 @@ const Header = () => {
                 setOpenSubMenu(openSubMenu === index ? false : index);
             }
         }
-    };
+    }
 
     useEffect(() => {
         // close mobile menu
@@ -68,7 +67,7 @@ const Header = () => {
                                 </ul>
                             ) : (
                                 <ul>
-                                    {/* {AppData.header.menu.map((item, index) => (
+                                    {AppData.header.menu.map((item, index) => (
                                         <li className={`${item.children !== 0 ? "menu-item-has-children" : ""} ${isPathActive(item.link) ? "current-menu-item" : ""}`} key={`header-menu-item-${index}`}>
                                             <Link href={item.link} onClick={(item.children.length > 0) ? (e) => handleSubMenuClick(index, e) : null}>
                                                 {item.label}
@@ -91,7 +90,7 @@ const Header = () => {
                                                 </ul>
                                             )}
                                         </li>
-                                    ))} */}
+                                    ))}
                                 </ul>
                             )}
                         </nav>

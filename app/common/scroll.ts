@@ -1,8 +1,8 @@
 "use client";
 
-import Sticky from "sticky-js";
+import { Sticky } from 'sticky-ts'
 
-const numberAnimate = (render, from, to, duration, timeFx) => {
+const numberAnimate = (render: any, from: number, to: number, duration: number, timeFx: any) => {
     let startTime = performance.now();
     requestAnimationFrame(function step(time) {
         let pTime = (time - startTime) / duration;
@@ -18,14 +18,16 @@ export const ScrollAnimation = () => {
     const footer = document.querySelector('footer');
 
     // responsive animation
-    if (window.innerWidth < 992) {
-        footer.classList.remove('tst-fade-down');
-    } else {
-        footer.classList.add('tst-fade-down');
+    if (footer) {
+        if (window.innerWidth < 992) {
+            footer.classList.remove('tst-fade-down');
+        } else {
+            footer.classList.add('tst-fade-down');
+        }
     }
 
     // scrolling fade
-    const animatedElements = document.querySelectorAll('.tst-fade-up , .tst-fade-down');
+    const animatedElements = document.querySelectorAll<HTMLElement>('.tst-fade-up , .tst-fade-down')
 
     if (animatedElements !== undefined) {
         window.addEventListener("scroll", (e) => {
@@ -42,18 +44,18 @@ export const ScrollAnimation = () => {
     }
 
     // scrolling main slider
-    const animatedMainSliderElements = document.querySelectorAll(".tst-main-title , .tst-main-slider-nav , .tst-main-pagination");
+    const animatedMainSliderElements = document.querySelectorAll<HTMLElement>(".tst-main-title , .tst-main-slider-nav , .tst-main-pagination");
 
     if (animatedMainSliderElements !== undefined) {
         window.addEventListener("scroll", (e) => {
             animatedMainSliderElements.forEach((element) => {
-                element.style.opacity = 1 - window.scrollY / 500;
-            });
-        });
+                element.style.opacity = String(1 - window.scrollY / 500)
+            })
+        })
     }
 
     // scrolling parallax
-    const animatedParallaxElements = document.querySelectorAll(".tst-parallax");
+    const animatedParallaxElements = document.querySelectorAll<HTMLElement>(".tst-parallax");
 
     if (animatedParallaxElements !== undefined) {
         window.addEventListener("scroll", (e) => {
@@ -67,7 +69,7 @@ export const ScrollAnimation = () => {
     // scrolling menu frame
     const animatedMenu = document.querySelector(".tst-menu-frame");
 
-    if (animatedMenu !== undefined) {
+    if (animatedMenu) {
         window.addEventListener("scroll", (e) => {
             if (window.scrollY >= 120) {
                 animatedMenu.classList.add("tst-active");
@@ -78,20 +80,20 @@ export const ScrollAnimation = () => {
     }
 
     // scrolling counters
-    const animatedCounters = document.querySelectorAll(".tst-number");
+    const animatedCounters = document.querySelectorAll<HTMLElement>(".tst-number");
 
     if (animatedCounters !== undefined) {
         window.addEventListener("scroll", (e) => {
             animatedCounters.forEach((element) => {
-                if (element.innerText == 0) {
+                if (element.innerText == '0') {
                     let bottom_of_object = element.getBoundingClientRect().top + window.scrollY - 140;
                     let bottom_of_window = window.scrollY + window.innerHeight / 2;
 
                     if (bottom_of_window > bottom_of_object) {
                         var countTo = element.getAttribute('data-count');
-                        numberAnimate(function (newValue) {
-                            element.innerText = Math.floor(newValue);
-                        }, 0, countTo, 3000, x => x);
+                        numberAnimate(function (newValue: number) {
+                            element.innerText = Math.floor(newValue).toString()
+                        }, 0, Number(countTo), 3000, (x: any) => x);
                     }
                 }
             });
@@ -100,17 +102,21 @@ export const ScrollAnimation = () => {
 
     // resize & orientation change animation
     window.addEventListener("resize", (e) => {
-        if (window.innerWidth < 992) {
-            footer.classList.remove('tst-fade-down');
-        } else {
-            footer.classList.add('tst-fade-down');
+        if (footer) {
+            if (window.innerWidth < 992) {
+                footer.classList.remove('tst-fade-down');
+            } else {
+                footer.classList.add('tst-fade-down');
+            }
         }
     });
     window.addEventListener("orientationChange", (e) => {
-        if (window.innerWidth < 992) {
-            footer.classList.remove('tst-fade-down');
-        } else {
-            footer.classList.add('tst-fade-down');
+        if (footer) {
+            if (window.innerWidth < 992) {
+                footer.classList.remove('tst-fade-down');
+            } else {
+                footer.classList.add('tst-fade-down');
+            }
         }
     });
 

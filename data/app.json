@@ -32,146 +32,22 @@
             {
                 "label": "Home",
                 "link": "/",
-                "children": [
-                    {
-                        "label": "Home slider",
-                        "link": "/"
-                    },
-                    {
-                        "label": "Home image",
-                        "link": "/home-2"
-                    },
-                    {
-                        "label": "Home video",
-                        "link": "/home-3"
-                    },
-                    {
-                        "label": "Onepage",
-                        "link": "/onepage",
-                        "blank": 1
-                    }
-                ]
+                "children": 0
             },
             {
                 "label": "About",
                 "link": "/about",
-                "children": [
-                    {
-                        "label": "About Us",
-                        "link": "/about"
-                    },
-                    {
-                        "label": "About employee",
-                        "link": "/about-chef"
-                    },
-                    {
-                        "label": "Services",
-                        "link": "/services"
-                    },
-                    {
-                        "label": "History",
-                        "link": "/history"
-                    }
-                ]
+                "children": 0
             },
             {
                 "label": "Menu",
                 "link": "/menu",
-                "children": [
-                    {
-                        "label": "Menu type 1",
-                        "link": "/menu"
-                    },
-                    {
-                        "label": "Menu type 2",
-                        "link": "/menu-2"
-                    }
-                ]
-            },
-            {
-                "label": "Blog",
-                "link": "/blog",
-                "children": [
-                    {
-                        "label": "Blog list",
-                        "link": "/blog"
-                    },
-                    {
-                        "label": "Blog category",
-                        "link": "/blog/category/recipes"
-                    },
-                    {
-                        "label": "Publication",
-                        "link": "/blog/incredible-vegan-mac-and-cheese"
-                    }
-                ]
-            },
-            {
-                "label": "Reserve",
-                "link": "/reservation",
-                "children": [
-                    {
-                        "label": "Reservation (Form)",
-                        "link": "/reservation"
-                    },
-                    {
-                        "label": "Reservation (OpenTable API)",
-                        "link": "/reservation-2"
-                    }
-                ]
-            },
-            {
-                "label": "Shop",
-                "link": "/shop",
-                "children": [
-                    {
-                        "label": "Shop Page",
-                        "link": "/shop"
-                    },
-                    {
-                        "label": "Products List",
-                        "link": "/products"
-                    },
-                    {
-                        "label": "Product Page",
-                        "link": "/product"
-                    },
-                    {
-                        "label": "Cart Page",
-                        "link": "/cart"
-                    },
-                    {
-                        "label": "Checkout Page",
-                        "link": "/checkout"
-                    }
-                ]
+                "children": 0
             },
             {
                 "label": "Contact",
                 "link": "/contact",
                 "children": 0
-            }
-        ],
-        "onepage": [
-            {
-                "label": "Home",
-                "link": "#home"
-            },
-            {
-                "label": "About",
-                "link": "#about"
-            },
-            {
-                "label": "Menu",
-                "link": "#menu"
-            },
-            {
-                "label": "Blog",
-                "link": "#blog"
-            },
-            {
-                "label": "Contact",
-                "link": "#contact"
             }
         ]
     },
