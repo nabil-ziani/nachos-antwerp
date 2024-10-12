@@ -1,4 +1,3 @@
-import React, { Suspense } from "react"
 import dynamic from "next/dynamic"
 
 import AppData from "@/data/app.json"
@@ -9,13 +8,11 @@ import Divider from "@/app/layouts/divider"
 
 import AboutSection from "@/components/sections/about"
 import FeaturesSection from "@/components/sections/features"
-// import TeamSection from "@components/sections/Team"
 import ScheduleSection from "@/components/sections/schedule"
 import CountersSection from "@/components/sections/counters"
 import CallToActionSection from "@/components/sections/call-to-action"
 import CallToActionTwoSection from "@/components/sections/call-to-action-two"
 import CallToActionThreeSection from "@/components/sections/call-to-action-three"
-// import SubscribeSection from "@components/sections/Subscribe"
 import ContactInfoSection from "@/components/sections/contact-info"
 import ContactFormSection from "@/components/sections/contact-form"
 
@@ -45,8 +42,6 @@ export default async function HomePage() {
               <AboutSection />
               <Divider />
               <FeaturesSection />
-              {/* <Divider /> */}
-              {/* <TeamSection /> */}
               <Divider />
               <CountersSection />
               <Divider />
@@ -76,12 +71,6 @@ export default async function HomePage() {
           <div className="tst-content-box">
             <div className="container tst-p-60-60">
               <TestimonialSlider />
-              {/* <Divider onlyBottom={0} /> */}
-              {/* <Suspense fallback={<div>Loading...</div>}>
-                <LatestPostsSection posts={posts} />
-              </Suspense>
-              <Divider onlyBottom={0} /> */}
-              {/* <SubscribeSection /> */}
             </div>
           </div>
         </div>
