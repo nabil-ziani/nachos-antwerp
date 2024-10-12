@@ -31,19 +31,23 @@
         "menu": [
             {
                 "label": "Home",
-                "link": "#home"
+                "link": "/",
+                "children": 0
             },
             {
                 "label": "About",
-                "link": "#about"
+                "link": "/about",
+                "children": 0
             },
             {
                 "label": "Menu",
-                "link": "#menu"
+                "link": "/menu",
+                "children": 0
             },
             {
                 "label": "Contact",
-                "link": "#contact"
+                "link": "/contact",
+                "children": 0
             }
         ]
     },

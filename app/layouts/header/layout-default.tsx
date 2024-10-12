@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 
-import { Menu } from '@/app/common/menu';
-
 import AppData from "@/data/app.json";
 import CartData from "@/data/cart.json";
 
@@ -18,17 +16,16 @@ const Header = () => {
     const [reservationPopup, setReservationPopup] = useState(false);
     const asPath = usePathname();
 
+    const isPathActive = (path: any) => {
+        return (asPath.endsWith(path) && path !== '/') || asPath === path;
+    }
+
     useEffect(() => {
         // close mobile menu
         setMobileMenu(false);
         setMiniCart(false);
         setReservationPopup(false);
     }, [asPath])
-
-    // Search what this does
-    useEffect(() => {
-        Menu()
-    }, [])
 
     return (
         <>
@@ -43,10 +40,13 @@ const Header = () => {
                         </Link>
                         {/* menu */}
                         <nav className={`${mobileMenu ? "tst-active" : ""}`}>
-
                             <ul>
-                                {AppData.header.menu.map((item, index) => (
-                                    <li key={`header-menu-onepage-item-${index}`} className={index == 0 ? "current-menu-item" : ""}><a data-no-swup href={item.link}>{item.label}</a></li>
+                                {AppData.header.menu.map((item: any, index: any) => (
+                                    <li className={`${item.children !== 0 ? "menu-item-has-children" : ""} ${isPathActive(item.link) ? "current-menu-item" : ""}`} key={`header-menu-item-${index}`}>
+                                        <Link href={item.link}>
+                                            {item.label}
+                                        </Link>
+                                    </li>
                                 ))}
                             </ul>
                         </nav>
