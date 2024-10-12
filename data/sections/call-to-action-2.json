@@ -7,7 +7,7 @@
         "alt": "burger"
     },
     "button1": {
-        "link": "/menu-2",
+        "link": "/menu",
         "label": "Bestel Nu"
     }
 }

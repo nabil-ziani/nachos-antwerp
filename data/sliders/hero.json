@@ -47,7 +47,7 @@
                 "label": "Vind Ons"
             },
             "button2": {
-                "link": "/menu-2",
+                "link": "/menu",
                 "label": "Bestel Nu"
             }
         }
