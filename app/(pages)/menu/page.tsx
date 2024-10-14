@@ -1,26 +1,26 @@
-import React from "react"
 import dynamic from "next/dynamic"
 
 import AppData from "@/data/app.json"
-import MenuData from "@/data/menu.json"
-// import ProductsData from "@/data/products.json"
 
 import ScrollHint from "@/app/layouts/scroll-hint"
 
 import PageBanner from "@/components/page-banner"
-// import CallToActionTwoSection from "@/components/sections/call-to-action-two"
+import { createClient } from "@/utils/supabase/server"
+import { MenuItemWithCategory } from "@/lib/types"
+import { Tables } from "@/database.types"
 
 const MenuGrid = dynamic(() => import("@/components/menu/menu-grid"), { ssr: false })
-// const ProductsSlider = dynamic(() => import("@/components/sliders/products"), { ssr: false })
 
 export const metadata = {
     title: {
-        default: "Menu",
+        default: "Menu"
     },
     description: AppData.settings.siteDescription,
 }
 
-const Menu = () => {
+const Menu = async () => {
+    const menu = await getMenu()
+
     return (
         <>
             <div id="tst-dynamic-banner" className="tst-dynamic-banner">
@@ -37,41 +37,37 @@ const Menu = () => {
                         <div className="container tst-p-60-0">
                             <ScrollHint />
 
-                            <MenuGrid
-                                categories={MenuData.categories}
-                            />
-
+                            <MenuGrid items={menu.menu_items} categories={menu.menu_categories} />
                         </div>
                     </div>
                 </div>
-                {/* <CallToActionTwoSection />
-                <div className="tst-content-frame">
-                    <div className="tst-content-box">
-                        <div className="container tst-p-60-60">
-
-                            <ProductsSlider
-                                heading={
-                                    {
-                                        "subtitle": "Menu",
-                                        "title": "Special proposals",
-                                        "description": "Porro eveniet, autem ipsam corrupti consectetur cum. <br>Repudiandae dignissimos fugiat sit nam."
-                                    }
-                                }
-                                items={ProductsData.collection.special}
-                                button={
-                                    {
-                                        "link": "/shop",
-                                        "label": "Go to online store"
-                                    }
-                                }
-                            />
-
-                        </div>
-                    </div>
-                </div> */}
             </div>
         </>
-    );
+    )
+}
+
+async function getMenu() {
+    const supabase = createClient()
+
+    const { data: menu_items, error: menu_items_err } = await supabase
+        .from('menu_items')
+        .select(`*, category(*)`)
+        .returns<MenuItemWithCategory[]>()
+
+    if (menu_items_err) {
+        console.error('Error fetching menu items:', menu_items_err);
+    }
+
+    const { data: menu_categories, error: menu_categories_err } = await supabase
+        .from('menu_categories')
+        .select(`*`)
+        .returns<Tables<'menu_categories'>[]>()
+
+    if (menu_categories_err) {
+        console.error('Error fetching menu categories:', menu_categories_err);
+    }
+
+    return { menu_items, menu_categories }
 }
 
 export default Menu

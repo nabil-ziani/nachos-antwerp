@@ -1,21 +1,24 @@
 "use client";
 
+import { useStore } from "@/hooks/useStore";
+import { CartItem as CartItemType } from "@/lib/types";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import CartData from "@/data/cart.json";
 
-const CartItem = ({ item, key }: any) => {
-    const [cartTotal, setCartTotal] = useState(CartData.total);
+const CartItem = ({ item, key }: { item: CartItemType, key: any }) => {
     const [quantity, setQuantity] = useState(item.quantity);
     const [total, setTotal] = useState((item.price * item.quantity).toFixed(2));
     const minQuantity = 1;
     const maxQuantity = 10;
 
+    const { cartItems, cartTotal, removeFromCart } = useStore()
+
     useEffect(() => {
         const cartNumberEl = document.querySelector<HTMLElement>('.tst-cart-number')
 
         if (cartNumberEl) {
-            cartNumberEl.innerHTML = String(cartTotal)
+            const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0)
+            cartNumberEl.innerHTML = String(totalQuantity)
         }
     }, [cartTotal])
 
@@ -23,10 +26,12 @@ const CartItem = ({ item, key }: any) => {
         setTotal((quantity * item.price).toFixed(2));
     }, [quantity]);
 
-    const removeFromCart = (e: any, key: any) => {
+    const handleRemoveFromCart = (e: any, itemId: string) => {
         e.preventDefault();
+        removeFromCart(itemId)
+
         const cartNumberEl = document.querySelector('.tst-cart-number')
-        setCartTotal(cartTotal - quantity);
+        // setCartTotal(cartTotal - quantity);
 
         if (cartNumberEl) {
             cartNumberEl.classList.add('tst-added')
@@ -69,7 +74,7 @@ const CartItem = ({ item, key }: any) => {
                         <div className="tst-price-2"><span>Total: </span>{item.currency}{total}</div>
                     </div>
                     <div className="col-1">
-                        <a href="#." className="tst-remove" onClick={(e) => removeFromCart(e, key)}>+</a>
+                        <a href="#." className="tst-remove" onClick={(e) => handleRemoveFromCart(e, item.itemId)}>+</a>
                     </div>
                 </div>
             </div>

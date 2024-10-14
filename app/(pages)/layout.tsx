@@ -5,11 +5,7 @@ const PagesLayouts = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <Header layout={"default"} />
-
-            {/* dynamic content */}
             {children}
-            {/* dynamic content end */}
-
             <Footer layout={"default"} />
         </>
     )

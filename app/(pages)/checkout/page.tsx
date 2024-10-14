@@ -45,7 +45,7 @@ const Checkout = () => {
                                                             </div>
                                                         </div>
 
-                                                        {CartData.items.map((item, key) => (
+                                                        {CartData.items.map((item: any, key) => (
                                                             <div className="tst-cart-item" key={key}>
                                                                 <div className="row align-items-center">
                                                                     <div className="col-lg-9">

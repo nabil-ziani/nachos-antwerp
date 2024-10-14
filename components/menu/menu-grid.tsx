@@ -1,8 +1,15 @@
 "use client"
 
 import MenuItem from "@/components/menu/menu-item"
+import { MenuCategory, MenuItemWithCategory } from "@/lib/types";
 
-const MenuGrid = ({ categories, columns = 2 }: any) => {
+interface MenuGridProps {
+    items: MenuItemWithCategory[] | null
+    categories: MenuCategory[] | null
+    columns?: number
+}
+
+const MenuGrid = ({ categories, items, columns = 2 }: MenuGridProps) => {
     var columnsClass = '';
 
     switch (columns) {
@@ -18,22 +25,34 @@ const MenuGrid = ({ categories, columns = 2 }: any) => {
 
     return (
         <>
-            {categories.map((category: any, category_key: any) => (
+            {categories?.map((category, category_key) => (
                 <div key={`menu-category-item-${category_key}`}>
                     <div className="row">
                         <div className="col-lg-12">
                             {/* title */}
                             <div className="text-center">
                                 <div className="tst-suptitle tst-suptitle-center tst-mb-15">{category.subtitle}</div>
-                                <h3 className="tst-mb-30" dangerouslySetInnerHTML={{ __html: category.name }} />
-                                <p className="tst-text tst-mb-60" dangerouslySetInnerHTML={{ __html: category.description }} />
+                                <h3 className="tst-mb-30">
+                                    {category.name}
+                                </h3>
+                                <p className="tst-text tst-mb-60">
+                                    {category.description}
+                                </p>
                             </div>
                             {/* title end */}
                         </div>
 
-                        {category.items.map((item: any, key: any) => (
+                        {items?.filter(i => i.category.id === category.id).map((item: MenuItemWithCategory, key) => (
                             <div className={columnsClass} key={`menu-grid-item-${key}`}>
-                                <MenuItem item={item} />
+                                <MenuItem item={{
+                                    itemId: item.id,
+                                    title: item.title,
+                                    description: item.description,
+                                    image: item.image_url,
+                                    price: item.price,
+                                    currency: item.currency,
+                                    quantity: 1
+                                }} />
                             </div>
                         ))}
                     </div>
