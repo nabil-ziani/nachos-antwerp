@@ -1,11 +1,9 @@
 import AppData from "@/data/app.json"
-import CartData from "@/data/cart.json"
 import ScrollHint from "@/app/layouts/scroll-hint"
 
 import PageBanner from "@/components/page-banner"
 import CheckoutForm from "@/components/forms/checkout-form"
-
-import Link from "next/link"
+import CartSummary from "@/components/sections/cart-summary"
 
 export const metadata = {
     title: {
@@ -15,6 +13,7 @@ export const metadata = {
 }
 
 const Checkout = () => {
+
     return (
         <>
             <div id="tst-dynamic-banner" className="tst-dynamic-banner">
@@ -34,64 +33,7 @@ const Checkout = () => {
                                             <CheckoutForm />
                                         </div>
                                         <div className="col-lg-4">
-
-                                            <div className="tst-pad-type-2 tst-sticky" data-margin-top="120">
-                                                <div className="tst-co-cart-frame">
-                                                    <div className="tst-cart-table">
-                                                        <div className="tst-cart-table-header">
-                                                            <div className="row">
-                                                                <div className="col-lg-9">Bestelling</div>
-                                                                <div className="col-lg-3 text-right">Totaal</div>
-                                                            </div>
-                                                        </div>
-
-                                                        {CartData.items.map((item: any, key) => (
-                                                            <div className="tst-cart-item" key={key}>
-                                                                <div className="row align-items-center">
-                                                                    <div className="col-lg-9">
-                                                                        <Link className="tst-product" href="/product">
-                                                                            <div className="tst-cover-frame">
-                                                                                <img src={item.image} alt={item.title} />
-                                                                            </div>
-                                                                            <div className="tst-prod-description">
-                                                                                <h6 className="tst-mb-15">{item.title}</h6>
-                                                                                <p className="tst-text tst-text-sm">x{item.quantity}</p>
-                                                                            </div>
-                                                                        </Link>
-                                                                    </div>
-                                                                    <div className="col-lg-3 text-md-right">
-                                                                        <div className="tst-price-2"><span>Totaal: </span>{item.currency}{item.price}</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-
-                                                        <div className="tst-cart-total tst-cart-total-2">
-                                                            <div className="tst-sum">
-                                                                <div className="row">
-                                                                    <div className="col-6">
-                                                                        <div className="tst-total-title">Subtotaal:</div>
-                                                                    </div>
-                                                                    <div className="col-6">
-                                                                        <div className="tst-price-1 text-right">$32.99</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="tst-realy-sum">
-                                                                <div className="row">
-                                                                    <div className="col-6">
-                                                                        <div className="tst-total-title">Totaal:</div>
-                                                                    </div>
-                                                                    <div className="col-6">
-                                                                        <div className="tst-price-2 text-right">$37.99</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                            <CartSummary />
                                         </div>
                                     </div>
                                 </div>

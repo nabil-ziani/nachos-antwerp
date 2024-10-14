@@ -46,7 +46,7 @@ const MiniCart = () => {
             </p>
             <p className="woocommerce-mini-cart__buttons buttons">
                 {/* <Link href="/cart" className="tst-btn tst-btn-2">Bekijk bestelling</Link> */}
-                <Link href="/checkout" className="tst-btn">Afrekenen</Link>
+                {cartItems.length > 0 && <Link href="/checkout" className="tst-btn">Afrekenen</Link>}
             </p>
         </>
     );
