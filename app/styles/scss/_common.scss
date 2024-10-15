@@ -15,7 +15,7 @@ scrollbar
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0,0,0,1);
+  background: rgba(0, 0, 0, 1);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -24,8 +24,9 @@ scrollbar
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  filter:brightness(108%);
+  filter: brightness(108%);
 }
+
 /*-------------------------
 typography
 -------------------------*/
@@ -51,7 +52,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(180deg, rgba(4,25,29 ,.7) 0%, rgba(4,25,29 ,.7) 20%);
+    background-image: linear-gradient(180deg, rgba(4, 25, 29, .7) 0%, rgba(4, 25, 29, .7) 20%);
   }
 }
 
@@ -136,16 +137,35 @@ h6 {
     font-size: 18px;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: $dl1;
   }
-  h1, h2, h3, h4, h5, h6, ul, ol, iframe, object, table, blockquote, p {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  ul,
+  ol,
+  iframe,
+  object,
+  table,
+  blockquote,
+  p {
     margin-bottom: 30px;
 
     &:last-child {
       margin-bottom: 0;
     }
   }
+
   ul {
     display: block;
     list-style-type: disc;
@@ -153,17 +173,20 @@ h6 {
     margin-inline-end: 0px;
     padding-inline-start: 40px;
     line-height: 2;
+
     li {
       list-style-type: disc;
     }
   }
 }
+
 .tst-white {
   .tst-text {
     color: inherit;
     opacity: 0.7;
   }
 }
+
 .tst-white-2.tst-text {
   opacity: 0.7;
 }
@@ -263,7 +286,7 @@ h6 {
 }
 
 .tst-text-shadow {
-  text-shadow: 0 5px 20px rgba(26,47,51,0.95);
+  text-shadow: 0 5px 20px rgba(26, 47, 51, 0.95);
 }
 
 .tst-white {
@@ -301,7 +324,9 @@ a.tst-white-2 {
 .tst-right {
   float: right;
 }
+
 @media (max-width: 992px) {
+
   .h1,
   h1 {
     font-size: 64px;
@@ -335,6 +360,7 @@ a.tst-white-2 {
     }
   }
 }
+
 @media (max-width: 992px) {
   .tst-suptitle {
     &.tst-suptitle-mobile-md-center {
@@ -350,7 +376,9 @@ a.tst-white-2 {
     }
   }
 }
+
 @media (max-width: 790px) {
+
   .h1,
   h1 {
     font-size: 54px;
@@ -412,6 +440,7 @@ a.tst-white-2 {
     }
   }
 }
+
 /*-------------------------
 buttons
 -------------------------*/
@@ -435,7 +464,7 @@ buttons
   white-space: nowrap;
 
   &.tst-btn-shadow {
-    box-shadow: 0 3px 5px 0 rgba(26,47,51,0.30);
+    box-shadow: 0 3px 5px 0 rgba(26, 47, 51, 0.30);
   }
 
   &:before {
@@ -456,7 +485,7 @@ buttons
   }
 
   &:hover {
-    filter:brightness(108%);
+    filter: brightness(108%);
     transform: scale(1.015);
 
     &:before {
@@ -487,16 +516,19 @@ buttons
       transform: translateY(-2px);
     }
   }
+
   &.tst-btn-gray {
     background-color: transparent;
   }
+
   &.tst-btn-2 {
     background-color: #f2f3f5;
-    
+
     &:hover {
       filter: brightness(95%);
     }
   }
+
   &.tst-btn-icon {
     padding: 0;
     width: 55px;
@@ -506,7 +538,7 @@ buttons
     &:before {
       display: none;
     }
-    
+
     & .tst-icon {
       background-color: #f2f3f5;
       position: relative;
@@ -540,15 +572,16 @@ buttons
       align-items: center;
       height: 50px;
     }
-    & > span:last-child {
+
+    &>span:last-child {
       position: relative;
       top: 1px;
     }
 
     &:hover {
-      filter:brightness(95%);
+      filter: brightness(95%);
       transform: scale(1.015);
-  
+
       &:before {
         bottom: -5px;
         transform: scale(.95);
@@ -561,6 +594,7 @@ buttons
       position: relative;
       top: 1px;
     }
+
     .tst-added-text {
       position: absolute !important;
       opacity: 0;
@@ -568,6 +602,7 @@ buttons
       right: -100%;
       pointer-events: none;
     }
+
     &.tst-added {
       .tst-add-to-cart-text {
         opacity: 0;
@@ -580,11 +615,13 @@ buttons
       }
     }
   }
+
   &.tst-added {
     cursor: not-allowed;
     background-color: $auxc2;
   }
 }
+
 /*-------------------------
 forms
 -------------------------*/
@@ -596,7 +633,7 @@ form {
     height: 50px;
     margin-bottom: 30px;
     padding: 0 20px;
-    box-shadow: 0 2px 5px 0 rgba(26,47,51,0.11);
+    box-shadow: 0 2px 5px 0 rgba(26, 47, 51, 0.11);
     color: $dl1 !important;
     opacity: 1;
     font-size: 14px;
@@ -621,7 +658,7 @@ form {
     height: 50px;
     margin-bottom: 30px;
     padding: 0 20px;
-    box-shadow: 0 2px 5px 0 rgba(26,47,51,0.11);
+    box-shadow: 0 2px 5px 0 rgba(26, 47, 51, 0.11);
     color: $dl1 !important;
     opacity: 1;
     font-size: 14px;
@@ -644,7 +681,7 @@ textarea {
   width: 100%;
   margin-bottom: 30px;
   padding: 15px 20px;
-  box-shadow: 0 2px 5px 0 rgba(26,47,51,0.11);
+  box-shadow: 0 2px 5px 0 rgba(26, 47, 51, 0.11);
   color: $dl1 !important;
   opacity: 1;
   font-size: 14px;
@@ -661,6 +698,7 @@ textarea {
     font-weight: 400;
   }
 }
+
 /*-------------------------
 spaces
 -------------------------*/
@@ -687,6 +725,7 @@ spaces
 .tst-mr-30 {
   margin-right: 30px;
 }
+
 .tst-mr-10 {
   margin-right: 10px;
 }
@@ -729,7 +768,7 @@ spaces
   li {
     margin-right: 10px;
     list-style: none;
-    
+
     a {
       position: relative;
       background-color: $wl2;
@@ -790,7 +829,7 @@ spaces
   }
 }
 
-.tst-categories + .tst-tags {
+.tst-categories+.tst-tags {
   margin-top: 20px;
 }
 
@@ -815,6 +854,11 @@ spaces
 radio
 
 ***************************/
+.tst-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
 .tst-checkout-form {
   ul {
     margin: 0;
@@ -822,6 +866,7 @@ radio
     list-style: none;
   }
 }
+
 .tst-group-input {
   label {
     font-size: 17px;
@@ -877,10 +922,10 @@ radio
   transition: $tr-sm;
 }
 
-.tst-radio input[type=radio]:checked ~ .tst-check {
+.tst-radio input[type=radio]:checked~.tst-check {
   border-color: $ac;
 }
 
-.tst-radio input[type=radio]:checked ~ .tst-check::before {
+.tst-radio input[type=radio]:checked~.tst-check::before {
   background: $ac;
 }

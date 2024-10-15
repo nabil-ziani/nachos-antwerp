@@ -12,6 +12,8 @@ export type CartItem = {
 
 export type MenuCategory = Tables<'menu_categories'>
 
+export type Restaurant = Tables<'restaurant_location'>
+
 export type MenuItemWithCategory = {
     id: string
     created_at: string
