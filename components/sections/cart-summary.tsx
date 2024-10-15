@@ -3,8 +3,10 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useStore } from '@/hooks/useStore'
+
 import Link from 'next/link'
 
+import { CartItem } from '@/lib/types'
 
 const CartSummary = () => {
     const { cartItems, cartTotal } = useStore()
@@ -31,7 +33,7 @@ const CartSummary = () => {
                         </div>
                     </div>
 
-                    {cartItems.map((item: any, key) => (
+                    {cartItems.map((item: CartItem, key) => (
                         <div className="tst-cart-item" key={key}>
                             <div className="row align-items-center">
                                 <div className="col-lg-9">
@@ -69,7 +71,7 @@ const CartSummary = () => {
                                     <div className="tst-total-title">Totaal:</div>
                                 </div>
                                 <div className="col-6">
-                                    <div className="tst-price-2 text-right">€{cartTotal}</div>
+                                    <div className="tst-price-2 text-right">€{cartTotal.toFixed(2)}</div>
                                 </div>
                             </div>
                         </div>

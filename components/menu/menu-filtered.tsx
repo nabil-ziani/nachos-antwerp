@@ -4,8 +4,16 @@ import { SliderProps } from "@/app/common/slider-props"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import MenuItem from "@/components/menu/menu-item"
+import { MenuCategory, MenuItemWithCategory } from "@/lib/types";
 
-const MenuFiltered = ({ heading = 0, categories }: any) => {
+interface MenuFilteredProps {
+    heading?: any
+    categories: MenuCategory[] | null
+    items: MenuItemWithCategory[] | null
+}
+
+
+const MenuFiltered = ({ heading = 0, categories, items }: MenuFilteredProps) => {
     return (
         <>
             <div className="row" id="menu">
@@ -25,7 +33,7 @@ const MenuFiltered = ({ heading = 0, categories }: any) => {
 
                 <div className="col-lg-12">
                     <div className="swiper-menu-nav">
-                        {categories.map((category: any, key: any) => (
+                        {categories?.map((category: MenuCategory, key) => (
                             <span key={`menu-category-item-${key}`} data-slug={`${category.slug}`}>{category.name}</span>
                         ))}
                     </div>
@@ -35,13 +43,13 @@ const MenuFiltered = ({ heading = 0, categories }: any) => {
                 <div className="col-lg-12">
                     {/* Slider main container */}
                     <Swiper {...SliderProps.menuSlider} className="swiper-container swiper-menu">
-                        {categories.map((category: any, category_key: any) => (
+                        {categories?.map((category: any, category_key: any) => (
                             <SwiperSlide className="swiper-slide" key={`menu-filtered-category-${category_key}`}>
                                 <div className="row">
-                                    {category.items.map((item: any, key: any) => (
+                                    {items?.filter(i => i.category.id === category.id).map((item: any, key: any) => (
                                         <div className="col-lg-6" key={`menu-filtered-item-${category_key}-${key}`}>
                                             <MenuItem item={item} />
-                                        </div>
+                                        </div> 
                                     ))}
                                 </div>
                             </SwiperSlide>
