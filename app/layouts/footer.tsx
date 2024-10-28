@@ -67,7 +67,7 @@ const DefaultFooter = () => {
 
                     <div className="tst-footer-bottom">
                         <div className="tst-text" dangerouslySetInnerHTML={{ __html: AppData.footer.copy }} />
-                        <a href="#tst-app" className="tst-label tst-color tst-anchor-scroll" onClick={(e) => scrollToTop(e)}>Back to top</a>
+                        <a href="#tst-app" className="tst-label tst-color tst-anchor-scroll" onClick={(e) => scrollToTop(e)}>Terug naar boven</a>
                     </div>
                 </div>
             </footer>

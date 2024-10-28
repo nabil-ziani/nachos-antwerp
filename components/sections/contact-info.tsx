@@ -1,23 +1,25 @@
-import Data from "@/data/sections/contact-info.json";
+import { contactInfoItems } from "@/constants"
 
 const ContactInfoSection = () => {
   return (
     <>
-      {/* contact info */}
       <div className="row" id="contact">
         <div className="col-lg-12">
-          {/* title */}
           <div className="text-center">
-            <div className="tst-suptitle tst-suptitle-center tst-mb-15" dangerouslySetInnerHTML={{ __html: Data.subtitle }} />
-            <h3 className="tst-mb-30" dangerouslySetInnerHTML={{ __html: Data.title }} />
-            <p className="tst-text tst-mb-60" dangerouslySetInnerHTML={{ __html: Data.description }} />
+            <div className="tst-suptitle tst-suptitle-center tst-mb-15">
+              Heb je vragen?
+            </div>
+            <h3 className="tst-mb-30">
+              Contacteer Ons
+            </h3>
+            <p className="tst-text tst-mb-60">
+              We helpen je graag! Neem contact met ons op voor vragen, reserveringen of meer informatie.
+            </p>
           </div>
-          {/* title end */}
         </div>
 
-        {Data.items.map((item, key) => (
+        {contactInfoItems.map((item, key) => (
           <div className="col-lg-4" key={`contact-info-item-${key}`}>
-            {/* icon box */}
             <div className="tst-icon-box tst-mb-60">
               <img src={item.icon} alt={item.title} className="tst-mb-30" />
               <h5 className="tst-mb-30">{item.title}</h5>

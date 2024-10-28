@@ -52,7 +52,7 @@ const ProductsSlider = ({ heading = {}, items, button = {} }: any) => {
                         }
                         <div className="tst-slider-pagination tst-testi-pagination"></div>
                         <div className="tst-nav tst-right">
-                            <div className="tst-label">Slider navigation</div>
+                            {/* <div className="tst-label">Slider navigation</div> */}
                             <div className="tst-slider-btn tst-prev"><i className="fas fa-arrow-left"></i></div>
                             <div className="tst-slider-btn tst-next"><i className="fas fa-arrow-right"></i></div>
                         </div>

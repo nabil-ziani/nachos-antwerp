@@ -20,13 +20,11 @@ const MenuFiltered = ({ heading = 0, categories, items }: MenuFilteredProps) => 
                 <div className="col-lg-12">
                     {heading != 0 &&
                         <>
-                            {/* title */}
                             <div className="text-center">
                                 <div className="tst-suptitle tst-suptitle-center tst-mb-15">{heading.subtitle}</div>
                                 <h3 className="tst-mb-30" dangerouslySetInnerHTML={{ __html: heading.title }} />
                                 <p className="tst-text tst-mb-30" dangerouslySetInnerHTML={{ __html: heading.description }} />
                             </div>
-                            {/* title end */}
                         </>
                     }
                 </div>
@@ -43,13 +41,21 @@ const MenuFiltered = ({ heading = 0, categories, items }: MenuFilteredProps) => 
                 <div className="col-lg-12">
                     {/* Slider main container */}
                     <Swiper {...SliderProps.menuSlider} className="swiper-container swiper-menu">
-                        {categories?.map((category: any, category_key: any) => (
+                        {categories?.map((category, category_key) => (
                             <SwiperSlide className="swiper-slide" key={`menu-filtered-category-${category_key}`}>
                                 <div className="row">
-                                    {items?.filter(i => i.category.id === category.id).map((item: any, key: any) => (
+                                    {items?.filter(i => i.category.id === category.id).map((item, key) => (
                                         <div className="col-lg-6" key={`menu-filtered-item-${category_key}-${key}`}>
-                                            <MenuItem item={item} />
-                                        </div> 
+                                            <MenuItem item={{
+                                                itemId: item.id,
+                                                title: item.title,
+                                                description: item.description,
+                                                image: item.image_url,
+                                                price: item.price,
+                                                currency: item.currency,
+                                                quantity: 1
+                                            }} />
+                                        </div>
                                     ))}
                                 </div>
                             </SwiperSlide>

@@ -13,7 +13,6 @@ export const metadata = {
 }
 
 const Checkout = () => {
-
     return (
         <>
             <div id="tst-dynamic-banner" className="tst-dynamic-banner">

@@ -3,7 +3,6 @@
 import { Formik, FormikErrors } from 'formik';
 import AppData from "@/data/app.json";
 import { createClient } from '@/utils/supabase/client';
-import { Tables } from '@/database.types';
 import { useEffect, useState } from 'react';
 import { Restaurant } from '@/lib/types';
 
