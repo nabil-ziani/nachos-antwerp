@@ -70,10 +70,10 @@ const CheckoutForm = () => {
 
                 onSubmit={async (values, { setSubmitting }) => {
                     try {
-                        const form = document.getElementById("checkoutForm") as HTMLFormElement
-                        const status = document.getElementById("checkoutFormStatus")
+                        const form = document.getElementById("checkoutForm") as HTMLFormElement;
+                        const status = document.getElementById("checkoutFormStatus");
 
-                        if (!form || !status) return
+                        if (!form || !status) return;
 
                         const orderData = {
                             order_id: orderId,
@@ -99,16 +99,17 @@ const CheckoutForm = () => {
                                 image: item.image
                             })),
                             notes: values.message
-                        }
+                        };
 
-                        // Store order in Supabase
-                        const supabase = createClient()
+                        // Store order in Supabase first
+                        const supabase = createClient();
                         const { error: dbError } = await supabase
                             .from('orders')
-                            .insert([orderData])
+                            .insert([orderData]);
 
-                        if (dbError) throw dbError
+                        if (dbError) throw dbError;
 
+                        // Handle payment based on selected method
                         if (values.payment_method === 'cash') {
                             // Handle cash payment
                             const response = await fetch(form.action, {
@@ -118,21 +119,22 @@ const CheckoutForm = () => {
                                     'Accept': 'application/json',
                                     'Content-Type': 'application/json'
                                 }
-                            })
+                            });
 
-                            if (!response.ok) throw new Error('Form submission failed')
+                            if (!response.ok) throw new Error('Form submission failed');
 
-                            status.innerHTML = "<h5>Bedankt! Uw bestelling is succesvol geplaatst.</h5>"
-                            form.reset()
+                            status.innerHTML = "<h5>Bedankt! Uw bestelling is succesvol geplaatst.</h5>";
+                            form.reset();
                         }
+                        // For Payconiq, the PayconiqButton component will handle the payment flow
                     } catch (error) {
-                        console.error('Order submission failed:', error)
-                        const status = document.getElementById("checkoutFormStatus")
+                        console.error('Order submission failed:', error);
+                        const status = document.getElementById("checkoutFormStatus");
                         if (status) {
-                            status.innerHTML = "<h5>Er is een probleem opgetreden. Probeer het opnieuw.</h5>"
+                            status.innerHTML = "<h5>Er is een probleem opgetreden. Probeer het opnieuw.</h5>";
                         }
                     } finally {
-                        setSubmitting(false)
+                        setSubmitting(false);
                     }
                 }}
             >
@@ -283,12 +285,26 @@ const CheckoutForm = () => {
                                 <h5 className="tst-mb-30">Betaalmethode</h5>
                                 <ul>
                                     <li className="tst-radio">
-                                        <input type="radio" id="option-1" name="payment_method" defaultChecked value="bankoverschrijving" />
+                                        <input 
+                                            type="radio" 
+                                            id="option-1" 
+                                            name="payment_method" 
+                                            value="bankoverschrijving"
+                                            checked={values.payment_method === 'bankoverschrijving'}
+                                            onChange={handleChange}
+                                        />
                                         <label htmlFor="option-1">Bankoverschrijving</label>
                                         <div className="tst-check"></div>
                                     </li>
                                     <li className="tst-radio">
-                                        <input type="radio" id="option-2" name="payment_method" value="cash" />
+                                        <input 
+                                            type="radio" 
+                                            id="option-2" 
+                                            name="payment_method" 
+                                            value="cash"
+                                            checked={values.payment_method === 'cash'}
+                                            onChange={handleChange}
+                                        />
                                         <label htmlFor="option-2">Cash</label>
                                         <div className="tst-check"></div>
                                     </li>

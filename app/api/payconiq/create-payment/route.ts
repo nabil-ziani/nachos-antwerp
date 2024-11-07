@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
                 amount: Math.round(amount * 100),
                 currency: 'EUR',
                 reference: reference,
-                callbackUrl: 'https://nachosantwerp.be/api/payconiq/callback',
+                callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payconiq/callback`,
                 merchantId: PAYCONIQ_MERCHANT_ID,
                 profileId: PAYCONIQ_PROFILE_ID,
                 description: "Bestelling Nacho's Antwerp",
@@ -52,13 +52,6 @@ export async function POST(request: NextRequest) {
 
         if (!response.ok) {
             throw new Error(`API error: ${JSON.stringify(paymentData)}`)
-        }
-
-        if (paymentData._links?.checkout?.href) {
-            paymentData._links.checkout.href = paymentData._links.checkout.href.replace(
-                'https://payconiq.com',
-                'https://ext.payconiq.com'
-            )
         }
 
         return NextResponse.json(paymentData)
