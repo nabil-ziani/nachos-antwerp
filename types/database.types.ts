@@ -82,55 +82,52 @@ export type Database = {
       }
       orders: {
         Row: {
-          address: string
-          city: string
-          company: string | null
-          email: string
-          firstname: string
+          amount: number
+          created_at: string
+          customer_company: string | null
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          delivery_address: Json | null
+          delivery_method: string
           id: string
-          lastname: string
-          message: string | null
-          order_date: string | null
-          payment_method: number
-          postcode: string
-          products: Json
-          status: string | null
-          tel: string
-          total_amount: number
+          notes: string | null
+          order_id: string
+          order_items: Json
+          payment_method: string
+          payment_status: string
         }
         Insert: {
-          address: string
-          city: string
-          company?: string | null
-          email: string
-          firstname: string
+          amount: number
+          created_at?: string
+          customer_company?: string | null
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          delivery_address?: Json | null
+          delivery_method: string
           id?: string
-          lastname: string
-          message?: string | null
-          order_date?: string | null
-          payment_method: number
-          postcode: string
-          products: Json
-          status?: string | null
-          tel: string
-          total_amount: number
+          notes?: string | null
+          order_id: string
+          order_items: Json
+          payment_method: string
+          payment_status: string
         }
         Update: {
-          address?: string
-          city?: string
-          company?: string | null
-          email?: string
-          firstname?: string
+          amount?: number
+          created_at?: string
+          customer_company?: string | null
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          delivery_address?: Json | null
+          delivery_method?: string
           id?: string
-          lastname?: string
-          message?: string | null
-          order_date?: string | null
-          payment_method?: number
-          postcode?: string
-          products?: Json
-          status?: string | null
-          tel?: string
-          total_amount?: number
+          notes?: string | null
+          order_id?: string
+          order_items?: Json
+          payment_method?: string
+          payment_status?: string
         }
         Relationships: []
       }
@@ -166,7 +163,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      delivery_method: "pickup" | "delivery"
+      payment_method: "payconiq" | "cash"
+      payment_status:
+        | "pending"
+        | "processing"
+        | "completed"
+        | "failed"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -254,4 +258,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

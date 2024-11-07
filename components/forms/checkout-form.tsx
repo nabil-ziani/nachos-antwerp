@@ -285,10 +285,10 @@ const CheckoutForm = () => {
                                 <h5 className="tst-mb-30">Betaalmethode</h5>
                                 <ul>
                                     <li className="tst-radio">
-                                        <input 
-                                            type="radio" 
-                                            id="option-1" 
-                                            name="payment_method" 
+                                        <input
+                                            type="radio"
+                                            id="option-1"
+                                            name="payment_method"
                                             value="bankoverschrijving"
                                             checked={values.payment_method === 'bankoverschrijving'}
                                             onChange={handleChange}
@@ -297,10 +297,10 @@ const CheckoutForm = () => {
                                         <div className="tst-check"></div>
                                     </li>
                                     <li className="tst-radio">
-                                        <input 
-                                            type="radio" 
-                                            id="option-2" 
-                                            name="payment_method" 
+                                        <input
+                                            type="radio"
+                                            id="option-2"
+                                            name="payment_method"
                                             value="cash"
                                             checked={values.payment_method === 'cash'}
                                             onChange={handleChange}
@@ -350,6 +350,11 @@ const CheckoutForm = () => {
                                     orderId={orderId}
                                     className="tst-btn tst-btn-with-icon tst-m-0"
                                     disabled={!isValid || isSubmitting}
+                                    formValues={{
+                                        ...values,
+                                        cartItems,
+                                        delivery_method: values.delivery_method,
+                                    }}
                                     onPaymentCreated={(checkoutUrl) => {
                                         const status = document.getElementById("checkoutFormStatus")
                                         if (status) {

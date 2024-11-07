@@ -18,14 +18,15 @@ export async function POST(request: NextRequest) {
                 break
 
             case 'SUCCEEDED':
+            case 'AUTHORIZED':
                 await supabase
                     .from('orders')
                     .update({ payment_status: 'completed' })
                     .eq('order_id', payload.reference)
-                // TODO: Send confirmation email
                 break
 
             case 'FAILED':
+            case 'EXPIRED':
                 await supabase
                     .from('orders')
                     .update({ payment_status: 'failed' })
@@ -40,6 +41,7 @@ export async function POST(request: NextRequest) {
                 break
         }
 
+        console.log('Updated order status to:', payload.status)
         return NextResponse.json({ message: 'Webhook processed successfully' })
     } catch (error) {
         console.error('Error processing webhook:', error)

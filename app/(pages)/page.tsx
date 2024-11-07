@@ -16,7 +16,7 @@ import ContactInfoSection from "@/components/sections/contact-info"
 import ContactFormSection from "@/components/sections/contact-form"
 import { createClient } from "@/utils/supabase/server"
 import { MenuItemWithCategory } from "@/lib/types"
-import { Tables } from "@/database.types"
+import { Tables } from "@/types/database.types"
 
 const HeroSlider = dynamic(() => import("@/components/sliders/hero"), { ssr: false });
 const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"), { ssr: false });

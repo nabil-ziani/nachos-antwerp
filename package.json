@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "db:types": "npx supabase gen types typescript --project-id wgmhnqbxelhhqdkaijlc > types/database.types.ts"
   },
   "dependencies": {
     "@supabase/ssr": "latest",
