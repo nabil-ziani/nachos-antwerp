@@ -25,7 +25,7 @@ interface CheckoutFormValues {
 
 const CheckoutForm = () => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
-    const { cartTotal: totalAmount } = useCart()
+    const { cartTotal: totalAmount, cartItems } = useCart()
     const [orderId] = useState(uuidv4());
 
     useEffect(() => {
@@ -45,60 +45,95 @@ const CheckoutForm = () => {
                 initialValues={{ firstname: '', lastname: '', email: '', tel: '', company: '', city: '', address: '', postcode: '', message: '', payment_method: 'bankoverschrijving', delivery_method: 'afhalen' }}
                 validate={values => {
                     const errors: FormikErrors<CheckoutFormValues> = {}
+
+                    // Required fields validation
+                    if (!values.firstname) errors.firstname = 'Verplicht'
+                    if (!values.lastname) errors.lastname = 'Verplicht'
+                    if (!values.tel) errors.tel = 'Verplicht'
+
+                    // Email validation
                     if (!values.email) {
                         errors.email = 'Verplicht'
-                    } else if (
-                        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-                    ) {
+                    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
                         errors.email = 'Ongeldige mailadres'
                     }
-                    return errors;
-                }}
 
-                onSubmit={(values, { setSubmitting }) => {
-                    const form = document.getElementById("checkoutForm") as HTMLFormElement
-                    const status = document.getElementById("checkoutFormStatus")
-                    const data = new FormData()
-
-                    data.append('firstname', values.firstname)
-                    data.append('lastname', values.lastname)
-                    data.append('email', values.email)
-                    data.append('tel', values.tel)
-                    data.append('company', values.company)
-                    data.append('city', values.city)
-                    data.append('address', values.address)
-                    data.append('postcode', values.postcode)
-                    data.append('message', values.message)
-                    data.append('payment_method', values.payment_method.toString())
-                    data.append('delivery_method', values.delivery_method.toString())
-
-                    if (form && status) {
-                        fetch(form.action, {
-                            method: 'POST',
-                            body: data,
-                            headers: {
-                                'Accept': 'application/json'
-                            }
-                        }).then(response => {
-                            if (response.ok) {
-                                // check if it is in allowed_locations and show correct message based upon restaurant
-                                status.innerHTML = "<h5>Thanks, your message is sent successfully.</h5>";
-                                form.reset()
-                            } else {
-                                response.json().then(data => {
-                                    if (Object.hasOwn(data, 'errors')) {
-                                        status.innerHTML = data["errors"].map((error: any) => error["message"]).join(", ")
-                                    } else {
-                                        status.innerHTML = "<h5>Oops! There was a problem submitting your form</h5>"
-                                    }
-                                })
-                            }
-                        }).catch(error => {
-                            status.innerHTML = "<h5>Oops! There was a problem submitting your form</h5>"
-                        })
+                    // Address validation for delivery
+                    if (values.delivery_method === 'leveren') {
+                        if (!values.address) errors.address = 'Verplicht'
+                        if (!values.city) errors.city = 'Verplicht'
+                        if (!values.postcode) errors.postcode = 'Verplicht'
                     }
 
-                    setSubmitting(false);
+                    return errors
+                }}
+
+                onSubmit={async (values, { setSubmitting }) => {
+                    try {
+                        const form = document.getElementById("checkoutForm") as HTMLFormElement
+                        const status = document.getElementById("checkoutFormStatus")
+
+                        if (!form || !status) return
+
+                        const orderData = {
+                            order_id: orderId,
+                            payment_method: values.payment_method === 'bankoverschrijving' ? 'payconiq' : 'cash',
+                            payment_status: 'pending',
+                            amount: totalAmount,
+                            customer_name: `${values.firstname} ${values.lastname}`,
+                            customer_email: values.email,
+                            customer_phone: values.tel,
+                            customer_company: values.company || null,
+                            delivery_method: values.delivery_method,
+                            delivery_address: values.delivery_method === 'leveren' ? {
+                                street: values.address,
+                                city: values.city,
+                                postcode: values.postcode
+                            } : null,
+                            order_items: cartItems.map(item => ({
+                                title: item.title,
+                                price: item.price,
+                                quantity: item.quantity,
+                                total: item.price * item.quantity,
+                                currency: item.currency,
+                                image: item.image
+                            })),
+                            notes: values.message
+                        }
+
+                        // Store order in Supabase
+                        const supabase = createClient()
+                        const { error: dbError } = await supabase
+                            .from('orders')
+                            .insert([orderData])
+
+                        if (dbError) throw dbError
+
+                        if (values.payment_method === 'cash') {
+                            // Handle cash payment
+                            const response = await fetch(form.action, {
+                                method: 'POST',
+                                body: JSON.stringify(orderData),
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+
+                            if (!response.ok) throw new Error('Form submission failed')
+
+                            status.innerHTML = "<h5>Bedankt! Uw bestelling is succesvol geplaatst.</h5>"
+                            form.reset()
+                        }
+                    } catch (error) {
+                        console.error('Order submission failed:', error)
+                        const status = document.getElementById("checkoutFormStatus")
+                        if (status) {
+                            status.innerHTML = "<h5>Er is een probleem opgetreden. Probeer het opnieuw.</h5>"
+                        }
+                    } finally {
+                        setSubmitting(false)
+                    }
                 }}
             >
                 {({
@@ -109,6 +144,7 @@ const CheckoutForm = () => {
                     handleBlur,
                     handleSubmit,
                     isSubmitting,
+                    isValid,
                     /* and other goodies */
                 }) => (
                     <form onSubmit={handleSubmit} id="checkoutForm" action={AppData.settings.formspreeURL} className="tst-checkout-form">
@@ -291,16 +327,36 @@ const CheckoutForm = () => {
 
                         {/* button */}
                         <div className="tst-button-group">
-                            {values.payment_method === 'bankoverschrijving' && (
+                            {values.payment_method === 'bankoverschrijving' ? (
+                                // Payconiq payment flow
                                 <PayconiqButton
                                     amount={totalAmount}
                                     orderId={orderId}
                                     className="tst-btn tst-btn-with-icon tst-m-0"
+                                    disabled={!isValid || isSubmitting}
+                                    onPaymentCreated={(checkoutUrl) => {
+                                        const status = document.getElementById("checkoutFormStatus")
+                                        if (status) {
+                                            status.innerHTML = "<h5>U wordt doorgestuurd naar Payconiq...</h5>"
+                                        }
+                                    }}
+                                    onPaymentError={(error) => {
+                                        const status = document.getElementById("checkoutFormStatus")
+                                        if (status) {
+                                            status.innerHTML = "<h5>Er is een probleem opgetreden. Probeer het opnieuw.</h5>"
+                                        }
+                                    }}
                                 />
-                            )}
-
-                            {values.payment_method === 'cash' && (
-                                <button type="submit" className="tst-btn tst-btn-with-icon tst-m-0">
+                            ) : (
+                                // Cash payment flow - regular form submission
+                                <button
+                                    type="submit"
+                                    className="tst-btn tst-btn-with-icon tst-m-0"
+                                    onClick={() => {
+                                        // Here you can add any pre-submission logic
+                                        console.log('Submitting cash payment order')
+                                    }}
+                                >
                                     <span className="tst-icon">
                                         <img src="/img/ui/icons/arrow.svg" alt="icon" />
                                     </span>
@@ -327,8 +383,9 @@ const getRestaurants = async () => {
         .select(`*`)
         .returns<Restaurant[]>()
 
-    if (restaurants) {
-        console.error('Error fetching menu items:', error);
+    if (error) {
+        console.error('Error fetching restaurants:', error)
+        return null
     }
 
     return restaurants
