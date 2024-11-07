@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { createClient } from '@/utils/supabase/client'
+import { usePayment } from "@/contexts/payment-context"
 
 interface PayconiqButtonProps {
     amount: number
@@ -27,6 +28,8 @@ interface PayconiqButtonProps {
 export function PayconiqButton({ amount, orderId, className, onPaymentCreated, onPaymentError, disabled, formValues }: PayconiqButtonProps) {
     const [isLoading, setIsLoading] = useState(false)
 
+    const { startPaymentTracking } = usePayment()
+
     const handlePayment = async (e: React.MouseEvent) => {
         e.preventDefault()
         if (disabled) return
@@ -34,12 +37,30 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
         try {
             setIsLoading(true)
 
-            // First, save the order to Supabase
+            // First create Payconiq payment
+            const response = await fetch('/api/payconiq/create-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount,
+                    reference: orderId, // We'll still use this as reference but not as order_id
+                }),
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error(data.details || 'Payment creation failed')
+            }
+
+            startPaymentTracking(data.paymentId, 'pending')
+
+            // Now save the order to Supabase using the paymentId
             const supabase = createClient()
             const { error: orderError } = await supabase
                 .from('orders')
                 .insert({
-                    order_id: orderId,
+                    order_id: data.paymentId,
                     amount: amount,
                     payment_method: 'payconiq',
                     payment_status: 'pending',
@@ -61,28 +82,13 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
                 throw new Error(`Failed to save order: ${orderError.message}`)
             }
 
-            // Then create Payconiq payment
-            const response = await fetch('/api/payconiq/create-payment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    amount,
-                    reference: orderId.substring(0, 35),
-                }),
-            })
-
-            const data = await response.json()
-
-            if (!response.ok) {
-                throw new Error(data.details || 'Payment creation failed')
-            }
-
+            // Store QR code
             if (data._links?.qrcode?.href) {
-                localStorage.setItem(`payment_${orderId}`, data._links.qrcode.href)
+                localStorage.setItem(`payment_${data.paymentId}`, data._links.qrcode.href)
             }
 
             onPaymentCreated?.(data._links?.deeplink?.href || '')
-            window.location.href = `/payment/${orderId}`
+            window.location.href = `/payment/${data.paymentId}`
         } catch (error) {
             console.error('Payment failed:', error)
             onPaymentError?.(error as Error)

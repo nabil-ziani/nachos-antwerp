@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import { Restaurant } from '@/lib/types';
 import { PayconiqButton } from '../payconiq-button';
 import { useCart } from '@/hooks/useCart';
-import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from 'next/navigation';
+import { usePayment } from '@/contexts/payment-context';
 
 interface CheckoutFormValues {
     firstname: string
@@ -25,8 +26,10 @@ interface CheckoutFormValues {
 
 const CheckoutForm = () => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+    const [orderId] = useState(crypto.randomUUID())
+
+    const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
-    const [orderId] = useState(uuidv4());
 
     useEffect(() => {
         (async () => {
@@ -75,58 +78,48 @@ const CheckoutForm = () => {
 
                         if (!form || !status) return;
 
-                        const orderData = {
-                            order_id: orderId,
-                            payment_method: values.payment_method === 'bankoverschrijving' ? 'payconiq' : 'cash',
-                            payment_status: 'pending',
-                            amount: totalAmount,
-                            customer_name: `${values.firstname} ${values.lastname}`,
-                            customer_email: values.email,
-                            customer_phone: values.tel,
-                            customer_company: values.company || null,
-                            delivery_method: values.delivery_method,
-                            delivery_address: values.delivery_method === 'leveren' ? {
-                                street: values.address,
-                                city: values.city,
-                                postcode: values.postcode
-                            } : null,
-                            order_items: cartItems.map(item => ({
-                                title: item.title,
-                                price: item.price,
-                                quantity: item.quantity,
-                                total: item.price * item.quantity,
-                                currency: item.currency,
-                                image: item.image
-                            })),
-                            notes: values.message
-                        };
-
-                        // Store order in Supabase first
-                        const supabase = createClient();
-                        const { error: dbError } = await supabase
-                            .from('orders')
-                            .insert([orderData]);
-
-                        if (dbError) throw dbError;
-
-                        // Handle payment based on selected method
                         if (values.payment_method === 'cash') {
-                            // Handle cash payment
-                            const response = await fetch(form.action, {
-                                method: 'POST',
-                                body: JSON.stringify(orderData),
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json'
-                                }
-                            });
+                            // For cash orders, create order with generated ID and set status to completed
+                            const orderData = {
+                                order_id: orderId,
+                                payment_method: 'cash',
+                                payment_status: 'completed', // Cash orders are completed immediately
+                                amount: totalAmount,
+                                customer_name: `${values.firstname} ${values.lastname}`,
+                                customer_email: values.email,
+                                customer_phone: values.tel,
+                                customer_company: values.company || null,
+                                delivery_method: values.delivery_method,
+                                delivery_address: values.delivery_method === 'leveren' ? {
+                                    street: values.address,
+                                    city: values.city,
+                                    postcode: values.postcode
+                                } : null,
+                                order_items: cartItems.map(item => ({
+                                    title: item.title,
+                                    price: item.price,
+                                    quantity: item.quantity,
+                                    total: item.price * item.quantity,
+                                    currency: item.currency,
+                                    image: item.image
+                                })),
+                                notes: values.message
+                            };
 
-                            if (!response.ok) throw new Error('Form submission failed');
+                            const supabase = createClient();
 
-                            status.innerHTML = "<h5>Bedankt! Uw bestelling is succesvol geplaatst.</h5>";
-                            form.reset();
+                            const { error: dbError } = await supabase
+                                .from('orders')
+                                .insert([orderData]);
+
+                            if (dbError) throw dbError;
+
+                            // Redirect to order confirmation page
+                            router.push(`/order-confirmation/${orderId}`);
                         }
-                        // For Payconiq, the PayconiqButton component will handle the payment flow
+
+                        // For Payconiq, we don't create the order here
+                        // The PayconiqButton component will handle that after getting the paymentId
                     } catch (error) {
                         console.error('Order submission failed:', error);
                         const status = document.getElementById("checkoutFormStatus");

@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import PageBanner from "@/components/page-banner"
+import { usePayment } from '@/contexts/payment-context'
 
 export default function PaymentPage({ params }: { params: { orderId: string } }) {
     const [qrCode, setQrCode] = useState<string | null>(null)
     const router = useRouter()
+    const { startPaymentTracking } = usePayment()
 
-    // Get QR code on mount
+    // Get QR code and start tracking on mount
     useEffect(() => {
         const storedQrCode = localStorage.getItem(`payment_${params.orderId}`)
         if (!storedQrCode) {
@@ -16,7 +18,10 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
             return
         }
         setQrCode(storedQrCode)
-    }, [params.orderId, router])
+        
+        // Start tracking the payment status
+        startPaymentTracking(params.orderId, 'pending')
+    }, [params.orderId, router, startPaymentTracking])
 
     if (!qrCode) return null
 
