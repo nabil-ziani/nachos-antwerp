@@ -4,14 +4,14 @@ import { useState, useEffect, MouseEvent } from "react"
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
 
-import { useStore } from "@/hooks/useStore"
+import { useCart } from "@/hooks/useCart"
 import { CartItem } from "@/lib/types"
 
 const MenuItem = ({ item }: { item: CartItem }) => {
   const [img, setImg] = useState(false);
   const [imgValue, setImgValue] = useState<any>([]);
 
-  const { cartItems, cartTotal, addToCart, setMiniCart } = useStore()
+  const { cartItems, cartTotal, addToCart, setMiniCart } = useCart()
 
   useEffect(() => {
     const cartNumberEl = document.querySelector('.tst-cart-number')

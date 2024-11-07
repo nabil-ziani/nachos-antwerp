@@ -1,6 +1,6 @@
 "use client";
 
-import { useStore } from "@/hooks/useStore";
+import { useCart } from "@/hooks/useCart";
 import { CartItem as CartItemType } from "@/lib/types";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -11,7 +11,7 @@ const CartItem = ({ item, key }: { item: CartItemType, key: any }) => {
     const minQuantity = 1;
     const maxQuantity = 10;
 
-    const { cartItems, cartTotal, removeFromCart } = useStore()
+    const { cartItems, cartTotal, removeFromCart } = useCart()
 
     useEffect(() => {
         const cartNumberEl = document.querySelector<HTMLElement>('.tst-cart-number')

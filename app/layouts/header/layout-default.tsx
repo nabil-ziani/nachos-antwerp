@@ -8,14 +8,14 @@ import AppData from "@/data/app.json";
 
 import MiniCart from "@/app/layouts/cart/mini-cart";
 import ReservationForm from "@/components/forms/reservation-form";
-import { useStore } from "@/hooks/useStore";
+import { useCart } from "@/hooks/useCart";
 
 const Header = () => {
     const [mobileMenu, setMobileMenu] = useState(false)
     const [reservationPopup, setReservationPopup] = useState(false)
 
     const asPath = usePathname()
-    const { miniCart, setMiniCart, cartItems } = useStore()
+    const { miniCart, setMiniCart, cartItems } = useCart()
 
     const isPathActive = (path: any) => {
         return (asPath.endsWith(path) && path !== '/') || asPath === path;

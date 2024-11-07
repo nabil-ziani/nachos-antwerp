@@ -1,6 +1,6 @@
 "use client"
 
-import { useStore } from "@/hooks/useStore"
+import { useCart } from "@/hooks/useCart"
 import { useState, useEffect } from "react"
 
 import Lightbox from "yet-another-react-lightbox"
@@ -8,7 +8,7 @@ import "yet-another-react-lightbox/styles.css"
 
 const ProductItem = ({ item }: any) => {
 
-    const { cartItems, cartTotal, addToCart, removeFromCart } = useStore()
+    const { cartItems, cartTotal, addToCart, removeFromCart } = useCart()
 
     useEffect(() => {
         const cartNumberEl = document.querySelector<HTMLElement>('.tst-cart-number')

@@ -12,7 +12,7 @@ interface CartState {
     removeFromCart: (itemId: string) => void
 }
 
-export const useStore = create<CartState>((set, get) => ({
+export const useCart = create<CartState>((set, get) => ({
     cartItems: [],
     cartTotal: 0,
     miniCart: false,

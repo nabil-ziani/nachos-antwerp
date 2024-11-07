@@ -2,14 +2,14 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useStore } from '@/hooks/useStore'
+import { useCart } from '@/hooks/useCart'
 
 import Link from 'next/link'
 
 import { CartItem } from '@/lib/types'
 
 const CartSummary = () => {
-    const { cartItems, cartTotal } = useStore()
+    const { cartItems, cartTotal } = useCart()
     const router = useRouter()
 
     useEffect(() => {

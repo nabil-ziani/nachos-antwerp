@@ -1,11 +1,11 @@
 "use client"
 
-import { useStore } from "@/hooks/useStore";
+import { useCart } from "@/hooks/useCart";
 import Link from "next/link"
 import { useEffect, MouseEvent } from "react"
 
 const MiniCart = () => {
-    const { cartItems, cartTotal, removeFromCart } = useStore()
+    const { cartItems, cartTotal, removeFromCart } = useCart()
 
     useEffect(() => {
         const cartNumberEl = document.querySelector('.tst-cart-number')

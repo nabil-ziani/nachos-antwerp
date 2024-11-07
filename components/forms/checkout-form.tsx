@@ -5,6 +5,9 @@ import AppData from "@/data/app.json";
 import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { Restaurant } from '@/lib/types';
+import { PayconiqButton } from '../payconiq-button';
+import { useCart } from '@/hooks/useCart';
+import { v4 as uuidv4 } from 'uuid';
 
 interface CheckoutFormValues {
     firstname: string
@@ -22,6 +25,8 @@ interface CheckoutFormValues {
 
 const CheckoutForm = () => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+    const { cartTotal: totalAmount } = useCart()
+    const [orderId] = useState(uuidv4());
 
     useEffect(() => {
         (async () => {
@@ -285,12 +290,24 @@ const CheckoutForm = () => {
                         </div>
 
                         {/* button */}
-                        <button type="submit" className="tst-btn tst-btn-with-icon tst-m-0">
-                            <span className="tst-icon">
-                                <img src="/img/ui/icons/arrow.svg" alt="icon" />
-                            </span>
-                            <span>Plaats bestelling</span>
-                        </button>
+                        <div className="tst-button-group">
+                            {values.payment_method === 'bankoverschrijving' && (
+                                <PayconiqButton
+                                    amount={totalAmount}
+                                    orderId={orderId}
+                                    className="tst-btn tst-btn-with-icon tst-m-0"
+                                />
+                            )}
+
+                            {values.payment_method === 'cash' && (
+                                <button type="submit" className="tst-btn tst-btn-with-icon tst-m-0">
+                                    <span className="tst-icon">
+                                        <img src="/img/ui/icons/arrow.svg" alt="icon" />
+                                    </span>
+                                    <span>Plaats bestelling</span>
+                                </button>
+                            )}
+                        </div>
                         {/* button end */}
 
                         <div id="checkoutFormStatus" className="form-status"></div>
