@@ -1,6 +1,6 @@
 "use client";
 
-const DividerModule = ( { onlyBottom = 1 } ) => {
+const DividerModule = ({ onlyBottom = true }) => {
     return (
         <>
             {/* divider */}

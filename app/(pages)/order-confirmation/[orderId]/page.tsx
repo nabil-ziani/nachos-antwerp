@@ -41,13 +41,5 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
 
     if (!order) return null
 
-    return (
-        <PaymentResult
-            status={order.payment_status}
-            orderId={order.order_id}
-            customerName={order.customer_name}
-            amount={order.amount}
-            deliveryMethod={order.delivery_method}
-        />
-    )
+    return <PaymentResult status={order.payment_status} />
 } 

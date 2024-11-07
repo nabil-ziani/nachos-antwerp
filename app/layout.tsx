@@ -31,8 +31,6 @@ import '@/app/styles/scss/style.scss';
 
 import AppData from "@/data/app.json";
 
-import '@/styles/confirmation.css'
-
 export const metadata = {
   title: {
     default: AppData.settings.siteName,
