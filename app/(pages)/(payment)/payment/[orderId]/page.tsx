@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePayment } from '@/contexts/payment-context'
+import { createClient } from '@/utils/supabase/client'
 
 export default function PaymentPage({ params }: { params: { orderId: string } }) {
     const [qrCode, setQrCode] = useState<string | null>(null)
@@ -28,6 +29,20 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
         setIsLoading(false)
     }, [params.orderId, router, startPaymentTracking])
 
+    const handleCancel = async () => {
+        try {
+            const supabase = createClient()
+            await supabase
+                .from('orders')
+                .update({ payment_status: 'cancelled' })
+                .eq('order_id', params.orderId)
+
+            router.push('/menu')
+        } catch (error) {
+            console.error('Error cancelling payment:', error)
+        }
+    }
+
     if (!qrCode) return null
 
     return (
@@ -38,6 +53,15 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
 
                 <div className="tst-payment-qr">
                     <img src={qrCode} alt="Payment QR Code" />
+                </div>
+
+                <div className="tst-button-group" style={{ marginTop: '2rem' }}>
+                    <button
+                        onClick={handleCancel}
+                        className="tst-btn tst-btn-secondary"
+                    >
+                        Annuleren
+                    </button>
                 </div>
             </div>
         </div>

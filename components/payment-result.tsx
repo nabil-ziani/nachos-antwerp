@@ -1,4 +1,5 @@
 import Divider from "@/app/layouts/divider"
+import Link from "next/link"
 
 interface PaymentResultProps {
     status: string
@@ -76,6 +77,17 @@ export function PaymentResult({ status }: PaymentResultProps) {
                 <p>
                     {content.details}
                 </p>
+
+                <div className="tst-button-group" style={{ marginTop: '2rem' }}>
+                    <Link href="/menu" className="tst-btn">
+                        Terug naar menu
+                    </Link>
+                    {status === 'failed' && (
+                        <Link href="/checkout" className="tst-btn tst-btn-secondary">
+                            Opnieuw proberen
+                        </Link>
+                    )}
+                </div>
             </div>
         </div>
     )
