@@ -1,5 +1,3 @@
-import '@/styles/confirmation.css'
-
 import Header from "@/app/layouts/header/index"
 import Footer from "@/app/layouts/footer/index"
 

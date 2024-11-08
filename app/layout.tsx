@@ -21,6 +21,7 @@ const playfair_display = Playfair_Display({
 })
 
 import "./globals.css";
+import '@/styles/confirmation.css';
 
 import "@/app/styles/css/plugins/bootstrap.min.css";
 import "@/app/styles/css/plugins/swiper.min.css";
