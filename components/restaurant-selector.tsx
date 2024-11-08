@@ -33,7 +33,7 @@ export function RestaurantSelector() {
         ] : []),
         ...restaurants.map(restaurant => ({
             value: restaurant.id,
-            label: restaurant.name
+            label: `🍴 ${restaurant.name}`
         }))
     ]
 

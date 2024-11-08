@@ -79,9 +79,11 @@ export function PaymentResult({ status }: PaymentResultProps) {
                 </p>
 
                 <div className="tst-button-group" style={{ marginTop: '2rem' }}>
-                    <Link href="/menu" className="tst-btn">
-                        Terug naar menu
-                    </Link>
+                    {(status === 'completed' || status === 'cancelled') && (
+                        <Link href="/" className="tst-btn">
+                            Terug naar website
+                        </Link>
+                    )}
                     {status === 'failed' && (
                         <Link href="/checkout" className="tst-btn tst-btn-secondary">
                             Opnieuw proberen
@@ -89,6 +91,6 @@ export function PaymentResult({ status }: PaymentResultProps) {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     )
 } 
