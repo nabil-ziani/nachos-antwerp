@@ -29,15 +29,20 @@ export function CustomSelect({
     const selectedOption = options.find(opt => opt.value === value)
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        function handleClickOutside(event: MouseEvent) {
             if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
                 setIsOpen(false)
             }
         }
 
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [])
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside)
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [isOpen])
 
     return (
         <div

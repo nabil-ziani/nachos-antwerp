@@ -33,8 +33,8 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
 
                 if (data) {
                     setRestaurants(data)
-                    // Set default restaurant (Antwerp) if no location
-                    const defaultRestaurant = data.find(r => r.name.toLowerCase().includes('antwerp')) || data[0]
+                    // Set default restaurant (Berchem) if no location
+                    const defaultRestaurant = data.find(r => r.name.toLowerCase().includes('berchem')) || data[0]
                     setSelectedRestaurant(defaultRestaurant)
                 }
 
@@ -77,13 +77,13 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
                     position.coords.latitude,
                     position.coords.longitude
                 );
-                
+
                 if (nearest) {
                     setSelectedRestaurant(nearest);
                 } else {
                     // Fallback to default restaurant if no nearest found
-                    const defaultRestaurant = restaurants.find(r => 
-                        r.name.toLowerCase().includes('antwerp')
+                    const defaultRestaurant = restaurants.find(r =>
+                        r.name.toLowerCase().includes('berchem')
                     ) || restaurants[0];
                     setSelectedRestaurant(defaultRestaurant);
                     console.warn('Could not find nearest restaurant, falling back to default');
@@ -141,8 +141,8 @@ function findNearestRestaurant(restaurants: Restaurant[], userLat: number, userL
     if (!restaurants.length) return null;
 
     // Filter restaurants with valid coordinates first
-    const validRestaurants = restaurants.filter(r => 
-        r.latitude != null && 
+    const validRestaurants = restaurants.filter(r =>
+        r.latitude != null &&
         r.longitude != null
     );
 
