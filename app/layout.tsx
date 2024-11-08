@@ -1,5 +1,6 @@
 import { Josefin_Sans, Playfair_Display } from 'next/font/google'
 import { RestaurantProvider } from '@/contexts/restaurant-context'
+import { PaymentProvider } from '@/contexts/payment-context'
 
 const josefin_sans = Josefin_Sans({
   weight: ['100', '200', '300', '400', '500', '600', '700'],
@@ -46,9 +47,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body style={{ "backgroundImage": "url(" + AppData.settings.bgImage + ")" }}>
         <div className="tst-main-overlay"></div>
         <RestaurantProvider>
-          <div id="tst-app" className="tst-app">
-            {children}
-          </div>
+          <PaymentProvider>
+            <div id="tst-app" className="tst-app">
+              {children}
+            </div>
+          </PaymentProvider>
         </RestaurantProvider>
       </body>
     </html>
