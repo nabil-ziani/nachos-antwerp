@@ -19,7 +19,7 @@ export function DeliveryLocationsSection() {
                 {restaurants.map((restaurant) => (
                     <div key={restaurant.id} className="col-lg-6 mb-4">
                         <div className="tst-location-card">
-                            <h5 className="mb-3">Nacho's {restaurant.name}</h5>
+                            <h5 className="mb-3">{restaurant.name}</h5>
                             <p className="tst-text mb-3">{restaurant.address}</p>
                             <div className="tst-postal-codes">
                                 <strong>Bezorging mogelijk in:</strong>

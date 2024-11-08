@@ -172,3 +172,30 @@
   color: #0369a1;
   font-weight: 500;
 }
+
+.tst-back-link {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+}
+
+.tst-text-link:hover {
+    color: #333;
+}
+
+.tst-payment-status {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #666;
+}
+
+/* Optional: Add a subtle pulse animation to indicate waiting */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.tst-payment-status p {
+    animation: pulse 2s infinite;
+}

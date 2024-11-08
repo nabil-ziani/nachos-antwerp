@@ -29,14 +29,14 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
         setIsLoading(false)
     }, [params.orderId, router, startPaymentTracking])
 
-    const handleCancel = async () => {
+    const handleBack = async () => {
         try {
             const supabase = createClient()
             await supabase
                 .from('orders')
                 .update({ payment_status: 'cancelled' })
                 .eq('order_id', params.orderId)
-
+            
             router.push('/menu')
         } catch (error) {
             console.error('Error cancelling payment:', error)
@@ -47,6 +47,36 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
 
     return (
         <div className="tst-confirmation-page">
+            <div className="tst-back-link">
+                <button 
+                    onClick={handleBack}
+                    className="tst-text-link"
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#666',
+                        fontSize: '0.9rem',
+                        padding: '0.5rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                    }}
+                >
+                    <svg 
+                        width="16" 
+                        height="16" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2"
+                    >
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Terug naar menu
+                </button>
+            </div>
+
             <div className="tst-confirmation-box">
                 <h1>Betaling</h1>
                 <p>Scan de QR code met de Payconiq app</p>
@@ -55,13 +85,8 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
                     <img src={qrCode} alt="Payment QR Code" />
                 </div>
 
-                <div className="tst-button-group" style={{ marginTop: '2rem' }}>
-                    <button
-                        onClick={handleCancel}
-                        className="tst-btn tst-btn-secondary"
-                    >
-                        Annuleren
-                    </button>
+                <div className="tst-payment-status">
+                    <p>Wachten op betaling...</p>
                 </div>
             </div>
         </div>
