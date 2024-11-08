@@ -36,7 +36,7 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
                 .from('orders')
                 .update({ payment_status: 'cancelled' })
                 .eq('order_id', params.orderId)
-            
+
             router.push('/menu')
         } catch (error) {
             console.error('Error cancelling payment:', error)
@@ -47,46 +47,12 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
 
     return (
         <div className="tst-confirmation-page">
-            <div className="tst-back-link">
-                <button 
-                    onClick={handleBack}
-                    className="tst-text-link"
-                    style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#666',
-                        fontSize: '0.9rem',
-                        padding: '0.5rem',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                    }}
-                >
-                    <svg 
-                        width="16" 
-                        height="16" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2"
-                    >
-                        <path d="M19 12H5M12 19l-7-7 7-7" />
-                    </svg>
-                    Terug naar menu
-                </button>
-            </div>
-
             <div className="tst-confirmation-box">
                 <h1>Betaling</h1>
                 <p>Scan de QR code met de Payconiq app</p>
 
                 <div className="tst-payment-qr">
                     <img src={qrCode} alt="Payment QR Code" />
-                </div>
-
-                <div className="tst-payment-status">
-                    <p>Wachten op betaling...</p>
                 </div>
             </div>
         </div>
