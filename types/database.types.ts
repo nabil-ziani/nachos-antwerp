@@ -131,11 +131,13 @@ export type Database = {
         }
         Relationships: []
       }
-      restaurant_location: {
+      restaurant: {
         Row: {
           address: string
           allowed_postalcodes: string[]
           id: string
+          latitude: number | null
+          longitude: number | null
           name: string
           phone: string
         }
@@ -143,6 +145,8 @@ export type Database = {
           address?: string
           allowed_postalcodes: string[]
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           name?: string
           phone?: string
         }
@@ -150,6 +154,8 @@ export type Database = {
           address?: string
           allowed_postalcodes?: string[]
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           name?: string
           phone?: string
         }

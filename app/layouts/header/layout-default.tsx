@@ -9,6 +9,7 @@ import AppData from "@/data/app.json";
 import MiniCart from "@/app/layouts/cart/mini-cart";
 import ReservationForm from "@/components/forms/reservation-form";
 import { useCart } from "@/hooks/useCart";
+import { RestaurantSelector } from "@/components/restaurant-selector";
 
 const Header = () => {
     const [mobileMenu, setMobileMenu] = useState(false)
@@ -54,6 +55,7 @@ const Header = () => {
                         {/* menu end */}
                         {/* top bar right */}
                         <div className="tst-menu-right">
+                            <RestaurantSelector />
                             {/* reservation button */}
                             <a
                                 href="#."

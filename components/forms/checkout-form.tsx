@@ -393,7 +393,7 @@ const getRestaurants = async () => {
     const supabase = createClient()
 
     const { data: restaurants, error } = await supabase
-        .from('restaurant_location')
+        .from('restaurant')
         .select(`*`)
         .returns<Restaurant[]>()
 
