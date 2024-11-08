@@ -136,3 +136,39 @@
     transform: scale(1);
   }
 }
+
+/* Payment QR Code */
+
+.tst-payment-qr {
+  margin: 2rem auto;
+  max-width: 300px;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tst-payment-qr img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.tst-confirmation-box h1 {
+  color: #1a2f33;
+  margin-bottom: 0.5rem;
+}
+
+.tst-confirmation-box p {
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+.tst-payment-status {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f0f9ff;
+  border-radius: 8px;
+  color: #0369a1;
+  font-weight: 500;
+}

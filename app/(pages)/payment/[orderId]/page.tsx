@@ -2,54 +2,42 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import PageBanner from "@/components/page-banner"
 import { usePayment } from '@/contexts/payment-context'
 
 export default function PaymentPage({ params }: { params: { orderId: string } }) {
     const [qrCode, setQrCode] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(true)
     const router = useRouter()
     const { startPaymentTracking } = usePayment()
 
-    // Get QR code and start tracking on mount
     useEffect(() => {
         const storedQrCode = localStorage.getItem(`payment_${params.orderId}`)
         if (!storedQrCode) {
             router.push('/menu')
             return
         }
-        setQrCode(storedQrCode)
-        
-        // Start tracking the payment status
+
+        // Modify QR code URL to use SVG format and black color
+        const qrUrl = new URL(storedQrCode)
+        qrUrl.searchParams.set('f', 'SVG') // Use SVG for sharper image
+        qrUrl.searchParams.set('s', 'L')   // Large size (400x400)
+        qrUrl.searchParams.set('cl', 'black') // Black color for better contrast
+
+        setQrCode(qrUrl.toString())
         startPaymentTracking(params.orderId, 'pending')
+        setIsLoading(false)
     }, [params.orderId, router, startPaymentTracking])
 
     if (!qrCode) return null
 
     return (
-        <div className="tst-payment-page">
-            <div id="tst-dynamic-banner" className="tst-dynamic-banner">
-                <PageBanner
-                    pageTitle="Betaling"
-                    description="Scan de QR code met de Payconiq app"
-                    breadTitle="Betaling"
-                />
-            </div>
-            <div id="tst-dynamic-content" className="tst-dynamic-content">
-                <div className="tst-content-frame">
-                    <div className="tst-content-box">
-                        <div className="container tst-p-60-60">
-                            <div className="row justify-content-center">
-                                <div className="col-md-6 text-center">
-                                    <div className="tst-payment-status">
-                                        <img src={qrCode} alt="Payment QR Code" className="mb-4" style={{ maxWidth: '300px' }} />
-                                        <div className="alert alert-info">
-                                            Wachten op betaling...
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div className="tst-confirmation-page">
+            <div className="tst-confirmation-box">
+                <h1>Betaling</h1>
+                <p>Scan de QR code met de Payconiq app</p>
+
+                <div className="tst-payment-qr">
+                    <img src={qrCode} alt="Payment QR Code" />
                 </div>
             </div>
         </div>
