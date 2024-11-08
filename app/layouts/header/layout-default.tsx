@@ -37,9 +37,12 @@ const Header = () => {
                 <div className="tst-dynamic-menu" id="tst-dynamic-menu">
                     <div className="tst-menu">
                         {/* logo */}
-                        <Link href="/">
-                            <img src={AppData.header.logo.image} className="tst-logo" alt={AppData.header.logo.alt} />
-                        </Link>
+                        <div className="tst-logo-group">
+                            <Link href="/">
+                                <img src={AppData.header.logo.image} className="tst-logo" alt={AppData.header.logo.alt} />
+                            </Link>
+                            <RestaurantSelector />
+                        </div>
                         {/* menu */}
                         <nav className={`${mobileMenu ? "tst-active" : ""}`}>
                             <ul>
@@ -55,7 +58,6 @@ const Header = () => {
                         {/* menu end */}
                         {/* top bar right */}
                         <div className="tst-menu-right">
-                            <RestaurantSelector />
                             {/* reservation button */}
                             <a
                                 href="#."

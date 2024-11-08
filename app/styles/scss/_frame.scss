@@ -167,8 +167,77 @@ menu
       left: 15px;
     }
 
-    & .tst-logo {
-      width: 80px;
+    & .tst-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .tst-logo {
+        width: 80px;
+      }
+
+      .tst-restaurant-selector {
+        margin: 0;
+        min-width: 180px;
+
+        select {
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%231a2f33' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 12px center;
+          padding: 8px 30px 8px 12px;
+          border-radius: 5px;
+          border: 1px solid rgba(26, 47, 51, 0.2);
+          font-family: var(--font-josefin_sans);
+          font-size: 14px;
+          color: #1a2f33;
+          width: 100%;
+          min-width: 180px;
+          cursor: pointer;
+          
+          &:focus {
+            outline: none;
+            border-color: rgba(26, 47, 51, 0.4);
+          }
+        }
+
+        // Styling the dropdown
+        select option {
+          font-family: var(--font-josefin_sans) !important;
+          padding: 12px 15px;
+          margin: 4px 0;
+          background-color: #fff;
+          color: #1a2f33;
+          font-size: 14px;
+          border: none;
+          cursor: pointer;
+
+          &:hover {
+            background-color: rgba(26, 47, 51, 0.05);
+          }
+        }
+
+        // Firefox specific styles
+        @-moz-document url-prefix() {
+          select {
+            font-family: var(--font-josefin_sans) !important;
+            
+            option {
+              font-family: var(--font-josefin_sans) !important;
+              line-height: 1.5;
+            }
+          }
+        }
+
+        // Webkit browsers (Chrome, Safari)
+        select::-webkit-listbox {
+          background-color: #fff;
+          border-radius: 5px;
+          padding: 8px 0;
+          margin-top: 5px;
+          box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.20);
+        }
+      }
     }
 
     & nav {
@@ -653,5 +722,23 @@ fade scroll object
   &.tst-active {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .tst-logo-group {
+    .tst-restaurant-selector {
+      display: none; // Hide on mobile
+    }
+  }
+
+  nav.tst-active {
+    .tst-restaurant-selector {
+      display: block; // Show in mobile menu when active
+      width: 100%;
+      padding: 15px 30px;
+      margin: 0;
+      border-bottom: 1px solid rgba(26, 47, 51, 0.1);
+    }
   }
 }
