@@ -29,6 +29,7 @@ interface CheckoutFormValues {
 const CheckoutForm = () => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
     const [orderId] = useState(crypto.randomUUID())
+    const [savedDetails, setSavedDetails] = useState<any>(null)
 
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
@@ -44,12 +45,21 @@ const CheckoutForm = () => {
         })
     }, [])
 
-    const loadSavedDetails = () => {
-        const saved = localStorage.getItem('user-checkout-details')
-        return saved ? JSON.parse(saved) : null
-    }
+    useEffect(() => {
+        // Load saved details only on client-side
+        const loadSavedDetails = () => {
+            try {
+                const saved = localStorage.getItem('user-checkout-details')
+                return saved ? JSON.parse(saved) : null
+            } catch (error) {
+                console.error('Error loading saved details:', error)
+                return null
+            }
+        }
+        
+        setSavedDetails(loadSavedDetails())
+    }, [])
 
-    const savedDetails = loadSavedDetails()
     const initialValues = {
         firstname: savedDetails?.firstname || '',
         lastname: savedDetails?.lastname || '',
