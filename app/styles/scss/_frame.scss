@@ -170,7 +170,9 @@ menu
     & .tst-logo-group {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 30px;
+      flex: 1;
+      max-width: 500px;
 
       .tst-logo {
         width: 80px;
@@ -194,7 +196,7 @@ menu
           width: 100%;
           min-width: 180px;
           cursor: pointer;
-          
+
           &:focus {
             outline: none;
             border-color: rgba(26, 47, 51, 0.4);
@@ -221,7 +223,7 @@ menu
         @-moz-document url-prefix() {
           select {
             font-family: var(--font-josefin_sans) !important;
-            
+
             option {
               font-family: var(--font-josefin_sans) !important;
               line-height: 1.5;
@@ -728,13 +730,13 @@ fade scroll object
 @media (max-width: 768px) {
   .tst-logo-group {
     .tst-restaurant-selector {
-      display: none; // Hide on mobile
+      display: none;
     }
   }
 
   nav.tst-active {
     .tst-restaurant-selector {
-      display: block; // Show in mobile menu when active
+      display: block;
       width: 100%;
       padding: 15px 30px;
       margin: 0;

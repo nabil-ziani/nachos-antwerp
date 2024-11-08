@@ -26,7 +26,7 @@ export function RestaurantSelector() {
     const options = [
         { value: '', label: 'Kies een locatie', disabled: true },
         ...(locationStatus === 'prompt' ? [
-            { value: 'nearest', label: '📍 Dichtstbijzijnde locatie zoeken' }
+            { value: 'nearest', label: '📍 Dichtstbijzijnde locatie' }
         ] : []),
         ...(locationStatus === 'denied' ? [
             { value: '', label: 'ℹ️ Locatie delen uitgeschakeld', disabled: true }
