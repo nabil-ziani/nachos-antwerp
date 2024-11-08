@@ -39,12 +39,9 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
                     const newStatus = payload.new.payment_status
                     setPaymentStatus(newStatus)
 
-                    if (newStatus === 'completed') {
-                        console.log('Payment completed, redirecting to confirmation')
+                    if (newStatus === 'completed' || newStatus === 'failed' || newStatus === 'cancelled') {
+                        console.log(`Payment ${newStatus}, redirecting to confirmation`)
                         router.push(`/order-confirmation/${orderId}`)
-                    } else if (newStatus === 'failed' || newStatus === 'cancelled') {
-                        console.log('Payment failed/cancelled, redirecting to failure page')
-                        router.push(`/payment-failed/${orderId}`)
                     }
                 }
             )
@@ -67,11 +64,11 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <PaymentContext.Provider value={{ 
-            paymentStatus, 
-            orderId, 
-            startPaymentTracking, 
-            stopPaymentTracking 
+        <PaymentContext.Provider value={{
+            paymentStatus,
+            orderId,
+            startPaymentTracking,
+            stopPaymentTracking
         }}>
             {children}
         </PaymentContext.Provider>
