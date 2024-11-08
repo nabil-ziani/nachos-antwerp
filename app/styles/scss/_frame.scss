@@ -170,9 +170,7 @@ menu
     & .tst-logo-group {
       display: flex;
       align-items: center;
-      gap: 30px;
-      flex: 1;
-      max-width: 500px;
+      gap: 20px;
 
       .tst-logo {
         width: 80px;
@@ -524,7 +522,7 @@ menu
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .tst-menu-frame {
     width: 100%;
     padding: 0;
