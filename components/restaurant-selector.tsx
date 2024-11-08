@@ -1,6 +1,7 @@
 'use client'
 
 import { useRestaurant } from '@/contexts/restaurant-context'
+import { CustomSelect } from './ui/custom-select'
 
 export function RestaurantSelector() {
     const {
@@ -12,50 +13,39 @@ export function RestaurantSelector() {
         isLoading
     } = useRestaurant()
 
-    if (isLoading) {
-        return (
-            <div className="tst-restaurant-selector">
-                <select disabled className="form-select">
-                    <option>Locatie laden...</option>
-                </select>
-            </div>
-        )
-    }
-
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        if (e.target.value === 'nearest') {
+    const handleChange = (value: string) => {
+        if (value === 'nearest') {
             findNearestLocation()
             return
         }
 
-        const restaurant = restaurants.find(r => r.id === e.target.value)
+        const restaurant = restaurants.find(r => r.id === value)
         if (restaurant) setSelectedRestaurant(restaurant)
     }
 
+    const options = [
+        { value: '', label: 'Kies een locatie', disabled: true },
+        ...(locationStatus === 'prompt' ? [
+            { value: 'nearest', label: '📍 Dichtstbijzijnde locatie zoeken' }
+        ] : []),
+        ...(locationStatus === 'denied' ? [
+            { value: '', label: 'ℹ️ Locatie delen uitgeschakeld', disabled: true }
+        ] : []),
+        ...restaurants.map(restaurant => ({
+            value: restaurant.id,
+            label: restaurant.name
+        }))
+    ]
+
     return (
         <div className="tst-restaurant-selector">
-            <select
+            <CustomSelect
                 value={selectedRestaurant?.id || ''}
                 onChange={handleChange}
-                className="form-select"
-            >
-                <option value="" disabled>Kies een locatie</option>
-                {locationStatus === 'prompt' && (
-                    <option value="nearest">
-                        📍 Dichtstbijzijnde locatie zoeken
-                    </option>
-                )}
-                {locationStatus === 'denied' && (
-                    <option value="" disabled>
-                        ℹ️ Locatie delen uitgeschakeld
-                    </option>
-                )}
-                {restaurants.map((restaurant) => (
-                    <option key={restaurant.id} value={restaurant.id}>
-                        {restaurant.name}
-                    </option>
-                ))}
-            </select>
+                options={options}
+                disabled={isLoading}
+                placeholder={isLoading ? 'Locatie laden...' : 'Kies een locatie'}
+            />
         </div>
     )
 } 
