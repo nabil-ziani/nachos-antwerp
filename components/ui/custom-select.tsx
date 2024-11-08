@@ -36,18 +36,23 @@ export function CustomSelect({
         }
 
         if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside)
+            window.addEventListener('click', handleClickOutside, true)
         }
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
+            window.removeEventListener('click', handleClickOutside, true)
         }
     }, [isOpen])
+
+    const handleSelectClick = (e: React.MouseEvent) => {
+        e.stopPropagation()
+    }
 
     return (
         <div
             ref={selectRef}
             className={`tst-custom-select ${className} ${disabled ? 'disabled' : ''}`}
+            onClick={handleSelectClick}
         >
             <button
                 type="button"
