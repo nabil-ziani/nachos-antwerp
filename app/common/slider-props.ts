@@ -43,7 +43,7 @@ import "swiper/css/pagination";
 export const SliderProps = {
   heroSlider: {
     slidesPerView: 1,
-    speed: 800,
+    speed: 2000,
     effect: 'fade',
     fadeEffect: {
       crossFade: true
@@ -54,7 +54,7 @@ export const SliderProps = {
     },
     parallax: true,
     autoplay: {
-      delay: 5000,
+      delay: 7000,
     },
     navigation: {
       prevEl: '.tst-main-prev',
