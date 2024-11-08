@@ -1,11 +1,21 @@
 import Divider from "@/app/layouts/divider"
 import Link from "next/link"
+import { useCart } from '@/hooks/useCart'
+import { useEffect } from 'react'
 
 interface PaymentResultProps {
     status: string
 }
 
 export function PaymentResult({ status }: PaymentResultProps) {
+    const { cartItems, removeFromCart } = useCart()
+
+    useEffect(() => {
+        if (status === 'completed') {
+            cartItems.forEach(item => removeFromCart(item.itemId))
+        }
+    }, [status])
+
     const getStatusContent = () => {
         switch (status) {
             case 'completed':

@@ -929,3 +929,30 @@ radio
 .tst-radio input[type=radio]:checked~.tst-check::before {
   background: $ac;
 }
+
+// Checkbox specific styles (after the radio styles)
+.tst-radio {
+  input[type="checkbox"] {
+    position: absolute;
+    visibility: hidden;
+    
+    &:checked ~ .tst-check {
+      border-color: $ac;
+      
+      &::before {
+        background: $ac;
+        border-radius: 2px;
+        width: 13px;
+        height: 13px;
+      }
+    }
+  }
+
+  input[type="checkbox"] ~ .tst-check {
+    border-radius: 4px;
+    
+    &::before {
+      border-radius: 2px;
+    }
+  }
+}

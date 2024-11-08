@@ -23,6 +23,7 @@ interface CheckoutFormValues {
     message: string
     payment_method: string
     delivery_method: string
+    remember_details: boolean
 }
 
 const CheckoutForm = () => {
@@ -43,11 +44,32 @@ const CheckoutForm = () => {
         })
     }, [])
 
+    const loadSavedDetails = () => {
+        const saved = localStorage.getItem('user-checkout-details')
+        return saved ? JSON.parse(saved) : null
+    }
+
+    const savedDetails = loadSavedDetails()
+    const initialValues = {
+        firstname: savedDetails?.firstname || '',
+        lastname: savedDetails?.lastname || '',
+        email: savedDetails?.email || '',
+        tel: savedDetails?.tel || '',
+        company: savedDetails?.company || '',
+        city: savedDetails?.city || '',
+        address: savedDetails?.address || '',
+        postcode: savedDetails?.postcode || '',
+        message: '',
+        payment_method: 'bankoverschrijving',
+        delivery_method: 'afhalen',
+        remember_details: true
+    }
+
     return (
         <>
             {/* checkout form */}
             <Formik
-                initialValues={{ firstname: '', lastname: '', email: '', tel: '', company: '', city: '', address: '', postcode: '', message: '', payment_method: 'bankoverschrijving', delivery_method: 'afhalen' }}
+                initialValues={initialValues}
                 validate={values => {
                     const errors: FormikErrors<CheckoutFormValues> = {}
 
@@ -75,6 +97,20 @@ const CheckoutForm = () => {
 
                 onSubmit={async (values, { setSubmitting }) => {
                     try {
+                        if (values.remember_details) {
+                            const detailsToSave = {
+                                firstname: values.firstname,
+                                lastname: values.lastname,
+                                email: values.email,
+                                tel: values.tel,
+                                company: values.company,
+                                city: values.city,
+                                address: values.address,
+                                postcode: values.postcode,
+                            }
+                            localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
+                        }
+
                         const form = document.getElementById("checkoutForm") as HTMLFormElement;
                         const status = document.getElementById("checkoutFormStatus");
 
@@ -216,7 +252,7 @@ const CheckoutForm = () => {
                                         value={values.postcode}
                                     />
                                     {errors.postcode && touched.postcode && (
-                                        <div className="error-message">{errors.postcode}</div>
+                                        <div className="error-message">{errors.postcode as string}</div>
                                     )}
                                 </div>
                             </div>
@@ -289,6 +325,20 @@ const CheckoutForm = () => {
                                 onBlur={handleBlur}
                                 value={values.message}
                             />
+                        </div>
+
+                        <div className="tst-group-input">
+                            <div className="tst-radio">
+                                <input
+                                    type="checkbox"
+                                    id="remember-details"
+                                    name="remember_details"
+                                    checked={values.remember_details}
+                                    onChange={handleChange}
+                                />
+                                <label htmlFor="remember-details">Onthoud mijn gegevens voor de volgende keer</label>
+                                <div className="tst-check"></div>
+                            </div>
                         </div>
 
                         <div className="tst-mb-30 tst-space-between">

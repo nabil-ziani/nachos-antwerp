@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { createClient } from '@/utils/supabase/client'
 import { usePayment } from "@/contexts/payment-context"
+import { useCart } from '@/hooks/useCart'
 
 interface PayconiqButtonProps {
     amount: number
