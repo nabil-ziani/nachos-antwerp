@@ -9,6 +9,7 @@ import { PayconiqButton } from '../payconiq-button';
 import { useCart } from '@/hooks/useCart';
 import { useRouter } from 'next/navigation';
 import { usePayment } from '@/contexts/payment-context';
+import { useRestaurant } from '@/contexts/restaurant-context';
 
 interface CheckoutFormValues {
     firstname: string
@@ -30,6 +31,7 @@ const CheckoutForm = () => {
 
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
+    const { findRestaurantByPostalCode } = useRestaurant()
 
     useEffect(() => {
         (async () => {
@@ -140,7 +142,8 @@ const CheckoutForm = () => {
                     handleSubmit,
                     isSubmitting,
                     isValid,
-                    /* and other goodies */
+                    setFieldValue,
+                    setFieldError,
                 }) => (
                     <form onSubmit={handleSubmit} id="checkoutForm" action={AppData.settings.formspreeURL} className="tst-checkout-form">
                         <div className="tst-mb-30">
@@ -197,9 +200,24 @@ const CheckoutForm = () => {
                                         name="postcode"
                                         required={true}
                                         onChange={handleChange}
-                                        onBlur={handleBlur}
+                                        onBlur={(e) => {
+                                            handleBlur(e)
+                                            if (e.target.value) {
+                                                const restaurant = findRestaurantByPostalCode(e.target.value)
+                                                if (!restaurant) {
+                                                    // Reset the form or disable submission
+                                                    e.target.value = ''
+                                                    setFieldValue('postcode', '')
+                                                    // Optionally, disable the submit button or show an error message
+                                                    setFieldError('postcode', 'We bezorgen niet in deze postcode')
+                                                }
+                                            }
+                                        }}
                                         value={values.postcode}
                                     />
+                                    {errors.postcode && touched.postcode && (
+                                        <div className="error-message">{errors.postcode}</div>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-lg-6">

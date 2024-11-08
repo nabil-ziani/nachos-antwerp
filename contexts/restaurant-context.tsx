@@ -10,6 +10,8 @@ interface RestaurantContextType {
     restaurants: Restaurant[]
     locationStatus: 'prompt' | 'granted' | 'denied' | 'unsupported'
     findNearestLocation: () => void
+    findRestaurantByPostalCode: (postalCode: string) => Restaurant | null
+    isLoading: boolean
 }
 
 const RestaurantContext = createContext<RestaurantContextType | undefined>(undefined)
@@ -18,40 +20,38 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
     const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null)
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
     const [locationStatus, setLocationStatus] = useState<'prompt' | 'granted' | 'denied' | 'unsupported'>('prompt')
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const fetchRestaurants = async () => {
-            const supabase = createClient()
-            const { data } = await supabase
-                .from('restaurant')
-                .select('*')
-                .returns<Restaurant[]>()
-
-            if (!data) return
-
-            setRestaurants(data)
-
-            // Set default restaurant initially
-            if (!selectedRestaurant) {
-                setSelectedRestaurant(data[0])
-            }
-
-            // Check if geolocation is supported
-            if (!navigator.geolocation) {
-                setLocationStatus('unsupported')
-                return
-            }
-
             try {
+                setIsLoading(true)
+                const supabase = createClient()
+                const { data } = await supabase
+                    .from('restaurant')
+                    .select('*')
+
+                if (data) {
+                    setRestaurants(data)
+                    // Set default restaurant (Antwerp) if no location
+                    const defaultRestaurant = data.find(r => r.name.toLowerCase().includes('antwerp')) || data[0]
+                    setSelectedRestaurant(defaultRestaurant)
+                }
+
+                // Check geolocation support and permissions
+                if (!navigator.geolocation) {
+                    setLocationStatus('unsupported')
+                    setIsLoading(false)
+                    return
+                }
+
                 const permission = await navigator.permissions.query({ name: 'geolocation' })
                 setLocationStatus(permission.state as 'prompt' | 'granted' | 'denied')
 
-                // If permission is already granted, get location
                 if (permission.state === 'granted') {
                     findNearestLocation()
                 }
 
-                // Listen for permission changes
                 permission.addEventListener('change', () => {
                     setLocationStatus(permission.state as 'prompt' | 'granted' | 'denied')
                     if (permission.state === 'granted') {
@@ -59,8 +59,10 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
                     }
                 })
             } catch (error) {
-                console.error('Permission check error:', error)
+                console.error('Error fetching restaurants:', error)
                 setLocationStatus('denied')
+            } finally {
+                setIsLoading(false)
             }
         }
 
@@ -74,11 +76,41 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
                     restaurants,
                     position.coords.latitude,
                     position.coords.longitude
-                )
-                setSelectedRestaurant(nearest)
+                );
+                
+                if (nearest) {
+                    setSelectedRestaurant(nearest);
+                } else {
+                    // Fallback to default restaurant if no nearest found
+                    const defaultRestaurant = restaurants.find(r => 
+                        r.name.toLowerCase().includes('antwerp')
+                    ) || restaurants[0];
+                    setSelectedRestaurant(defaultRestaurant);
+                    console.warn('Could not find nearest restaurant, falling back to default');
+                }
             },
-            () => { } // Error is handled by the permission change listener
+            (error) => {
+                console.error('Geolocation error:', error);
+                setLocationStatus('denied');
+            }
+        );
+    };
+
+    const findRestaurantByPostalCode = (postalCode: string): Restaurant | null => {
+        const restaurant = restaurants.find(r =>
+            r.allowed_postalcodes?.includes(postalCode)
         )
+
+        if (restaurant) {
+            setSelectedRestaurant(restaurant)
+            alert(`We hebben voor jou het restaurant in ${restaurant.name} geselecteerd op basis van je postcode.`)
+            return restaurant
+        }
+
+        // No restaurant found = no delivery possible
+        setSelectedRestaurant(null)
+        alert(`Sorry, we bezorgen momenteel niet in ${postalCode}. Kijk op onze locatiepagina voor de gebieden waar we wel bezorgen.`)
+        return null
     }
 
     return (
@@ -87,7 +119,9 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
             setSelectedRestaurant,
             restaurants,
             locationStatus,
-            findNearestLocation
+            findNearestLocation,
+            findRestaurantByPostalCode,
+            isLoading
         }}>
             {children}
         </RestaurantContext.Provider>
@@ -103,26 +137,38 @@ export const useRestaurant = () => {
 }
 
 // Helper function to calculate distance and find nearest restaurant
-function findNearestRestaurant(restaurants: Restaurant[], userLat: number, userLng: number): Restaurant {
-    return restaurants.reduce((nearest, current) => {
+function findNearestRestaurant(restaurants: Restaurant[], userLat: number, userLng: number): Restaurant | null {
+    if (!restaurants.length) return null;
 
+    // Filter restaurants with valid coordinates first
+    const validRestaurants = restaurants.filter(r => 
+        r.latitude != null && 
+        r.longitude != null
+    );
+
+    if (!validRestaurants.length) return restaurants[0];
+
+    return validRestaurants.reduce((nearest, current) => {
         if (!current.latitude || !current.longitude || !nearest.latitude || !nearest.longitude) {
             return nearest;
         }
+
         const distanceToCurrent = calculateDistance(
             userLat,
             userLng,
             current.latitude,
             current.longitude
-        )
+        );
+
         const distanceToNearest = calculateDistance(
             userLat,
             userLng,
             nearest.latitude,
             nearest.longitude
-        )
-        return distanceToCurrent < distanceToNearest ? current : nearest
-    })
+        );
+
+        return distanceToCurrent < distanceToNearest ? current : nearest;
+    }, validRestaurants[0]);
 }
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {

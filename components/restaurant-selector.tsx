@@ -8,10 +8,11 @@ export function RestaurantSelector() {
         setSelectedRestaurant,
         restaurants,
         locationStatus,
-        findNearestLocation
+        findNearestLocation,
+        isLoading
     } = useRestaurant()
 
-    if (restaurants.length === 0) {
+    if (isLoading) {
         return (
             <div className="tst-restaurant-selector">
                 <select disabled className="form-select">
@@ -21,25 +22,29 @@ export function RestaurantSelector() {
         )
     }
 
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (e.target.value === 'nearest') {
+            findNearestLocation()
+            return
+        }
+
+        const restaurant = restaurants.find(r => r.id === e.target.value)
+        if (restaurant) setSelectedRestaurant(restaurant)
+    }
+
     return (
         <div className="tst-restaurant-selector">
-            {locationStatus === 'prompt' && (
-                <div className="tst-location-prompt">
-                    <button onClick={findNearestLocation} className="tst-location-button">
-                        <i className="fas fa-location-arrow"></i>
-                        Dichtstbijzijnde locatie zoeken
-                    </button>
-                </div>
-            )}
             <select
                 value={selectedRestaurant?.id || ''}
-                onChange={(e) => {
-                    const restaurant = restaurants.find(r => r.id === e.target.value)
-                    if (restaurant) setSelectedRestaurant(restaurant)
-                }}
+                onChange={handleChange}
                 className="form-select"
             >
                 <option value="" disabled>Kies een locatie</option>
+                {locationStatus === 'prompt' && (
+                    <option value="nearest">
+                        📍 Dichtstbijzijnde locatie zoeken
+                    </option>
+                )}
                 {locationStatus === 'denied' && (
                     <option value="" disabled>
                         ℹ️ Locatie delen uitgeschakeld
@@ -47,7 +52,7 @@ export function RestaurantSelector() {
                 )}
                 {restaurants.map((restaurant) => (
                     <option key={restaurant.id} value={restaurant.id}>
-                        Nacho's {restaurant.name}
+                        {restaurant.name}
                     </option>
                 ))}
             </select>

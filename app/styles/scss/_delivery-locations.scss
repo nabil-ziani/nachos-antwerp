@@ -1,0 +1,145 @@
+.tst-delivery-locations {
+  padding: 60px 0;
+
+  .tst-location-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    height: 100%;
+    box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.10);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px 0 rgba(26, 47, 51, 0.15);
+    }
+
+    h5 {
+      color: $ac;
+      font-family: $pf;
+      font-weight: 700;
+    }
+
+    .tst-text {
+      color: $dl1;
+      margin-bottom: 15px;
+    }
+
+    .tst-postal-codes {
+      border-top: 1px solid rgba($dl1, 0.1);
+      padding-top: 15px;
+
+      strong {
+        display: block;
+        margin-bottom: 10px;
+        color: $dl1;
+        font-family: $sf;
+        font-size: 14px;
+      }
+
+      p {
+        color: $dl2;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0;
+      }
+    }
+  }
+
+  @media (max-width: 991px) {
+    padding: 40px 0;
+  }
+}
+
+// Restaurant selector styling
+.tst-restaurant-selector {
+  position: relative;
+  margin-left: 20px;
+  min-width: 200px;
+
+  .tst-location-prompt {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .tst-location-button {
+    background: transparent;
+    border: none;
+    color: $dl2;
+    font-size: 12px;
+    padding: 4px 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 auto;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+
+    &:hover {
+      color: $ac;
+    }
+
+    i {
+      font-size: 10px;
+    }
+
+    span {
+      white-space: nowrap;
+    }
+  }
+
+  select {
+    width: 100%;
+    padding: 8px 30px 8px 12px;
+    border-radius: 5px;
+    border: 1px solid rgba($dl1, 0.2);
+    background-color: #fff;
+    color: $dl1;
+    font-size: 14px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%231a2f33' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+
+    &:focus {
+      outline: none;
+      border-color: $ac;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      background-color: #f5f5f5;
+    }
+
+    option {
+      background-color: #fff;
+      color: $dl1;
+      padding: 8px;
+    }
+  }
+
+  @media (max-width: 991px) {
+    margin: 15px 0;
+    width: 100%;
+    
+    .tst-location-prompt {
+      position: relative;
+      top: 0;
+      margin-bottom: 8px;
+    }
+
+    select {
+      width: 100%;
+    }
+  }
+} 

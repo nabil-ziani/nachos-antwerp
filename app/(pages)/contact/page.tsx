@@ -6,6 +6,7 @@ import Divider from "@/app/layouts/divider"
 import PageBanner from "@/components/page-banner"
 import ContactInfoSection from "@/components/sections/contact-info"
 import ContactFormSection from "@/components/sections/contact-form"
+import { DeliveryLocationsSection } from "@/components/sections/delivery-locations"
 
 export const metadata = {
     title: {
@@ -32,6 +33,8 @@ const Contact = () => {
                             <ScrollHint />
 
                             <ContactInfoSection />
+                            <Divider />
+                            <DeliveryLocationsSection />
                             <Divider />
                             <ContactFormSection />
                         </div>
