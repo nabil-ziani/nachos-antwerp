@@ -33,7 +33,6 @@ register();
 import '@/app/styles/scss/style.scss';
 
 import AppData from "@/data/app.json";
-import { NotificationBanner } from '@/components/notification-banner'
 
 export const metadata = {
   title: {
@@ -50,10 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="tst-main-overlay"></div>
         <RestaurantProvider>
           <PaymentProvider>
-            <NotificationBanner
-              isVisible={true}
-              message="Je bestelt bij Nacho's Berchem - Diksmuidelaan 170"
-            />
             <div id="tst-app" className="tst-app">
               {children}
             </div>
