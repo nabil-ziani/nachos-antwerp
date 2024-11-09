@@ -135,6 +135,7 @@ export type Database = {
         Row: {
           address: string
           allowed_postalcodes: string[]
+          delivery_minimums: Json | null
           id: string
           latitude: number | null
           longitude: number | null
@@ -144,6 +145,7 @@ export type Database = {
         Insert: {
           address?: string
           allowed_postalcodes: string[]
+          delivery_minimums?: Json | null
           id?: string
           latitude?: number | null
           longitude?: number | null
@@ -153,6 +155,7 @@ export type Database = {
         Update: {
           address?: string
           allowed_postalcodes?: string[]
+          delivery_minimums?: Json | null
           id?: string
           latitude?: number | null
           longitude?: number | null

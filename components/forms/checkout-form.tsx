@@ -9,6 +9,7 @@ import { PayconiqButton } from '../payconiq-button';
 import { useCart } from '@/hooks/useCart';
 import { useRouter } from 'next/navigation';
 import { useRestaurant } from '@/contexts/restaurant-context';
+import { MinimumOrderInfo } from '../minimum-order-info';
 
 interface CheckoutFormValues {
     firstname: string
@@ -125,6 +126,16 @@ const CheckoutForm = () => {
                             errors.postcode = 'Verplicht';
                         } else if (!/^\d{4}$/.test(values.postcode)) {
                             errors.postcode = 'Ongeldige postcode';
+                        }
+                    }
+
+                    // Add minimum order validation for delivery
+                    if (values.delivery_method === 'leveren' && values.postcode) {
+                        const { restaurant, minimumAmount } = findRestaurantByPostalCode(values.postcode);
+                        if (restaurant && minimumAmount) {
+                            if (totalAmount < minimumAmount) {
+                                errors.postcode = `Minimum bestelbedrag voor ${values.postcode} is €${minimumAmount.toFixed(2)}`;
+                            }
                         }
                     }
 
@@ -285,6 +296,9 @@ const CheckoutForm = () => {
                                     />
                                     {errors.postcode && touched.postcode && (
                                         <div className="error-message">{errors.postcode as string}</div>
+                                    )}
+                                    {values.delivery_method === 'leveren' && values.postcode && (
+                                        <MinimumOrderInfo postcode={values.postcode} />
                                     )}
                                 </div>
                             </div>

@@ -5,13 +5,15 @@ import { Restaurant } from '@/lib/types'
 import { createClient } from '@/utils/supabase/client'
 
 interface RestaurantContextType {
-    selectedRestaurant: Restaurant | null
-    setSelectedRestaurant: (restaurant: Restaurant) => void
     restaurants: Restaurant[]
-    locationStatus: 'prompt' | 'granted' | 'denied' | 'unsupported'
+    selectedRestaurant: Restaurant | null
+    locationStatus: string
     findNearestLocation: () => void
-    findRestaurantByPostalCode: (postalCode: string) => Restaurant | null
-    isLoading: boolean
+    findRestaurantByPostalCode: (postalCode: string) => {
+        restaurant: Restaurant | null;
+        minimumAmount: number | null;
+    }
+    setSelectedRestaurant: (restaurant: Restaurant | null) => void
 }
 
 const RestaurantContext = createContext<RestaurantContextType | undefined>(undefined)
@@ -96,30 +98,29 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
         );
     };
 
-    const findRestaurantByPostalCode = (postalCode: string): Restaurant | null => {
+    const findRestaurantByPostalCode = (postalCode: string) => {
         const restaurant = restaurants.find(r =>
             r.allowed_postalcodes?.includes(postalCode)
-        )
+        );
 
         if (restaurant) {
-            setSelectedRestaurant(restaurant)
-            return restaurant
+            const minimumAmount = restaurant.delivery_minimums?.[postalCode] || null;
+            setSelectedRestaurant(restaurant);
+            return { restaurant, minimumAmount };
         }
 
-        // No restaurant found = no delivery possible
-        setSelectedRestaurant(null)
-        return null
-    }
+        setSelectedRestaurant(null);
+        return { restaurant: null, minimumAmount: null };
+    };
 
     return (
         <RestaurantContext.Provider value={{
-            selectedRestaurant,
-            setSelectedRestaurant,
             restaurants,
+            selectedRestaurant,
             locationStatus,
             findNearestLocation,
             findRestaurantByPostalCode,
-            isLoading
+            setSelectedRestaurant
         }}>
             {children}
         </RestaurantContext.Provider>

@@ -12,7 +12,15 @@ export type CartItem = {
 
 export type MenuCategory = Tables<'menu_categories'>
 
-export type Restaurant = Tables<'restaurant'>
+export type Restaurant = {
+    id: string
+    name: string
+    address: string
+    latitude: number
+    longitude: number
+    allowed_postalcodes: string[]
+    delivery_minimums: Record<string, number>
+}
 
 export type MenuItemWithCategory = {
     id: string
