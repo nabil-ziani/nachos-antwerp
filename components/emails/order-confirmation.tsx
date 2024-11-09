@@ -98,7 +98,9 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
                                 {order.type === 'delivery' ? 'Leveringsadres' : 'Afhaaladres'}
                             </Heading>
                             <Text style={infoText}>
-                                {order.type === 'delivery' ? customer.address : restaurant.address}
+                                {order.type === 'delivery' && customer.address 
+                                    ? customer.address 
+                                    : restaurant.address}
                             </Text>
                             <Text style={estimatedTimeBox}>
                                 <svg 
@@ -114,7 +116,7 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
                                 </svg>
                                 <span style={estimatedTimeText}>
                                     Geschatte {order.type === 'delivery' ? 'levertijd' : 'afhaaltijd'}:{' '}
-                                    {order.type === 'delivery' ? 'ongeveer 60 minuten' : '30-45 minuten'}
+                                    {order.type === 'delivery' ? '45-60 minuten' : '30-45 minuten'}
                                 </span>
                             </Text>
                         </Section>
