@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { createClient } from '@/utils/supabase/client'
 import { usePayment } from "@/contexts/payment-context"
-import { useCart } from '@/hooks/useCart'
 
 interface PayconiqButtonProps {
     amount: number
@@ -24,9 +23,10 @@ interface PayconiqButtonProps {
     }
     onPaymentCreated?: (checkoutUrl: string) => void
     onPaymentError?: (error: Error) => void
+    children: React.ReactNode
 }
 
-export function PayconiqButton({ amount, orderId, className, onPaymentCreated, onPaymentError, disabled, formValues }: PayconiqButtonProps) {
+export function PayconiqButton({ amount, orderId, className, onPaymentCreated, onPaymentError, disabled, formValues, children }: PayconiqButtonProps) {
     const [isLoading, setIsLoading] = useState(false)
 
     const { startPaymentTracking } = usePayment()
@@ -99,16 +99,8 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
     }
 
     return (
-        <button
-            onClick={handlePayment}
-            disabled={disabled || isLoading}
-            className={className}
-            type="button"
-        >
-            <span className="tst-icon">
-                <img src="/img/ui/icons/arrow.svg" alt="icon" />
-            </span>
-            <span>{isLoading ? 'Even geduld...' : 'Betaal met Payconiq'}</span>
+        <button onClick={handlePayment} disabled={disabled || isLoading} className={className} type="button">
+            {children}
         </button>
     )
 } 

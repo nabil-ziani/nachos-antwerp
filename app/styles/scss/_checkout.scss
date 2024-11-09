@@ -1,0 +1,97 @@
+.tst-checkout-form {
+    .tst-group-input {
+        margin-bottom: 1.5rem;
+        position: relative;
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1a2f33;
+        }
+
+        input,
+        textarea {
+            &.error {
+                border-color: #FF5252;
+                background-color: rgba(255, 82, 82, 0.05);
+            }
+        }
+
+        .error-message {
+            color: #FF5252;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            position: absolute;
+            bottom: -20px;
+        }
+    }
+
+    .tst-btn {
+        &:disabled {
+            background-color: #e2e8f0;
+            cursor: not-allowed;
+            transform: none;
+
+            &:hover {
+                filter: none;
+                transform: none;
+            }
+
+            .tst-icon {
+                opacity: 0.5;
+            }
+        }
+
+        &.loading {
+            position: relative;
+
+            .spinner {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 20px;
+                height: 20px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                border-top-color: #fff;
+                animation: spin 0.8s linear infinite;
+            }
+        }
+    }
+
+    .tst-location-confirmation {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid #1a2f33;
+
+        .tst-location-icon {
+            color: #1a2f33;
+            font-size: 1.5rem;
+        }
+
+        .tst-location-details {
+            h6 {
+                margin: 0;
+                color: #1a2f33;
+                font-weight: 600;
+            }
+
+            p {
+                margin: 0.25rem 0 0;
+                color: #64748b;
+                font-size: 0.875rem;
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

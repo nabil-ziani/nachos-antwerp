@@ -103,13 +103,11 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
 
         if (restaurant) {
             setSelectedRestaurant(restaurant)
-            alert(`We hebben voor jou het restaurant in ${restaurant.name} geselecteerd op basis van je postcode.`)
             return restaurant
         }
 
         // No restaurant found = no delivery possible
         setSelectedRestaurant(null)
-        alert(`Sorry, we bezorgen momenteel niet in ${postalCode}. Kijk op onze locatiepagina voor de gebieden waar we wel bezorgen.`)
         return null
     }
 

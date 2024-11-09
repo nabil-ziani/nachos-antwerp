@@ -25,6 +25,22 @@ interface CheckoutFormValues {
     remember_details: boolean
 }
 
+const LocationConfirmation = ({ postalCode }: { postalCode: string }) => {
+    const location = postalCode.startsWith('2170') ? 'Merksem' : 'Berchem';
+    
+    return (
+        <div className="tst-location-confirmation">
+            <div className="tst-location-icon">
+                <i className="fas fa-map-marker-alt"></i>
+            </div>
+            <div className="tst-location-details">
+                <h6>Je bestelt bij Nacho's {location}</h6>
+                <p>{location === 'Merksem' ? 'Oudebareellei 51, 2170 Merksem' : 'Diksmuidelaan 170, 2600 Berchem'}</p>
+            </div>
+        </div>
+    );
+};
+
 const CheckoutForm = () => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
     const [orderId] = useState(crypto.randomUUID())
@@ -48,7 +64,7 @@ const CheckoutForm = () => {
     useEffect(() => {
         const loadSavedDetails = () => {
             if (typeof window === 'undefined') return null;
-            
+
             try {
                 const saved = localStorage.getItem('user-checkout-details')
                 return saved ? JSON.parse(saved) : null
@@ -197,6 +213,9 @@ const CheckoutForm = () => {
                     setFieldError,
                 }) => (
                     <form onSubmit={handleSubmit} id="checkoutForm" action={AppData.settings.formspreeURL} className="tst-checkout-form">
+                        {values.postcode && findRestaurantByPostalCode(values.postcode) && (
+                            <LocationConfirmation postalCode={values.postcode} />
+                        )}
                         <div className="tst-mb-30">
                             <h5>Factuurgegevens</h5>
                         </div>
@@ -208,11 +227,14 @@ const CheckoutForm = () => {
                                         type="text"
                                         placeholder="Voornaam"
                                         name="firstname"
-                                        required={true}
+                                        className={errors.firstname && touched.firstname ? 'error' : ''}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.firstname}
                                     />
+                                    {errors.firstname && touched.firstname && (
+                                        <div className="error-message">{errors.firstname as string}</div>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-lg-6">
@@ -424,7 +446,7 @@ const CheckoutForm = () => {
                                 <PayconiqButton
                                     amount={totalAmount}
                                     orderId={orderId}
-                                    className="tst-btn tst-btn-with-icon tst-m-0"
+                                    className={`tst-btn tst-btn-with-icon tst-m-0 ${isSubmitting ? 'loading' : ''}`}
                                     disabled={!isValid || isSubmitting}
                                     formValues={{
                                         ...values,
@@ -443,7 +465,13 @@ const CheckoutForm = () => {
                                             status.innerHTML = "<h5>Er is een probleem opgetreden. Probeer het opnieuw.</h5>"
                                         }
                                     }}
-                                />
+                                >
+                                    {isSubmitting && <div className="spinner" />}
+                                    <span className="tst-icon">
+                                        <img src="/img/ui/icons/arrow.svg" alt="icon" />
+                                    </span>
+                                    <span>{isSubmitting ? 'Even geduld...' : 'Betaal met Payconiq'}</span>
+                                </PayconiqButton>
                             ) : (
                                 // Cash payment flow - regular form submission
                                 <button
