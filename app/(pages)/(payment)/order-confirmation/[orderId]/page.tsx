@@ -12,10 +12,12 @@ interface OrderDetails {
     amount: number
     delivery_method: string
     payment_status: string
+    order_items: any[]
 }
 
 export default function OrderConfirmationPage({ params }: { params: { orderId: string } }) {
     const [order, setOrder] = useState<OrderDetails | null>(null)
+    const [emailSent, setEmailSent] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -28,16 +30,43 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
                 .single()
 
             if (error || !data) {
+                console.error('Error fetching order:', error)
                 router.push('/menu')
                 return
             }
 
             setOrder(data)
+
+            if (data.payment_status === 'completed' && !emailSent) {
+                try {
+                    await fetch('/api/email/order-confirmation', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            order: {
+                                id: data.order_id,
+                                items: data.order_items,
+                                total: data.amount,
+                                deliveryMethod: data.delivery_method,
+                            },
+                            customer: {
+                                name: data.customer_name,
+                                email: data.customer_email
+                            }
+                        })
+                    })
+                    setEmailSent(true)
+                    localStorage.removeItem('cart-storage')
+                } catch (error) {
+                    console.error('Failed to send confirmation email:', error)
+                }
+            }
+
             localStorage.removeItem(`payment_${params.orderId}`)
         }
 
         fetchOrder()
-    }, [params.orderId])
+    }, [params.orderId, emailSent])
 
     if (!order) return null
 
