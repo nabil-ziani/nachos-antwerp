@@ -104,26 +104,31 @@ const CheckoutForm = () => {
             <Formik
                 initialValues={initialValues}
                 validate={values => {
-                    const errors: FormikErrors<CheckoutFormValues> = {}
+                    const errors: FormikErrors<CheckoutFormValues> = {};
 
-                    // ----- VALIDATION -----
-                    if (!values.firstname) errors.firstname = 'Verplicht'
-                    if (!values.lastname) errors.lastname = 'Verplicht'
-                    if (!values.tel) errors.tel = 'Verplicht'
+                    // Basic required fields
+                    if (!values.firstname) errors.firstname = 'Verplicht';
+                    if (!values.lastname) errors.lastname = 'Verplicht';
+                    if (!values.tel) errors.tel = 'Verplicht';
 
                     if (!values.email) {
-                        errors.email = 'Verplicht'
+                        errors.email = 'Verplicht';
                     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-                        errors.email = 'Ongeldige mailadres'
+                        errors.email = 'Ongeldige mailadres';
                     }
 
+                    // Delivery-specific validation
                     if (values.delivery_method === 'leveren') {
-                        if (!values.address) errors.address = 'Verplicht'
-                        if (!values.city) errors.city = 'Verplicht'
-                        if (!values.postcode) errors.postcode = 'Verplicht'
+                        if (!values.address) errors.address = 'Verplicht';
+                        if (!values.city) errors.city = 'Verplicht';
+                        if (!values.postcode) {
+                            errors.postcode = 'Verplicht';
+                        } else if (!/^\d{4}$/.test(values.postcode)) {
+                            errors.postcode = 'Ongeldige postcode';
+                        }
                     }
 
-                    return errors
+                    return errors;
                 }}
 
                 onSubmit={async (values, { setSubmitting }) => {
@@ -242,11 +247,14 @@ const CheckoutForm = () => {
                                         type="text"
                                         placeholder="Familienaam"
                                         name="lastname"
-                                        required={true}
+                                        className={errors.lastname && touched.lastname ? 'error' : ''}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.lastname}
                                     />
+                                    {errors.lastname && touched.lastname && (
+                                        <div className="error-message">{errors.lastname as string}</div>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-lg-6">
@@ -269,21 +277,10 @@ const CheckoutForm = () => {
                                         type="text"
                                         placeholder="2600"
                                         name="postcode"
-                                        required={true}
+                                        className={errors.postcode && touched.postcode ? 'error' : ''}
+                                        required={values.delivery_method === 'leveren'}
                                         onChange={handleChange}
-                                        onBlur={(e) => {
-                                            handleBlur(e);
-                                            if (e.target.value) {
-                                                const restaurant = findRestaurantByPostalCode(e.target.value);
-                                                if (!restaurant) {
-                                                    e.target.value = '';
-                                                    setFieldValue('postcode', '');
-                                                    setFieldError('postcode', 'We bezorgen niet in deze postcode');
-                                                } else if (restaurant.id !== selectedRestaurant?.id) {
-                                                    setFieldError('postcode', `Deze postcode wordt bediend door ${restaurant.name}`);
-                                                }
-                                            }
-                                        }}
+                                        onBlur={handleBlur}
                                         value={values.postcode}
                                     />
                                     {errors.postcode && touched.postcode && (
@@ -298,11 +295,15 @@ const CheckoutForm = () => {
                                         type="text"
                                         placeholder="Berchem"
                                         name="city"
-                                        required={true}
+                                        className={errors.city && touched.city ? 'error' : ''}
+                                        required={values.delivery_method === 'leveren'}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.city}
                                     />
+                                    {errors.city && touched.city && (
+                                        <div className="error-message">{errors.city as string}</div>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-lg-6">
@@ -312,11 +313,15 @@ const CheckoutForm = () => {
                                         type="text"
                                         placeholder="Diksmuidelaan 170"
                                         name="address"
-                                        required={true}
+                                        className={errors.address && touched.address ? 'error' : ''}
+                                        required={values.delivery_method === 'leveren'}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.address}
                                     />
+                                    {errors.address && touched.address && (
+                                        <div className="error-message">{errors.address as string}</div>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-lg-6">
@@ -326,11 +331,14 @@ const CheckoutForm = () => {
                                         type="tel"
                                         placeholder="04 XX XX XX XX"
                                         name="tel"
-                                        required={true}
+                                        className={errors.tel && touched.tel ? 'error' : ''}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.tel}
                                     />
+                                    {errors.tel && touched.tel && (
+                                        <div className="error-message">{errors.tel as string}</div>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-lg-6">
@@ -340,11 +348,14 @@ const CheckoutForm = () => {
                                         type="email"
                                         placeholder="Email"
                                         name="email"
-                                        required={true}
+                                        className={errors.email && touched.email ? 'error' : ''}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.email}
                                     />
+                                    {errors.email && touched.email && (
+                                        <div className="error-message">{errors.email as string}</div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -440,7 +451,6 @@ const CheckoutForm = () => {
                         {/* button */}
                         <div className="tst-button-group">
                             {values.payment_method === 'bankoverschrijving' ? (
-                                // Payconiq payment flow
                                 <PayconiqButton
                                     amount={totalAmount}
                                     orderId={orderId}
@@ -452,10 +462,7 @@ const CheckoutForm = () => {
                                         delivery_method: values.delivery_method,
                                     }}
                                     onPaymentCreated={(checkoutUrl) => {
-                                        const status = document.getElementById("checkoutFormStatus")
-                                        if (status) {
-                                            status.innerHTML = "<h5>U wordt doorgestuurd naar Payconiq...</h5>"
-                                        }
+                                        // Remove status text update
                                     }}
                                     onPaymentError={(error) => {
                                         const status = document.getElementById("checkoutFormStatus")
@@ -464,11 +471,11 @@ const CheckoutForm = () => {
                                         }
                                     }}
                                 >
-                                    {isSubmitting && <div className="spinner" />}
                                     <span className="tst-icon">
                                         <img src="/img/ui/icons/arrow.svg" alt="icon" />
                                     </span>
-                                    <span>{isSubmitting ? 'Even geduld...' : 'Betaal met Payconiq'}</span>
+                                    <span>{isSubmitting ? '' : 'Betaal met Payconiq'}</span>
+                                    {isSubmitting && <div className="spinner" />}
                                 </PayconiqButton>
                             ) : (
                                 // Cash payment flow - regular form submission
