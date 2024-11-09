@@ -28,6 +28,8 @@ interface OrderConfirmationEmailProps {
         items: OrderItem[];
         total: number;
         deliveryMethod: string;
+        paymentMethod: string;
+        paymentStatus: string;
     };
     customer: {
         name: string;
@@ -48,8 +50,8 @@ export function OrderConfirmationEmail({ order, customer }: OrderConfirmationEma
                             <Img
                                 src="https://nachosantwerp.be/img/logo-sm.png"
                                 alt="Nacho's Antwerp"
-                                width="200"
-                                height="50"
+                                width="100"
+                                height="100"
                                 className="mx-auto mb-4"
                             />
                         </Section>
@@ -105,6 +107,22 @@ export function OrderConfirmationEmail({ order, customer }: OrderConfirmationEma
                                 </Heading>
                                 <Text className="text-[#64748b] m-0">
                                     Bezorgmethode: {order.deliveryMethod === 'leveren' ? 'Bezorgen' : 'Afhalen'}
+                                </Text>
+                                <Text className="text-[#64748b] m-0">
+                                    Betaling: {order.paymentStatus === 'completed' ? 'Betaald' : 'Cash betalen'}
+                                </Text>
+                            </Section>
+
+                            {/* Payment Method */}
+                            <Section className="bg-white rounded-lg p-6 mb-6">
+                                <Heading className="text-lg font-bold text-[#1a2f33] mb-2">
+                                    Betaling
+                                </Heading>
+                                <Text className="text-[#64748b] m-0">
+                                    Betaalmethode: {order.paymentMethod === 'payconiq' ? 'Payconiq' : 'Contant'}
+                                </Text>
+                                <Text className="text-[#64748b] m-0">
+                                    Status: {order.paymentStatus === 'completed' ? 'Betaald' : 'In afwachting'}
                                 </Text>
                             </Section>
                         </Section>
