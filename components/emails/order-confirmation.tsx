@@ -17,7 +17,7 @@ interface OrderConfirmationEmailProps {
         type: 'delivery' | 'pickup';
         status: string;
         items: Array<{
-            name: string;
+            title: string;
             quantity: number;
             price: number;
             options?: string;
@@ -40,11 +40,7 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
     return (
         <Html>
             <Head>
-                <Font
-                    fontFamily="Josefin Sans"
-                    fontWeight={400}
-                    fallbackFontFamily={['Arial', 'Helvetica', 'sans-serif']}
-                />
+                <Font />
             </Head>
             <Preview>Bedankt voor je bestelling bij {restaurant.name} #{order.id}</Preview>
             <Body style={main}>
@@ -75,8 +71,14 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
                             {order.items.map((item, index) => (
                                 <div key={index} style={orderItem}>
                                     <Text style={itemText}>
-                                        {item.quantity}x {item.name}
-                                        <span style={itemPrice}>€{item.price.toFixed(2)}</span>
+                                        <span>
+                                            <span style={itemQuantity}>{item.quantity}x</span>
+                                            {item.title}
+                                        </span>
+                                        <span style={itemPrice}>
+                                            <span style={currencySymbol}>€</span>
+                                            {item.price.toFixed(2)}
+                                        </span>
                                     </Text>
                                     {item.options && (
                                         <Text style={itemOptions}>{item.options}</Text>
@@ -137,7 +139,7 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
 // Updated styles
 const main = {
     backgroundColor: '#242424',
-    fontFamily: '"Josefin Sans", Arial, sans-serif',
+    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
     margin: '0',
     padding: '40px 20px',
 };
@@ -164,13 +166,14 @@ const heading = {
     fontSize: '28px',
     fontWeight: '700',
     margin: '0 0 10px',
-    fontFamily: '"Josefin Sans", Arial, sans-serif',
+    fontFamily: '"Playfair Display", Georgia, "Times New Roman", serif',
 };
 
 const orderIdText = {
     color: '#64748b',
     fontSize: '16px',
     margin: '0 0 30px',
+    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
 };
 
 const detailsCard = {
@@ -186,33 +189,46 @@ const subheading = {
     fontSize: '20px',
     fontWeight: '600',
     margin: '0 0 16px',
+    fontFamily: '"Playfair Display", Georgia, "Times New Roman", serif',
 };
 
 const orderItem = {
     marginBottom: '12px',
+    color: '#64748b',
 };
 
 const itemText = {
     fontSize: '16px',
     color: '#1a2f33',
-    margin: '0',
+    margin: '0 0 16px',
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
 };
 
-const itemPrice = {
-    fontWeight: '600',
+const itemQuantity = {
+    marginRight: '8px',
 };
 
 const itemOptions = {
     fontSize: '14px',
-    color: '#64748b',
     margin: '4px 0 0',
+    paddingLeft: '24px',
+};
+
+const itemPrice = {
+    fontSize: '16px',
+};
+
+const currencySymbol = {
+    marginRight: '2px',
+    fontSize: '14px',
 };
 
 const divider = {
-    borderTop: '1px solid #e2e8f0',
-    margin: '20px 0',
+    borderTop: 'dotted 4px rgba(26, 47, 51, 0.2)',
+    margin: '30px 0',
 };
 
 const totalPrice = {

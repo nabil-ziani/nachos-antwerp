@@ -1,30 +1,23 @@
 import Head from "next/head";
 
-export const Font = ({
-    fontFamily,
-    fontStyle = 'normal',
-    fontWeight = 400,
-    fallbackFontFamily = ['Arial', 'Helvetica', 'sans-serif'],
-}: {
-    fontFamily: string;
-    fontStyle?: string;
-    fontWeight?: number;
-    fallbackFontFamily?: string[];
-}) => {
+export const Font = () => {
     return (
         <>
             <Head>
                 <link
                     rel="stylesheet"
-                    href={`https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap&subset=latin`}
+                    href={`https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap&subset=latin`}
                 />
             </Head>
             <style>
                 {`
-                    * {
-                        font-family: '${fontFamily}', ${fallbackFontFamily.join(', ')} !important;
-                        font-style: ${fontStyle};
-                        font-weight: ${fontWeight};
+                    h1, h2, h3, h4, h5, h6 {
+                        font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+                        font-weight: 700;
+                    }
+                    body, p, div, span {
+                        font-family: 'Century Gothic', 'Futura', 'Trebuchet MS', Arial, sans-serif !important;
+                        font-weight: 400;
                     }
                 `}
             </style>
