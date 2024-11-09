@@ -8,7 +8,7 @@ import {
     Link,
     Preview,
     Section,
-    Text,
+    Text
 } from '@react-email/components';
 import { Font } from './custom-font';
 interface OrderConfirmationEmailProps {
@@ -62,7 +62,7 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
                         </Heading>
 
                         <Text style={orderIdText}>
-                            Bestelling #{order.id}
+                            Bestelling #{order.id.toUpperCase()}
                         </Text>
 
                         {/* Order Details Card */}
@@ -87,7 +87,8 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
                             ))}
                             <Hr style={divider} />
                             <Text style={totalPrice}>
-                                Totaal: €{order.total.toFixed(2)}
+                                <span>Totaal:</span>
+                                <span>€{order.total.toFixed(2)}</span>
                             </Text>
                         </Section>
 
@@ -99,32 +100,29 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
                             <Text style={infoText}>
                                 {order.type === 'delivery' ? customer.address : restaurant.address}
                             </Text>
-                            <Text style={estimatedTime}>
-                                Geschatte {order.type === 'delivery' ? 'levertijd' : 'afhaaltijd'}:{' '}
-                                {order.type === 'delivery' ? 'ongeveer 60 minuten' : '30-45 minuten'}
-                            </Text>
-                        </Section>
-
-                        {/* Payment Info Card */}
-                        <Section style={detailsCard}>
-                            <Heading as="h2" style={subheading}>Betaling</Heading>
-                            <Text style={paymentStatus}>
-                                Status: {order.paymentStatus === 'completed' ? 'Betaald' : 'In afwachting'}
-                            </Text>
-                            <Text style={infoText}>
-                                Methode: {order.paymentMethod === 'payconiq' ? 'Payconiq' : 'Contant'}
+                            <Text style={estimatedTimeBox}>
+                                <svg 
+                                    width="20" 
+                                    height="20" 
+                                    viewBox="0 0 24 24" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    style={clockIcon}
+                                >
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                                <span style={estimatedTimeText}>
+                                    Geschatte {order.type === 'delivery' ? 'levertijd' : 'afhaaltijd'}:{' '}
+                                    {order.type === 'delivery' ? 'ongeveer 60 minuten' : '30-45 minuten'}
+                                </span>
                             </Text>
                         </Section>
 
                         {/* Contact Info */}
                         <Text style={footerText}>
-                            Vragen over je bestelling?
+                            Vragen over je bestelling? Contacteer ons via
                             <br />
-                            Contacteer ons via{' '}
-                            <Link href="mailto:info@nachosantwerp.be" style={link}>
-                                info@nachosantwerp.be
-                            </Link>
-                            {' '}of{' '}
                             <Link href="tel:+32467071874" style={link}>
                                 +32 467 07 18 74
                             </Link>
@@ -198,8 +196,8 @@ const orderItem = {
 };
 
 const itemText = {
-    fontSize: '16px',
-    color: '#1a2f33',
+    fontSize: '14px',
+    color: '#64748b',
     margin: '0 0 16px',
     display: 'flex',
     justifyContent: 'space-between',
@@ -212,18 +210,18 @@ const itemQuantity = {
 };
 
 const itemOptions = {
-    fontSize: '14px',
+    fontSize: '12px',
     margin: '4px 0 0',
     paddingLeft: '24px',
 };
 
 const itemPrice = {
-    fontSize: '16px',
+    fontSize: '14px',
 };
 
 const currencySymbol = {
     marginRight: '2px',
-    fontSize: '14px',
+    fontSize: '12px',
 };
 
 const divider = {
@@ -232,11 +230,15 @@ const divider = {
 };
 
 const totalPrice = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '0 12px',
     fontSize: '18px',
     fontWeight: '700',
     color: '#1a2f33',
     textAlign: 'right' as const,
     margin: '0',
+    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
 };
 
 const infoText = {
@@ -244,25 +246,6 @@ const infoText = {
     color: '#1a2f33',
     lineHeight: '1.5',
     margin: '0 0 12px',
-};
-
-const estimatedTime = {
-    fontSize: '16px',
-    color: '#1a2f33',
-    margin: '12px 0 0',
-    padding: '12px',
-    backgroundColor: '#f0f9ff',
-    borderRadius: '6px',
-};
-
-const paymentStatus = {
-    fontSize: '16px',
-    color: '#0369a1',
-    margin: '0 0 12px',
-    padding: '12px',
-    backgroundColor: '#f0f9ff',
-    borderRadius: '6px',
-    fontWeight: '500',
 };
 
 const footerText = {
@@ -274,4 +257,34 @@ const footerText = {
 const link = {
     color: '#f39c12',
     textDecoration: 'none',
+};
+
+const estimatedTimeBox = {
+    fontSize: '16px',
+    color: '#ffffff',
+    margin: '12px 0 0',
+    backgroundColor: '#f39c12',
+    borderRadius: '5px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    padding: '12px 24px',
+    position: 'relative' as const,
+    fontWeight: '800',
+    letterSpacing: '1px',
+    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
+    cursor: 'default'
+};
+
+const estimatedTimeText = {
+    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
+    color: '#ffffff',
+    fontWeight: '500',
+    position: 'relative' as const,
+    top: '1px'
+};
+
+const clockIcon = {
+    marginRight: '10px',
+    width: '20px',
+    height: '20px'
 };
