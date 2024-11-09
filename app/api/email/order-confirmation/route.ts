@@ -6,9 +6,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
     try {
-        const { order, customer } = await request.json();
+        const { order, customer, restaurant } = await request.json();
 
-        const emailHtml = await render(OrderConfirmationEmail({ order, customer }));
+        const emailHtml = await render(OrderConfirmationEmail({ order, customer, restaurant }));
 
         const data = await resend.emails.send({
             from: 'Nacho\'s Antwerp <bestellingen@nachosantwerp.be>',

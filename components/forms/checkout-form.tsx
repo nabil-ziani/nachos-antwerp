@@ -3,12 +3,11 @@
 import { Formik, FormikErrors } from 'formik';
 import AppData from "@/data/app.json";
 import { createClient } from '@/utils/supabase/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Restaurant } from '@/lib/types';
 import { PayconiqButton } from '../payconiq-button';
 import { useCart } from '@/hooks/useCart';
 import { useRouter } from 'next/navigation';
-import { usePayment } from '@/contexts/payment-context';
 import { useRestaurant } from '@/contexts/restaurant-context';
 
 interface CheckoutFormValues {
@@ -30,6 +29,7 @@ const CheckoutForm = () => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
     const [orderId] = useState(crypto.randomUUID())
     const [savedDetails, setSavedDetails] = useState<any>(null)
+    const [isLoading, setIsLoading] = useState(true)
 
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
@@ -46,8 +46,9 @@ const CheckoutForm = () => {
     }, [])
 
     useEffect(() => {
-        // Load saved details only on client-side
         const loadSavedDetails = () => {
+            if (typeof window === 'undefined') return null;
+            
             try {
                 const saved = localStorage.getItem('user-checkout-details')
                 return saved ? JSON.parse(saved) : null
@@ -56,9 +57,13 @@ const CheckoutForm = () => {
                 return null
             }
         }
-        
-        setSavedDetails(loadSavedDetails())
+
+        const details = loadSavedDetails()
+        setSavedDetails(details)
+        setIsLoading(false)
     }, [])
+
+    if (isLoading) return null; // Don't render form until we've checked localStorage
 
     const initialValues = {
         firstname: savedDetails?.firstname || '',

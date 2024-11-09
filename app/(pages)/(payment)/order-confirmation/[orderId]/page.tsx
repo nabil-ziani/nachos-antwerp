@@ -9,10 +9,14 @@ interface OrderDetails {
     order_id: string
     customer_name: string
     customer_email: string
+    customer_phone: string
     amount: number
     delivery_method: string
+    payment_method: string
     payment_status: string
     order_items: any[]
+    restaurant_location: string
+    estimated_time?: string
 }
 
 export default function OrderConfirmationPage({ params }: { params: { orderId: string } }) {
@@ -47,15 +51,30 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
                             body: JSON.stringify({
                                 order: {
                                     id: data.order_id.substring(0, 8),
-                                    items: data.order_items,
+                                    items: data.order_items.map((item: any) => ({
+                                        title: item.title,
+                                        quantity: item.quantity,
+                                        price: item.price,
+                                        currency: '€'
+                                    })),
                                     total: data.amount,
-                                    deliveryMethod: data.delivery_method,
+                                    type: data.delivery_method === 'afhalen' ? 'pickup' : 'delivery',
+                                    status: 'Bevestigd',
+                                    estimatedTime: data.estimated_time || '30-45 minuten',
                                     paymentMethod: data.payment_method,
                                     paymentStatus: data.payment_status
                                 },
                                 customer: {
                                     name: data.customer_name,
-                                    email: data.customer_email
+                                    email: data.customer_email,
+                                    phone: data.customer_phone,
+                                    address: data.delivery_address
+                                },
+                                restaurant: {
+                                    name: "Nacho's Antwerp",
+                                    address: data.restaurant_location === 'berchem'
+                                        ? 'Diksmuidelaan 170, 2600 Berchem'
+                                        : 'Oudebareellei 51, 2170 Merksem'
                                 }
                             })
                         })
