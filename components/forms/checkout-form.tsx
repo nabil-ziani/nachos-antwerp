@@ -3,7 +3,7 @@
 import { Formik, FormikErrors } from 'formik';
 import AppData from "@/data/app.json";
 import { createClient } from '@/utils/supabase/client';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { Restaurant } from '@/lib/types';
 import { PayconiqButton } from '../payconiq-button';
 import { useCart } from '@/hooks/useCart';
@@ -25,17 +25,19 @@ interface CheckoutFormValues {
     remember_details: boolean
 }
 
-const LocationConfirmation = ({ postalCode }: { postalCode: string }) => {
-    const location = postalCode.startsWith('2170') ? 'Merksem' : 'Berchem';
-    
+const LocationConfirmation = () => {
+    const { selectedRestaurant } = useRestaurant();
+
+    if (!selectedRestaurant) return null;
+
     return (
         <div className="tst-location-confirmation">
             <div className="tst-location-icon">
                 <i className="fas fa-map-marker-alt"></i>
             </div>
             <div className="tst-location-details">
-                <h6>Je bestelt bij Nacho's {location}</h6>
-                <p>{location === 'Merksem' ? 'Oudebareellei 51, 2170 Merksem' : 'Diksmuidelaan 170, 2600 Berchem'}</p>
+                <h6>Je bestelt bij {selectedRestaurant.name}</h6>
+                <p>{selectedRestaurant.address}</p>
             </div>
         </div>
     );
@@ -49,7 +51,7 @@ const CheckoutForm = () => {
 
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
-    const { findRestaurantByPostalCode } = useRestaurant()
+    const { findRestaurantByPostalCode, selectedRestaurant } = useRestaurant()
 
     useEffect(() => {
         (async () => {
@@ -79,7 +81,8 @@ const CheckoutForm = () => {
         setIsLoading(false)
     }, [])
 
-    if (isLoading) return null; // Don't render form until we've checked localStorage
+    // Don't render form until we've checked localStorage
+    if (isLoading) return null;
 
     const initialValues = {
         firstname: savedDetails?.firstname || '',
@@ -98,25 +101,22 @@ const CheckoutForm = () => {
 
     return (
         <>
-            {/* checkout form */}
             <Formik
                 initialValues={initialValues}
                 validate={values => {
                     const errors: FormikErrors<CheckoutFormValues> = {}
 
-                    // Required fields validation
+                    // ----- VALIDATION -----
                     if (!values.firstname) errors.firstname = 'Verplicht'
                     if (!values.lastname) errors.lastname = 'Verplicht'
                     if (!values.tel) errors.tel = 'Verplicht'
 
-                    // Email validation
                     if (!values.email) {
                         errors.email = 'Verplicht'
                     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
                         errors.email = 'Ongeldige mailadres'
                     }
 
-                    // Address validation for delivery
                     if (values.delivery_method === 'leveren') {
                         if (!values.address) errors.address = 'Verplicht'
                         if (!values.city) errors.city = 'Verplicht'
@@ -213,9 +213,7 @@ const CheckoutForm = () => {
                     setFieldError,
                 }) => (
                     <form onSubmit={handleSubmit} id="checkoutForm" action={AppData.settings.formspreeURL} className="tst-checkout-form">
-                        {values.postcode && findRestaurantByPostalCode(values.postcode) && (
-                            <LocationConfirmation postalCode={values.postcode} />
-                        )}
+                        <LocationConfirmation />
                         <div className="tst-mb-30">
                             <h5>Factuurgegevens</h5>
                         </div>
@@ -274,15 +272,15 @@ const CheckoutForm = () => {
                                         required={true}
                                         onChange={handleChange}
                                         onBlur={(e) => {
-                                            handleBlur(e)
+                                            handleBlur(e);
                                             if (e.target.value) {
-                                                const restaurant = findRestaurantByPostalCode(e.target.value)
+                                                const restaurant = findRestaurantByPostalCode(e.target.value);
                                                 if (!restaurant) {
-                                                    // Reset the form or disable submission
-                                                    e.target.value = ''
-                                                    setFieldValue('postcode', '')
-                                                    // Optionally, disable the submit button or show an error message
-                                                    setFieldError('postcode', 'We bezorgen niet in deze postcode')
+                                                    e.target.value = '';
+                                                    setFieldValue('postcode', '');
+                                                    setFieldError('postcode', 'We bezorgen niet in deze postcode');
+                                                } else if (restaurant.id !== selectedRestaurant?.id) {
+                                                    setFieldError('postcode', `Deze postcode wordt bediend door ${restaurant.name}`);
                                                 }
                                             }
                                         }}

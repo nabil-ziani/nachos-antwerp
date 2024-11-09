@@ -7,7 +7,7 @@ import CartSummary from "@/components/sections/cart-summary"
 
 export const metadata = {
     title: {
-        default: "Order checkout",
+        default: "Afrekenen",
     },
     description: AppData.settings.siteDescription,
 }
@@ -16,7 +16,11 @@ const Checkout = () => {
     return (
         <>
             <div id="tst-dynamic-banner" className="tst-dynamic-banner">
-                <PageBanner pageTitle={"Checkout"} description={"Quaerat debitis, vel, sapiente dicta sequi <br>labore porro pariatur harum expedita."} breadTitle={"Checkout"} />
+                <PageBanner
+                    pageTitle="Bestelling afronden"
+                    description="Vul je gegevens in om je bestelling te plaatsen"
+                    breadTitle="Afrekenen"
+                />
             </div>
             <div id="tst-dynamic-content" className="tst-dynamic-content">
                 <div className="tst-content-frame">

@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react"
-
 import Link from "next/link"
 import { usePathname } from 'next/navigation'
-import { useSearchParams } from 'next/navigation'
 
 import { ScrollAnimation } from "@/app/common/scroll"
 import { mapboxInit } from "@/app/common/mapbox-init"
@@ -34,13 +32,6 @@ const PageBanner = ({ pageTitle, pageSubTitle = '', description, breadTitle, sho
         clearBreadTitle = pageTitle ? pageTitle.replace(regex, "") : "";
     }
 
-    if (pageTitle == 'Search: %s') {
-        const searchParams = useSearchParams();
-        const query = searchParams.get('key');
-
-        pageTitle = 'Search: ' + query;
-    }
-
     useEffect(() => {
         ScrollAnimation();
 
@@ -51,7 +42,6 @@ const PageBanner = ({ pageTitle, pageSubTitle = '', description, breadTitle, sho
 
     return (
         <>
-            {/* banner */}
             <div className="tst-banner tst-small-banner">
                 {showMap ? (
                     <div className="tst-cover-frame">
@@ -78,29 +68,30 @@ const PageBanner = ({ pageTitle, pageSubTitle = '', description, breadTitle, sho
                                 <div className="tst-text tst-text-shadow tst-text-lg tst-white-2 tst-mb-30" dangerouslySetInnerHTML={{ __html: description }} />
                                 <ul className="tst-breadcrumbs">
                                     <li><Link href="/" className="tst-anima-link">Home</Link></li>
-                                    {asPath.indexOf('/blog/') != -1 && asPath.indexOf('/blog/page/') == -1 &&
-                                        <li>
-                                            <Link href="/blog">Blog</Link>
-                                        </li>
-                                    }
-                                    {asPath.indexOf('/products') != -1 || asPath.indexOf('/cart') != -1 || asPath.indexOf('/checkout') != -1 &&
-                                        <li>
-                                            <Link href="/shop">Shop</Link>
-                                        </li>
-                                    }
-                                    {asPath.endsWith('/product') == true &&
-                                        <li>
-                                            <Link href="/products">Products</Link>
-                                        </li>
-                                    }
-                                    <li className="tst-active"><a dangerouslySetInnerHTML={{ __html: clearBreadTitle }} /></li>
+                                    {asPath === '/menu' && (
+                                        <li className="tst-active">Menu</li>
+                                    )}
+                                    {asPath === '/checkout' && (
+                                        <>
+                                            <li><Link href="/menu">Menu</Link></li>
+                                            <li className="tst-active">Afrekenen</li>
+                                        </>
+                                    )}
+                                    {asPath === '/contact' && (
+                                        <li className="tst-active">Contact</li>
+                                    )}
+                                    {asPath === '/reservation' && (
+                                        <li className="tst-active">Reserveren</li>
+                                    )}
+                                    {asPath === '/about' && (
+                                        <li className="tst-active">Over ons</li>
+                                    )}
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* banner end */}
         </>
     )
 }
