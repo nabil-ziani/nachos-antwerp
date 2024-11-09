@@ -38,27 +38,33 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
             setOrder(data)
 
             if (data.payment_status === 'completed' && !emailSent) {
-                try {
-                    await fetch('/api/email/order-confirmation', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            order: {
-                                id: data.order_id,
-                                items: data.order_items,
-                                total: data.amount,
-                                deliveryMethod: data.delivery_method,
-                            },
-                            customer: {
-                                name: data.customer_name,
-                                email: data.customer_email
-                            }
+                const emailKey = `email_sent_${params.orderId}`
+                if (!localStorage.getItem(emailKey)) {
+                    try {
+                        await fetch('/api/email/order-confirmation', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                order: {
+                                    id: data.order_id.substring(0, 8),
+                                    items: data.order_items,
+                                    total: data.amount,
+                                    deliveryMethod: data.delivery_method,
+                                    paymentMethod: data.payment_method,
+                                    paymentStatus: data.payment_status
+                                },
+                                customer: {
+                                    name: data.customer_name,
+                                    email: data.customer_email
+                                }
+                            })
                         })
-                    })
-                    setEmailSent(true)
-                    localStorage.removeItem('cart-storage')
-                } catch (error) {
-                    console.error('Failed to send confirmation email:', error)
+                        setEmailSent(true)
+                        localStorage.setItem(emailKey, 'true')
+                        localStorage.removeItem('cart-storage')
+                    } catch (error) {
+                        console.error('Failed to send confirmation email:', error)
+                    }
                 }
             }
 
