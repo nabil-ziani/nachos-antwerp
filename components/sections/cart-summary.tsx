@@ -1,29 +1,18 @@
-"use client"
-
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useCart } from '@/hooks/useCart'
-import { useRestaurant } from '@/contexts/restaurant-context'
-
 import Link from 'next/link'
 
+import { useCart } from '@/hooks/useCart'
 import { CartItem } from '@/lib/types'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
 const CartSummary = () => {
-    const { cartItems, cartTotal } = useCart()
-    const { selectedRestaurant } = useRestaurant()
-    const [deliveryPostcode, setDeliveryPostcode] = useState<string | null>(null)
-    const [deliveryMinimum, setDeliveryMinimum] = useState<number | null>(null)
-    const router = useRouter()
+    const { cartItems, cartTotal, isLoading } = useCart()
 
-    useEffect(() => {
-        if (cartItems.length === 0) {
-            router.push("/menu")
-        }
-    }, [cartItems, router])
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     if (cartItems.length === 0) {
-        return null
+        return null;
     }
 
     return (
@@ -69,16 +58,6 @@ const CartSummary = () => {
                                 </div>
                             </div>
                         </div>
-                        
-                        {selectedRestaurant && deliveryPostcode && deliveryMinimum && (
-                            <div className="tst-delivery-info">
-                                <p>Minimum bestelbedrag voor bezorging:</p>
-                                <div className="tst-postcode-minimum">
-                                    <span>{deliveryPostcode}:</span>
-                                    <span>€{deliveryMinimum.toFixed(2)}</span>
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>

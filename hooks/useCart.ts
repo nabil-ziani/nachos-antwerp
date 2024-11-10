@@ -8,6 +8,7 @@ interface CartState {
     cartItems: CartItem[]
     cartTotal: number
     miniCart: boolean
+    isLoading: boolean
     setMiniCart: (open: boolean) => void
     addToCart: (item: CartItem) => void
     removeFromCart: (itemId: string) => void
@@ -19,6 +20,7 @@ export const useCart = create<CartState>()(
             cartItems: [],
             cartTotal: 0,
             miniCart: false,
+            isLoading: false,
             addToCart: (item) => {
                 const existingItem = get().cartItems.find(ci => ci.itemId === item.itemId);
                 if (existingItem) {
