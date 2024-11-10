@@ -4,7 +4,7 @@ import ScrollHint from "@/app/layouts/scroll-hint"
 import PageBanner from "@/components/page-banner"
 import CheckoutForm from "@/components/forms/checkout-form"
 import CartSummary from "@/components/sections/cart-summary"
-import EmptyCartMessage from "@/components/empty-cart-message"
+import { CheckoutGuard } from "@/components/checkout-guard"
 
 export const metadata = {
     title: {
@@ -15,8 +15,7 @@ export const metadata = {
 
 const Checkout = () => {
     return (
-        <>
-            <EmptyCartMessage />
+        <CheckoutGuard>
             <div id="tst-dynamic-banner" className="tst-dynamic-banner">
                 <PageBanner
                     pageTitle="Bestelling afronden"
@@ -46,7 +45,7 @@ const Checkout = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </CheckoutGuard>
     )
 }
 

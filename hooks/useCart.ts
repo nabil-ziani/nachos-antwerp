@@ -12,6 +12,7 @@ interface CartState {
     setMiniCart: (open: boolean) => void
     addToCart: (item: CartItem) => void
     removeFromCart: (itemId: string) => void
+    clearCart: () => void
 }
 
 export const useCart = create<CartState>()(
@@ -46,7 +47,8 @@ export const useCart = create<CartState>()(
                     });
                 }
             },
-            setMiniCart: (open) => set({ miniCart: open })
+            setMiniCart: (open) => set({ miniCart: open }),
+            clearCart: () => set({ cartItems: [], cartTotal: 0 })
         }),
         {
             name: 'cart-storage'

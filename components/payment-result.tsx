@@ -8,13 +8,13 @@ interface PaymentResultProps {
 }
 
 export function PaymentResult({ status }: PaymentResultProps) {
-    const { cartItems, removeFromCart } = useCart()
+    const { cartItems, removeFromCart, clearCart } = useCart()
 
     useEffect(() => {
         if (status === 'completed') {
-            cartItems.forEach(item => removeFromCart(item.itemId))
+            clearCart()
         }
-    }, [status])
+    }, [status, clearCart])
 
     const getStatusContent = () => {
         switch (status) {

@@ -12,36 +12,47 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
     const { startPaymentTracking } = usePayment()
 
     useEffect(() => {
-        const storedQrCode = localStorage.getItem(`payment_${params.orderId}`)
-        if (!storedQrCode) {
-            router.push('/menu')
-            return
+        const checkOrderStatus = async () => {
+            try {
+                const supabase = createClient()
+                const { data: order, error } = await supabase
+                    .from('orders')
+                    .select('payment_status')
+                    .eq('order_id', params.orderId)
+                    .single()
+
+                if (error) throw error
+
+                // If payment is completed/failed/cancelled, redirect to confirmation
+                if (['completed', 'failed', 'cancelled'].includes(order.payment_status)) {
+                    router.push(`/order-confirmation/${params.orderId}`)
+                    return
+                }
+
+                // Only check QR code if payment is still pending
+                const storedQrCode = localStorage.getItem(`payment_${params.orderId}`)
+                if (!storedQrCode) {
+                    router.push('/menu')
+                    return
+                }
+
+                const qrUrl = new URL(storedQrCode)
+                qrUrl.searchParams.set('f', 'SVG')
+                qrUrl.searchParams.set('s', 'L')
+                qrUrl.searchParams.set('cl', 'black')
+
+                setQrCode(qrUrl.toString())
+                startPaymentTracking(params.orderId, 'pending')
+            } catch (error) {
+                console.error('Error checking order status:', error)
+                router.push('/menu')
+            } finally {
+                setIsLoading(false)
+            }
         }
 
-        // Modify QR code URL to use SVG format and black color
-        const qrUrl = new URL(storedQrCode)
-        qrUrl.searchParams.set('f', 'SVG') // Use SVG for sharper image
-        qrUrl.searchParams.set('s', 'L')   // Large size (400x400)
-        qrUrl.searchParams.set('cl', 'black') // Black color for better contrast
-
-        setQrCode(qrUrl.toString())
-        startPaymentTracking(params.orderId, 'pending')
-        setIsLoading(false)
+        checkOrderStatus()
     }, [params.orderId, router, startPaymentTracking])
-
-    const handleBack = async () => {
-        try {
-            const supabase = createClient()
-            await supabase
-                .from('orders')
-                .update({ payment_status: 'cancelled' })
-                .eq('order_id', params.orderId)
-
-            router.push('/menu')
-        } catch (error) {
-            console.error('Error cancelling payment:', error)
-        }
-    }
 
     if (!qrCode) return null
 
