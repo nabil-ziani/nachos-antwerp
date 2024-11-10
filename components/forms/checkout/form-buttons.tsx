@@ -1,4 +1,4 @@
-import { CartItem } from '@/lib/types';
+import { CartItem, Restaurant } from '@/lib/types';
 
 import { PayconiqButton } from '@/components/payconiq-button';
 
@@ -9,9 +9,12 @@ interface FormButtonsProps {
     orderId: string;
     totalAmount: number;
     cartItems: CartItem[];
+    selectedRestaurant: Restaurant | null;
 }
 
-export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmount, cartItems }: FormButtonsProps) => {
+export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmount, cartItems, selectedRestaurant }: FormButtonsProps) => {
+    const isButtonDisabled = !isValid || isSubmitting || !selectedRestaurant;
+
     return (
         <div className="tst-button-group">
             {values.payment_method === 'bankoverschrijving' ? (
@@ -19,7 +22,7 @@ export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmoun
                     amount={totalAmount}
                     orderId={orderId}
                     className={`tst-btn tst-btn-with-icon tst-m-0 ${isSubmitting ? 'loading' : ''}`}
-                    disabled={!isValid || isSubmitting}
+                    disabled={isButtonDisabled}
                     formValues={{
                         ...values,
                         cartItems,
@@ -42,7 +45,7 @@ export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmoun
                     {isSubmitting && <div className="spinner" />}
                 </PayconiqButton>
             ) : (
-                <button type="submit" className="tst-btn tst-btn-with-icon tst-m-0">
+                <button type="submit" className="tst-btn tst-btn-with-icon tst-m-0" disabled={isButtonDisabled}>
                     <span className="tst-icon">
                         <img src="/img/ui/icons/arrow.svg" alt="icon" />
                     </span>

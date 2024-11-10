@@ -1,8 +1,20 @@
 import { FormikErrors } from 'formik';
-import { CheckoutFormValues } from './types';
+import { CheckoutFormValues, Restaurant } from './types';
 
-export const validateCheckoutForm = (values: CheckoutFormValues, totalAmount: number, findRestaurantByPostalCode: any) => {
+interface ValidateCheckoutFormProps {
+    values: CheckoutFormValues
+    totalAmount: number
+    findRestaurantByPostalCode: any
+    selectedRestaurant: Restaurant | null
+}
+
+export const validateCheckoutForm = ({ values, totalAmount, findRestaurantByPostalCode, selectedRestaurant }: ValidateCheckoutFormProps) => {
     const errors: FormikErrors<CheckoutFormValues> = {};
+
+    // Check if restaurant is selected
+    if (!selectedRestaurant) {
+        errors.delivery_method = 'Selecteer eerst een restaurant';
+    }
 
     // Basic required fields
     if (!values.firstname) errors.firstname = 'Verplicht';

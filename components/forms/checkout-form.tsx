@@ -24,7 +24,7 @@ const CheckoutForm = () => {
     const { findRestaurantByPostalCode, selectedRestaurant } = useRestaurant()
 
     const validateForm = (values: CheckoutFormValues) => {
-        return validateCheckoutForm(values, totalAmount, findRestaurantByPostalCode);
+        return validateCheckoutForm({ values, totalAmount, findRestaurantByPostalCode, selectedRestaurant });
     }
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const CheckoutForm = () => {
                         ...initialValues,
                         ...parsedDetails
                     });
-                    
+
                     if (errors.postcode) {
                         parsedDetails.postcode = '';
                         localStorage.setItem('user-checkout-details', JSON.stringify(parsedDetails));
@@ -221,6 +221,7 @@ const CheckoutForm = () => {
                             orderId={orderId}
                             totalAmount={totalAmount}
                             cartItems={cartItems}
+                            selectedRestaurant={selectedRestaurant}
                         />
 
                         <div id="checkoutFormStatus" className="tst-form-status"></div>
