@@ -1,13 +1,49 @@
-import { FormFieldProps } from '@/lib/types';
+'use client'
+
+import { useState } from 'react'
+import { LocationSwitchModal } from '@/components/modals/location-switch-modal'
+import { FormFieldProps, Restaurant } from '@/lib/types';
+
+type LocationSwitchData = {
+    restaurant: Restaurant | null;
+    postalCode: string;
+}
 
 interface DeliveryDetailsProps extends FormFieldProps {
     findRestaurantByPostalCode: any;
-    cartTotal: number;
 }
 
-export const DeliveryDetails = ({ values, errors, touched, handleChange, handleBlur, findRestaurantByPostalCode, cartTotal }: DeliveryDetailsProps) => {
+export const DeliveryDetails = ({ values, errors, touched, handleChange, handleBlur, findRestaurantByPostalCode }: DeliveryDetailsProps) => {
+    const [showLocationModal, setShowLocationModal] = useState(false)
+    const [locationSwitchData, setLocationSwitchData] = useState<LocationSwitchData>({ restaurant: null, postalCode: '' })
+
+    const handlePostcodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const postalCode = e.target.value
+        handleChange(e)
+
+        if (values.delivery_method === 'leveren' && postalCode.length === 4) {
+            const result = findRestaurantByPostalCode(postalCode)
+
+            if (result.switchRequired) {
+                setLocationSwitchData({
+                    restaurant: result.restaurant,
+                    postalCode: postalCode
+                })
+                setShowLocationModal(true)
+            }
+        }
+    }
+
     return (
         <>
+            <LocationSwitchModal
+                isOpen={showLocationModal}
+                onClose={() => setShowLocationModal(false)}
+                onConfirm={() => setShowLocationModal(false)}
+                alternativeRestaurant={locationSwitchData.restaurant}
+                postalCode={locationSwitchData.postalCode}
+            />
+
             <div className="tst-mb-30">
                 <h5>Factuurgegevens</h5>
             </div>
@@ -102,7 +138,7 @@ export const DeliveryDetails = ({ values, errors, touched, handleChange, handleB
                             name="postcode"
                             className={errors.postcode && touched.postcode ? 'error' : ''}
                             required={values.delivery_method === 'leveren'}
-                            onChange={handleChange}
+                            onChange={handlePostcodeChange}
                             onBlur={handleBlur}
                             value={values.postcode}
                         />

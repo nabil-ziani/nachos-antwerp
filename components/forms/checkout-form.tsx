@@ -160,7 +160,6 @@ const CheckoutForm = () => {
                             handleChange={handleChange}
                             handleBlur={handleBlur}
                             findRestaurantByPostalCode={findRestaurantByPostalCode}
-                            cartTotal={totalAmount}
                         />
 
                         <div className="tst-mb-30">
