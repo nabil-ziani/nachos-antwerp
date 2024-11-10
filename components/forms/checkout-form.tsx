@@ -23,13 +23,31 @@ const CheckoutForm = () => {
     const { cartTotal: totalAmount, cartItems } = useCart()
     const { findRestaurantByPostalCode, selectedRestaurant } = useRestaurant()
 
+    const validateForm = (values: CheckoutFormValues) => {
+        return validateCheckoutForm(values, totalAmount, findRestaurantByPostalCode);
+    }
+
     useEffect(() => {
         const loadSavedDetails = () => {
             if (typeof window === 'undefined') return null;
 
             try {
                 const saved = localStorage.getItem('user-checkout-details')
-                return saved ? JSON.parse(saved) : null
+                const parsedDetails = saved ? JSON.parse(saved) : null
+
+                if (parsedDetails && selectedRestaurant) {
+                    const errors = validateForm({
+                        ...initialValues,
+                        ...parsedDetails
+                    });
+                    
+                    if (errors.postcode) {
+                        parsedDetails.postcode = '';
+                        localStorage.setItem('user-checkout-details', JSON.stringify(parsedDetails));
+                    }
+                }
+
+                return parsedDetails;
             } catch (error) {
                 console.error('Error loading saved details:', error)
                 return null
@@ -39,7 +57,7 @@ const CheckoutForm = () => {
         const details = loadSavedDetails()
         setSavedDetails(details)
         setIsLoading(false)
-    }, [])
+    }, [selectedRestaurant])
 
     // Check localStorage before rendering form
     if (isLoading) return null;
@@ -146,7 +164,8 @@ const CheckoutForm = () => {
         <>
             <Formik
                 initialValues={initialValues}
-                validate={(values) => validateCheckoutForm(values, totalAmount, findRestaurantByPostalCode)}
+                validate={validateForm}
+                validateOnMount={true}
                 onSubmit={handleSubmit}
             >
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, isValid }) => (
