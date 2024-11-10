@@ -108,24 +108,22 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
         }
 
         // Check other restaurants
-        const availableRestaurant = restaurants.find(r => 
+        const availableRestaurant = restaurants.find(r =>
             r.allowed_postalcodes?.includes(postalCode)
         );
 
         if (availableRestaurant) {
             const minimumAmount = availableRestaurant.delivery_minimums?.[postalCode] || null;
-            setSelectedRestaurant(availableRestaurant);
-            return { 
-                restaurant: availableRestaurant, 
+            return {
+                restaurant: availableRestaurant,
                 minimumAmount,
                 switchRequired: true,
-                message: `We hebben je restaurant gewijzigd naar ${availableRestaurant.name} omdat zij wel bezorgen in ${postalCode}.`
+                message: `Wij bezorgen niet naar ${postalCode}, maar ${availableRestaurant.name} wel.`
             };
         }
 
-        setSelectedRestaurant(null);
-        return { 
-            restaurant: null, 
+        return {
+            restaurant: null,
             minimumAmount: null,
             switchRequired: false,
             message: `Helaas, we bezorgen momenteel niet in ${postalCode}.`

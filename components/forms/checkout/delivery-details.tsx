@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { LocationSwitchModal } from '@/components/modals/location-switch-modal'
 import { FormFieldProps, Restaurant } from '@/lib/types';
+import { useRestaurant } from '@/contexts/restaurant-context';
 
 type LocationSwitchData = {
     restaurant: Restaurant | null;
@@ -16,6 +17,8 @@ interface DeliveryDetailsProps extends FormFieldProps {
 export const DeliveryDetails = ({ values, errors, touched, handleChange, handleBlur, findRestaurantByPostalCode }: DeliveryDetailsProps) => {
     const [showLocationModal, setShowLocationModal] = useState(false)
     const [locationSwitchData, setLocationSwitchData] = useState<LocationSwitchData>({ restaurant: null, postalCode: '' })
+
+    const { setSelectedRestaurant } = useRestaurant()
 
     const handlePostcodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const postalCode = e.target.value
@@ -38,8 +41,22 @@ export const DeliveryDetails = ({ values, errors, touched, handleChange, handleB
         <>
             <LocationSwitchModal
                 isOpen={showLocationModal}
-                onClose={() => setShowLocationModal(false)}
-                onConfirm={() => setShowLocationModal(false)}
+                onClose={() => {
+                    setShowLocationModal(false)
+                    // Reset postcode when user cancels
+                    handleChange({
+                        target: {
+                            name: 'postcode',
+                            value: ''
+                        }
+                    } as React.ChangeEvent<HTMLInputElement>)
+                }}
+                onConfirm={() => {
+                    if (locationSwitchData.restaurant) {
+                        setSelectedRestaurant(locationSwitchData.restaurant)
+                    }
+                    setShowLocationModal(false)
+                }}
                 alternativeRestaurant={locationSwitchData.restaurant}
                 postalCode={locationSwitchData.postalCode}
             />
