@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/hooks/useCart'
+import { useRestaurant } from '@/contexts/restaurant-context'
 
 import Link from 'next/link'
 
@@ -10,6 +11,9 @@ import { CartItem } from '@/lib/types'
 
 const CartSummary = () => {
     const { cartItems, cartTotal } = useCart()
+    const { selectedRestaurant } = useRestaurant()
+    const [deliveryPostcode, setDeliveryPostcode] = useState<string | null>(null)
+    const [deliveryMinimum, setDeliveryMinimum] = useState<number | null>(null)
     const router = useRouter()
 
     useEffect(() => {
@@ -55,16 +59,6 @@ const CartSummary = () => {
                     ))}
 
                     <div className="tst-cart-total tst-cart-total-2">
-                        {/* <div className="tst-sum">
-                            <div className="row">
-                                <div className="col-6">
-                                    <div className="tst-total-title">Subtotaal:</div>
-                                </div>
-                                <div className="col-6">
-                                    <div className="tst-price-1 text-right">{cartTotal}</div>
-                                </div>
-                            </div>
-                        </div> */}
                         <div className="tst-realy-sum">
                             <div className="row">
                                 <div className="col-6">
@@ -75,6 +69,16 @@ const CartSummary = () => {
                                 </div>
                             </div>
                         </div>
+                        
+                        {selectedRestaurant && deliveryPostcode && deliveryMinimum && (
+                            <div className="tst-delivery-info">
+                                <p>Minimum bestelbedrag voor bezorging:</p>
+                                <div className="tst-postcode-minimum">
+                                    <span>{deliveryPostcode}:</span>
+                                    <span>€{deliveryMinimum.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

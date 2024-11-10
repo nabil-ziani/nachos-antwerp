@@ -33,6 +33,7 @@ register();
 import '@/app/styles/scss/style.scss';
 
 import AppData from "@/data/app.json";
+import { ToastContainer } from 'react-toastify'
 
 export const metadata = {
   title: {
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PaymentProvider>
             <div id="tst-app" className="tst-app">
               {children}
+              <ToastContainer />
             </div>
           </PaymentProvider>
         </RestaurantProvider>

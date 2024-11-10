@@ -33,3 +33,27 @@ export type MenuItemWithCategory = {
     extra_info: string
     category: MenuCategory
 }
+
+// CHECKOUT FORM TYPES
+export interface CheckoutFormValues {
+    firstname: string
+    lastname: string
+    email: string
+    tel: string
+    company: string
+    city: string
+    address: string
+    postcode: string
+    message: string
+    payment_method: string
+    delivery_method: string
+    remember_details: boolean
+}
+
+export interface FormFieldProps {
+    values: CheckoutFormValues;
+    errors: any;
+    touched: any;
+    handleChange: (e: React.ChangeEvent<any>) => void;
+    handleBlur: (e: React.FocusEvent<any>) => void;
+} 

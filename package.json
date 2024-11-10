@@ -28,6 +28,7 @@
     "react-dom": "18.2.0",
     "react-email": "^3.0.2",
     "react-modal-video": "^2.0.1",
+    "react-toastify": "^10.0.6",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "resend": "^4.0.1-alpha.0",

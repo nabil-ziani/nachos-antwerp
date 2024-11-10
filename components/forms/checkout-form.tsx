@@ -1,51 +1,20 @@
 "use client";
 
-import { Formik, FormikErrors } from 'formik';
+import { Formik } from 'formik';
 import AppData from "@/data/app.json";
 import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
-import { Restaurant } from '@/lib/types';
-import { PayconiqButton } from '../payconiq-button';
 import { useCart } from '@/hooks/useCart';
 import { useRouter } from 'next/navigation';
 import { useRestaurant } from '@/contexts/restaurant-context';
-import { MinimumOrderInfo } from '../minimum-order-info';
-
-interface CheckoutFormValues {
-    firstname: string
-    lastname: string
-    email: string
-    tel: string
-    company: string
-    city: string
-    address: string
-    postcode: string
-    message: string
-    payment_method: string
-    delivery_method: string
-    remember_details: boolean
-}
-
-const LocationConfirmation = () => {
-    const { selectedRestaurant } = useRestaurant();
-
-    if (!selectedRestaurant) return null;
-
-    return (
-        <div className="tst-location-confirmation">
-            <div className="tst-location-icon">
-                <i className="fas fa-map-marker-alt"></i>
-            </div>
-            <div className="tst-location-details">
-                <h6>Je bestelt bij {selectedRestaurant.name}</h6>
-                <p>{selectedRestaurant.address}</p>
-            </div>
-        </div>
-    );
-};
+import { LocationConfirmation } from '@/components/location-confirmation';
+import { validateCheckoutForm } from '@/lib/checkout-validation';
+import { DeliveryDetails } from './checkout/delivery-details';
+import { PaymentMethods } from './checkout/payment-methods';
+import { FormButtons } from './checkout/form-buttons';
+import { CheckoutFormValues } from '@/lib/types';
 
 const CheckoutForm = () => {
-    const [restaurants, setRestaurants] = useState<Restaurant[]>([])
     const [orderId] = useState(crypto.randomUUID())
     const [savedDetails, setSavedDetails] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -53,16 +22,6 @@ const CheckoutForm = () => {
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
     const { findRestaurantByPostalCode, selectedRestaurant } = useRestaurant()
-
-    useEffect(() => {
-        (async () => {
-            const restaurants = await getRestaurants()
-
-            if (restaurants) {
-                setRestaurants(restaurants)
-            }
-        })
-    }, [])
 
     useEffect(() => {
         const loadSavedDetails = () => {
@@ -82,10 +41,10 @@ const CheckoutForm = () => {
         setIsLoading(false)
     }, [])
 
-    // Don't render form until we've checked localStorage
+    // Check localStorage before rendering form
     if (isLoading) return null;
 
-    const initialValues = {
+    const initialValues: CheckoutFormValues = {
         firstname: savedDetails?.firstname || '',
         lastname: savedDetails?.lastname || '',
         email: savedDetails?.email || '',
@@ -100,279 +59,110 @@ const CheckoutForm = () => {
         remember_details: true
     }
 
+    const handleSubmit = async (values: CheckoutFormValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+        try {
+            // Check minimum order amount for delivery orders
+            if (values.delivery_method === 'leveren' && values.postcode) {
+                const { minimumAmount } = findRestaurantByPostalCode(values.postcode);
+                if (minimumAmount && totalAmount < minimumAmount) {
+                    const status = document.getElementById("checkoutFormStatus");
+                    if (status) {
+                        status.className = "tst-form-status error";
+                        status.innerHTML = `
+                            <h5>Minimum bestelbedrag niet bereikt</h5>
+                            <p>Voor bezorging in ${values.postcode} is het minimum bestelbedrag €${minimumAmount.toFixed(2)}</p>
+                        `;
+                    }
+                    setSubmitting(false);
+                    return;
+                }
+            }
+
+            if (values.remember_details) {
+                const detailsToSave = {
+                    firstname: values.firstname,
+                    lastname: values.lastname,
+                    email: values.email,
+                    tel: values.tel,
+                    company: values.company,
+                    city: values.city,
+                    address: values.address,
+                    postcode: values.postcode,
+                }
+                localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
+            }
+
+            if (values.payment_method === 'cash') {
+                const orderData = {
+                    order_id: orderId,
+                    payment_method: 'cash',
+                    payment_status: 'completed',
+                    amount: totalAmount,
+                    customer_name: `${values.firstname} ${values.lastname}`,
+                    customer_email: values.email,
+                    customer_phone: values.tel,
+                    customer_company: values.company || null,
+                    delivery_method: values.delivery_method,
+                    delivery_address: values.delivery_method === 'leveren' ? {
+                        street: values.address,
+                        city: values.city,
+                        postcode: values.postcode
+                    } : null,
+                    order_items: cartItems.map(item => ({
+                        title: item.title,
+                        price: item.price,
+                        quantity: item.quantity,
+                        total: item.price * item.quantity,
+                        currency: item.currency,
+                        image: item.image
+                    })),
+                    notes: values.message
+                };
+
+                const supabase = createClient();
+                const { error: dbError } = await supabase
+                    .from('orders')
+                    .insert([orderData]);
+
+                if (dbError) throw dbError;
+                router.push(`/order-confirmation/${orderId}`);
+            }
+        } catch (error) {
+            console.error('Order submission failed:', error);
+            const status = document.getElementById("checkoutFormStatus");
+            if (status) {
+                status.className = "tst-form-status error";
+                status.innerHTML = `
+                    <h5>Er is een probleem opgetreden</h5>
+                    <p>Probeer het opnieuw of neem contact met ons op.</p>
+                `;
+            }
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
     return (
         <>
             <Formik
                 initialValues={initialValues}
-                validate={values => {
-                    const errors: FormikErrors<CheckoutFormValues> = {};
-
-                    // Basic required fields
-                    if (!values.firstname) errors.firstname = 'Verplicht';
-                    if (!values.lastname) errors.lastname = 'Verplicht';
-                    if (!values.tel) errors.tel = 'Verplicht';
-
-                    if (!values.email) {
-                        errors.email = 'Verplicht';
-                    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-                        errors.email = 'Ongeldige mailadres';
-                    }
-
-                    // Delivery-specific validation
-                    if (values.delivery_method === 'leveren') {
-                        if (!values.address) errors.address = 'Verplicht';
-                        if (!values.city) errors.city = 'Verplicht';
-                        if (!values.postcode) {
-                            errors.postcode = 'Verplicht';
-                        } else if (!/^\d{4}$/.test(values.postcode)) {
-                            errors.postcode = 'Ongeldige postcode';
-                        }
-                    }
-
-                    // Add minimum order validation for delivery
-                    if (values.delivery_method === 'leveren' && values.postcode) {
-                        const { restaurant, minimumAmount } = findRestaurantByPostalCode(values.postcode);
-                        if (restaurant && minimumAmount) {
-                            if (totalAmount < minimumAmount) {
-                                errors.postcode = `Minimum bestelbedrag voor ${values.postcode} is €${minimumAmount.toFixed(2)}`;
-                            }
-                        }
-                    }
-
-                    return errors;
-                }}
-
-                onSubmit={async (values, { setSubmitting }) => {
-                    try {
-                        if (values.remember_details) {
-                            const detailsToSave = {
-                                firstname: values.firstname,
-                                lastname: values.lastname,
-                                email: values.email,
-                                tel: values.tel,
-                                company: values.company,
-                                city: values.city,
-                                address: values.address,
-                                postcode: values.postcode,
-                            }
-                            localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
-                        }
-
-                        const form = document.getElementById("checkoutForm") as HTMLFormElement;
-                        const status = document.getElementById("checkoutFormStatus");
-
-                        if (!form || !status) return;
-
-                        if (values.payment_method === 'cash') {
-                            // For cash orders, create order with generated ID and set status to completed
-                            const orderData = {
-                                order_id: orderId,
-                                payment_method: 'cash',
-                                payment_status: 'completed', // Cash orders are completed immediately
-                                amount: totalAmount,
-                                customer_name: `${values.firstname} ${values.lastname}`,
-                                customer_email: values.email,
-                                customer_phone: values.tel,
-                                customer_company: values.company || null,
-                                delivery_method: values.delivery_method,
-                                delivery_address: values.delivery_method === 'leveren' ? {
-                                    street: values.address,
-                                    city: values.city,
-                                    postcode: values.postcode
-                                } : null,
-                                order_items: cartItems.map(item => ({
-                                    title: item.title,
-                                    price: item.price,
-                                    quantity: item.quantity,
-                                    total: item.price * item.quantity,
-                                    currency: item.currency,
-                                    image: item.image
-                                })),
-                                notes: values.message
-                            };
-
-                            const supabase = createClient();
-
-                            const { error: dbError } = await supabase
-                                .from('orders')
-                                .insert([orderData]);
-
-                            if (dbError) throw dbError;
-
-                            // Redirect to order confirmation page
-                            router.push(`/order-confirmation/${orderId}`);
-                        }
-
-                        // For Payconiq, we don't create the order here
-                        // The PayconiqButton component will handle that after getting the paymentId
-                    } catch (error) {
-                        console.error('Order submission failed:', error);
-                        const status = document.getElementById("checkoutFormStatus");
-                        if (status) {
-                            status.innerHTML = "<h5>Er is een probleem opgetreden. Probeer het opnieuw.</h5>";
-                        }
-                    } finally {
-                        setSubmitting(false);
-                    }
-                }}
+                validate={(values) => validateCheckoutForm(values, totalAmount, findRestaurantByPostalCode)}
+                onSubmit={handleSubmit}
             >
-                {({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    isSubmitting,
-                    isValid,
-                    setFieldValue,
-                    setFieldError,
-                }) => (
+                {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, isValid }) => (
                     <form onSubmit={handleSubmit} id="checkoutForm" action={AppData.settings.formspreeURL} className="tst-checkout-form">
-                        <LocationConfirmation />
-                        <div className="tst-mb-30">
-                            <h5>Factuurgegevens</h5>
-                        </div>
-                        <div className="row">
-                            <div className="col-lg-6">
-                                <div className="tst-group-input">
-                                    <label>Voornaam</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Voornaam"
-                                        name="firstname"
-                                        className={errors.firstname && touched.firstname ? 'error' : ''}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.firstname}
-                                    />
-                                    {errors.firstname && touched.firstname && (
-                                        <div className="error-message">{errors.firstname as string}</div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="tst-group-input">
-                                    <label>Familienaam</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Familienaam"
-                                        name="lastname"
-                                        className={errors.lastname && touched.lastname ? 'error' : ''}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.lastname}
-                                    />
-                                    {errors.lastname && touched.lastname && (
-                                        <div className="error-message">{errors.lastname as string}</div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="tst-group-input">
-                                    <label>Bedrijfsnaam (optioneel)</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Bedrijfsnaam"
-                                        name="company"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.company}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="tst-group-input">
-                                    <label>Postcode</label>
-                                    <input
-                                        type="text"
-                                        placeholder="2600"
-                                        name="postcode"
-                                        className={errors.postcode && touched.postcode ? 'error' : ''}
-                                        required={values.delivery_method === 'leveren'}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.postcode}
-                                    />
-                                    {errors.postcode && touched.postcode && (
-                                        <div className="error-message">{errors.postcode as string}</div>
-                                    )}
-                                    {values.delivery_method === 'leveren' && values.postcode && (
-                                        <MinimumOrderInfo postcode={values.postcode} />
-                                    )}
-                                </div>
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="tst-group-input">
-                                    <label>Stad</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Berchem"
-                                        name="city"
-                                        className={errors.city && touched.city ? 'error' : ''}
-                                        required={values.delivery_method === 'leveren'}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.city}
-                                    />
-                                    {errors.city && touched.city && (
-                                        <div className="error-message">{errors.city as string}</div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="tst-group-input">
-                                    <label>Adres</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Diksmuidelaan 170"
-                                        name="address"
-                                        className={errors.address && touched.address ? 'error' : ''}
-                                        required={values.delivery_method === 'leveren'}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.address}
-                                    />
-                                    {errors.address && touched.address && (
-                                        <div className="error-message">{errors.address as string}</div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="tst-group-input">
-                                    <label>Telefoon</label>
-                                    <input
-                                        type="tel"
-                                        placeholder="04 XX XX XX XX"
-                                        name="tel"
-                                        className={errors.tel && touched.tel ? 'error' : ''}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.tel}
-                                    />
-                                    {errors.tel && touched.tel && (
-                                        <div className="error-message">{errors.tel as string}</div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="col-lg-6">
-                                <div className="tst-group-input">
-                                    <label>Email</label>
-                                    <input
-                                        type="email"
-                                        placeholder="Email"
-                                        name="email"
-                                        className={errors.email && touched.email ? 'error' : ''}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.email}
-                                    />
-                                    {errors.email && touched.email && (
-                                        <div className="error-message">{errors.email as string}</div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                        <LocationConfirmation selectedRestaurant={selectedRestaurant} />
+
+                        <DeliveryDetails
+                            values={values}
+                            errors={errors}
+                            touched={touched}
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                            findRestaurantByPostalCode={findRestaurantByPostalCode}
+                            cartTotal={totalAmount}
+                        />
+
                         <div className="tst-mb-30">
                             <h5>Extra informatie</h5>
                         </div>
@@ -401,138 +191,26 @@ const CheckoutForm = () => {
                             </div>
                         </div>
 
-                        <div className="tst-mb-30 tst-space-between">
-                            <div>
-                                <h5 className="tst-mb-30">Betaalmethode</h5>
-                                <ul>
-                                    <li className="tst-radio">
-                                        <input
-                                            type="radio"
-                                            id="option-1"
-                                            name="payment_method"
-                                            value="bankoverschrijving"
-                                            checked={values.payment_method === 'bankoverschrijving'}
-                                            onChange={handleChange}
-                                        />
-                                        <label htmlFor="option-1">Bankoverschrijving</label>
-                                        <div className="tst-check"></div>
-                                    </li>
-                                    <li className="tst-radio">
-                                        <input
-                                            type="radio"
-                                            id="option-2"
-                                            name="payment_method"
-                                            value="cash"
-                                            checked={values.payment_method === 'cash'}
-                                            onChange={handleChange}
-                                        />
-                                        <label htmlFor="option-2">Cash</label>
-                                        <div className="tst-check"></div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h5 className="tst-mb-30">Afhalen of leveren?</h5>
-                                <ul>
-                                    <li className="tst-radio">
-                                        <input
-                                            type="radio"
-                                            id="afhalen"
-                                            name="delivery_method"
-                                            value="afhalen"
-                                            checked={values.delivery_method === 'afhalen'}
-                                            onChange={handleChange}
-                                        />
-                                        <label htmlFor="afhalen">Afhalen</label>
-                                        <div className="tst-check"></div>
-                                    </li>
-                                    <li className="tst-radio">
-                                        <input
-                                            type="radio"
-                                            id="leveren"
-                                            name="delivery_method"
-                                            value="leveren"
-                                            checked={values.delivery_method === 'leveren'}
-                                            onChange={handleChange}
-                                        />
-                                        <label htmlFor="leveren">Leveren</label>
-                                        <div className="tst-check"></div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <PaymentMethods
+                            values={values}
+                            handleChange={handleChange}
+                        />
 
-                        {/* button */}
-                        <div className="tst-button-group">
-                            {values.payment_method === 'bankoverschrijving' ? (
-                                <PayconiqButton
-                                    amount={totalAmount}
-                                    orderId={orderId}
-                                    className={`tst-btn tst-btn-with-icon tst-m-0 ${isSubmitting ? 'loading' : ''}`}
-                                    disabled={!isValid || isSubmitting}
-                                    formValues={{
-                                        ...values,
-                                        cartItems,
-                                        delivery_method: values.delivery_method,
-                                    }}
-                                    onPaymentCreated={(checkoutUrl) => {
-                                        // Remove status text update
-                                    }}
-                                    onPaymentError={(error) => {
-                                        const status = document.getElementById("checkoutFormStatus")
-                                        if (status) {
-                                            status.innerHTML = "<h5>Er is een probleem opgetreden. Probeer het opnieuw.</h5>"
-                                        }
-                                    }}
-                                >
-                                    <span className="tst-icon">
-                                        <img src="/img/ui/icons/arrow.svg" alt="icon" />
-                                    </span>
-                                    <span>{isSubmitting ? '' : 'Betaal met Payconiq'}</span>
-                                    {isSubmitting && <div className="spinner" />}
-                                </PayconiqButton>
-                            ) : (
-                                // Cash payment flow - regular form submission
-                                <button
-                                    type="submit"
-                                    className="tst-btn tst-btn-with-icon tst-m-0"
-                                    onClick={() => {
-                                        // Here you can add any pre-submission logic
-                                        console.log('Submitting cash payment order')
-                                    }}
-                                >
-                                    <span className="tst-icon">
-                                        <img src="/img/ui/icons/arrow.svg" alt="icon" />
-                                    </span>
-                                    <span>Plaats bestelling</span>
-                                </button>
-                            )}
-                        </div>
-                        {/* button end */}
+                        <FormButtons
+                            values={values}
+                            isValid={isValid}
+                            isSubmitting={isSubmitting}
+                            orderId={orderId}
+                            totalAmount={totalAmount}
+                            cartItems={cartItems}
+                        />
 
-                        <div id="checkoutFormStatus" className="form-status"></div>
+                        <div id="checkoutFormStatus" className="tst-form-status"></div>
                     </form>
                 )}
             </Formik>
-            {/* contact form end */}
         </>
     )
-}
-
-const getRestaurants = async () => {
-    const supabase = createClient()
-
-    const { data: restaurants, error } = await supabase
-        .from('restaurant')
-        .select(`*`)
-        .returns<Restaurant[]>()
-
-    if (error) {
-        console.error('Error fetching restaurants:', error)
-        return null
-    }
-
-    return restaurants
 }
 
 export default CheckoutForm

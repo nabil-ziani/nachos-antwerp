@@ -12,6 +12,8 @@ interface RestaurantContextType {
     findRestaurantByPostalCode: (postalCode: string) => {
         restaurant: Restaurant | null;
         minimumAmount: number | null;
+        switchRequired?: boolean;
+        message?: string;
     }
     setSelectedRestaurant: (restaurant: Restaurant | null) => void
 }
@@ -99,18 +101,35 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
     };
 
     const findRestaurantByPostalCode = (postalCode: string) => {
-        const restaurant = restaurants.find(r =>
+        // First check current restaurant
+        if (selectedRestaurant?.allowed_postalcodes?.includes(postalCode)) {
+            const minimumAmount = selectedRestaurant.delivery_minimums?.[postalCode] || null;
+            return { restaurant: selectedRestaurant, minimumAmount, switchRequired: false };
+        }
+
+        // Check other restaurants
+        const availableRestaurant = restaurants.find(r => 
             r.allowed_postalcodes?.includes(postalCode)
         );
 
-        if (restaurant) {
-            const minimumAmount = restaurant.delivery_minimums?.[postalCode] || null;
-            setSelectedRestaurant(restaurant);
-            return { restaurant, minimumAmount };
+        if (availableRestaurant) {
+            const minimumAmount = availableRestaurant.delivery_minimums?.[postalCode] || null;
+            setSelectedRestaurant(availableRestaurant);
+            return { 
+                restaurant: availableRestaurant, 
+                minimumAmount,
+                switchRequired: true,
+                message: `We hebben je restaurant gewijzigd naar ${availableRestaurant.name} omdat zij wel bezorgen in ${postalCode}.`
+            };
         }
 
         setSelectedRestaurant(null);
-        return { restaurant: null, minimumAmount: null };
+        return { 
+            restaurant: null, 
+            minimumAmount: null,
+            switchRequired: false,
+            message: `Helaas, we bezorgen momenteel niet in ${postalCode}.`
+        };
     };
 
     return (

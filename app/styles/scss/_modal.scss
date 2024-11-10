@@ -1,0 +1,45 @@
+.tst-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.tst-modal {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    
+    h4 {
+        margin-bottom: 15px;
+    }
+    
+    p {
+        margin-bottom: 20px;
+        color: #64748b;
+    }
+}
+
+.tst-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    
+    button {
+        min-width: 120px;
+    }
+}
+
+.info-message {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 5px;
+} 
