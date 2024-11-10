@@ -8,6 +8,7 @@ interface RestaurantContextType {
     restaurants: Restaurant[]
     selectedRestaurant: Restaurant | null
     locationStatus: string
+    isLoading: boolean
     findNearestLocation: () => void
     findRestaurantByPostalCode: (postalCode: string) => {
         restaurant: Restaurant | null;
@@ -37,9 +38,12 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
 
                 if (data) {
                     setRestaurants(data)
-                    // Set default restaurant (Berchem) if no location
-                    const defaultRestaurant = data.find(r => r.name.toLowerCase().includes('berchem')) || data[0]
-                    setSelectedRestaurant(defaultRestaurant)
+
+                    // Only set default restaurant if no restaurant is selected yet
+                    if (!selectedRestaurant) {
+                        const defaultRestaurant = data.find(r => r.name.toLowerCase().includes('berchem')) || data[0]
+                        setSelectedRestaurant(defaultRestaurant)
+                    }
                 }
 
                 // Check geolocation support and permissions
@@ -52,15 +56,13 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
                 const permission = await navigator.permissions.query({ name: 'geolocation' })
                 setLocationStatus(permission.state as 'prompt' | 'granted' | 'denied')
 
-                if (permission.state === 'granted') {
+                // Only find nearest location if permission is granted and no restaurant is selected yet
+                if (permission.state === 'granted' && !selectedRestaurant) {
                     findNearestLocation()
                 }
 
                 permission.addEventListener('change', () => {
                     setLocationStatus(permission.state as 'prompt' | 'granted' | 'denied')
-                    if (permission.state === 'granted') {
-                        findNearestLocation()
-                    }
                 })
             } catch (error) {
                 console.error('Error fetching restaurants:', error)
@@ -135,6 +137,7 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
             restaurants,
             selectedRestaurant,
             locationStatus,
+            isLoading,
             findNearestLocation,
             findRestaurantByPostalCode,
             setSelectedRestaurant
