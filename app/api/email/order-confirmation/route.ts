@@ -8,12 +8,20 @@ export async function POST(request: Request) {
     try {
         const { order, customer, restaurant } = await request.json();
 
+        const emailSubject = process.env.NODE_ENV === 'production'
+            ? 'Bedankt voor je bestelling bij Nacho\'s Antwerp'
+            : '[TEST] Bedankt voor je bestelling bij Nacho\'s Antwerp';
+
+        const fromEmail = process.env.NODE_ENV === 'production'
+            ? 'bestellingen@nachosantwerp.be'
+            : 'dev@nachosantwerp.be';
+
         const emailHtml = await render(OrderConfirmationEmail({ order, customer, restaurant }));
 
         const data = await resend.emails.send({
-            from: 'Nacho\'s Antwerp <bestellingen@nachosantwerp.be>',
+            from: `Nacho's Antwerp <${fromEmail}>`,
             to: customer.email,
-            subject: 'Bedankt voor je bestelling bij Nacho\'s Antwerp',
+            subject: emailSubject,
             html: emailHtml,
         });
 

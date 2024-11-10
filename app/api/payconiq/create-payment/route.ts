@@ -1,15 +1,27 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const PAYCONIQ_BASE_URL = process.env.NODE_ENV === 'production'
+    ? 'https://api.payconiq.com/v3/payments'
+    : 'https://api.ext.payconiq.com/v3/payments'
+
 export async function POST(request: NextRequest) {
     try {
         const { amount, reference } = await request.json()
 
-        const PAYCONIQ_API_KEY = process.env.PAYCONIQ_EXT_API_KEY
-        const PAYCONIQ_MERCHANT_ID = process.env.PAYCONIQ_EXT_MERCHANT_ID
-        const PAYCONIQ_PROFILE_ID = process.env.PAYCONIQ_EXT_PROFILE_ID
+        const PAYCONIQ_API_KEY = process.env.NODE_ENV === 'production'
+            ? process.env.PAYCONIQ_API_KEY
+            : process.env.PAYCONIQ_EXT_API_KEY
 
-        const response = await fetch('https://api.ext.payconiq.com/v3/payments', {
+        const PAYCONIQ_MERCHANT_ID = process.env.NODE_ENV === 'production'
+            ? process.env.PAYCONIQ_MERCHANT_ID
+            : process.env.PAYCONIQ_EXT_MERCHANT_ID
+
+        const PAYCONIQ_PROFILE_ID = process.env.NODE_ENV === 'production'
+            ? process.env.PAYCONIQ_PROFILE_ID
+            : process.env.PAYCONIQ_EXT_PROFILE_ID
+
+        const response = await fetch(PAYCONIQ_BASE_URL, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${PAYCONIQ_API_KEY}`,
