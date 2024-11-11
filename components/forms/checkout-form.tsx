@@ -114,7 +114,7 @@ const CheckoutForm = () => {
                     postcode: values.postcode,
                     payment_method: values.payment_method,
                     delivery_method: values.delivery_method,
-                    notes: values.message
+                    message: values.message
                 }
                 localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
             }
