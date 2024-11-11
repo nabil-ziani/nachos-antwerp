@@ -1,14 +1,15 @@
 import { FormikErrors } from 'formik';
 import { CheckoutFormValues, Restaurant } from './types';
+import { findRestaurantByPostalCode } from '@/utils/location';
 
 interface ValidateCheckoutFormProps {
     values: CheckoutFormValues
     totalAmount: number
-    findRestaurantByPostalCode: any
     selectedRestaurant: Restaurant | null
+    restaurants: Restaurant[]
 }
 
-export const validateCheckoutForm = ({ values, totalAmount, findRestaurantByPostalCode, selectedRestaurant }: ValidateCheckoutFormProps) => {
+export const validateCheckoutForm = ({ values, totalAmount, selectedRestaurant, restaurants }: ValidateCheckoutFormProps) => {
     const errors: FormikErrors<CheckoutFormValues> = {};
 
     // Check if restaurant is selected
@@ -40,7 +41,7 @@ export const validateCheckoutForm = ({ values, totalAmount, findRestaurantByPost
 
     // Add minimum order validation for delivery
     if (values.delivery_method === 'leveren' && values.postcode) {
-        const { restaurant, minimumAmount } = findRestaurantByPostalCode(values.postcode);
+        const { restaurant, minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode);
         if (restaurant && minimumAmount) {
             if (totalAmount < minimumAmount) {
                 errors.postcode = `Minimum bestelbedrag voor ${values.postcode} is €${minimumAmount.toFixed(2)}`;

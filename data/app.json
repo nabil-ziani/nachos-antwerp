@@ -89,23 +89,23 @@
             "title": "Sfeerfoto's",
             "items": [
                 {
-                    "image": "/img/menu/1.jpg",
+                    "image": "/img/menu/placeholder.png",
                     "alt": "Gallery Image"
                 },
                 {
-                    "image": "/img/menu/2.jpg",
+                    "image": "/img/menu/placeholder.png",
                     "alt": "Gallery Image"
                 },
                 {
-                    "image": "/img/menu/3.jpg",
+                    "image": "/img/menu/placeholder.png",
                     "alt": "Gallery Image"
                 },
                 {
-                    "image": "/img/menu/4.jpg",
+                    "image": "/img/menu/placeholder.png",
                     "alt": "Gallery Image"
                 },
                 {
-                    "image": "/img/menu/5.jpg",
+                    "image": "/img/menu/placeholder.png",
                     "alt": "Gallery Image"
                 }
             ]

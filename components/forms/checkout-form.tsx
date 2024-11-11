@@ -14,6 +14,7 @@ import { PaymentMethods } from './checkout/payment-methods';
 import { FormButtons } from './checkout/form-buttons';
 import { CheckoutFormValues } from '@/lib/types';
 import { LoadingSpinner } from "@/components/loading-spinner";
+import { findRestaurantByPostalCode } from '@/utils/location';
 
 const CheckoutForm = () => {
     const [orderId] = useState(crypto.randomUUID())
@@ -35,10 +36,10 @@ const CheckoutForm = () => {
 
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
-    const { findRestaurantByPostalCode, selectedRestaurant } = useRestaurant()
+    const { selectedRestaurant, restaurants } = useRestaurant()
 
     const validateForm = (values: CheckoutFormValues) => {
-        return validateCheckoutForm({ values, totalAmount, findRestaurantByPostalCode, selectedRestaurant });
+        return validateCheckoutForm({ values, totalAmount, selectedRestaurant, restaurants });
     }
 
     useEffect(() => {
@@ -55,7 +56,7 @@ const CheckoutForm = () => {
                 const parsedDetails = JSON.parse(saved)
 
                 // Validate all fields using existing validation
-                const errors = validateCheckoutForm({ values: parsedDetails, totalAmount, findRestaurantByPostalCode, selectedRestaurant })
+                const errors = validateCheckoutForm({ values: parsedDetails, totalAmount, selectedRestaurant, restaurants })
 
                 // If there are validation errors, clear the problematic fields
                 if (Object.keys(errors).length > 0) {
@@ -79,7 +80,7 @@ const CheckoutForm = () => {
         }
 
         loadSavedDetails()
-    }, [selectedRestaurant, findRestaurantByPostalCode, totalAmount])
+    }, [selectedRestaurant, totalAmount])
 
     // Check localStorage before rendering form
     if (isLoading) {
@@ -99,7 +100,7 @@ const CheckoutForm = () => {
         try {
             // Check minimum order amount for delivery orders
             if (values.delivery_method === 'leveren' && values.postcode) {
-                const { minimumAmount } = findRestaurantByPostalCode(values.postcode);
+                const { minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode);
                 if (minimumAmount && totalAmount < minimumAmount) {
                     const status = document.getElementById("checkoutFormStatus");
                     if (status) {
@@ -197,7 +198,6 @@ const CheckoutForm = () => {
                             touched={touched}
                             handleChange={handleChange}
                             handleBlur={handleBlur}
-                            findRestaurantByPostalCode={findRestaurantByPostalCode}
                         />
 
                         <div className="tst-mb-30">

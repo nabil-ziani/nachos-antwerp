@@ -4,28 +4,27 @@ import { useState } from 'react'
 import { LocationSwitchModal } from '@/components/modals/location-switch-modal'
 import { FormFieldProps, Restaurant } from '@/lib/types';
 import { useRestaurant } from '@/contexts/restaurant-context';
+import { findRestaurantByPostalCode } from '@/utils/location';
 
 type LocationSwitchData = {
     restaurant: Restaurant | null;
     postalCode: string;
 }
 
-interface DeliveryDetailsProps extends FormFieldProps {
-    findRestaurantByPostalCode: any;
-}
+interface DeliveryDetailsProps extends FormFieldProps { }
 
-export const DeliveryDetails = ({ values, errors, touched, handleChange, handleBlur, findRestaurantByPostalCode }: DeliveryDetailsProps) => {
+export const DeliveryDetails = ({ values, errors, touched, handleChange, handleBlur }: DeliveryDetailsProps) => {
     const [showLocationModal, setShowLocationModal] = useState(false)
     const [locationSwitchData, setLocationSwitchData] = useState<LocationSwitchData>({ restaurant: null, postalCode: '' })
 
-    const { setSelectedRestaurant } = useRestaurant()
+    const { restaurants, selectedRestaurant, setSelectedRestaurant } = useRestaurant()
 
     const handlePostcodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const postalCode = e.target.value
         handleChange(e)
 
         if (values.delivery_method === 'leveren' && postalCode.length === 4) {
-            const result = findRestaurantByPostalCode(postalCode)
+            const result = findRestaurantByPostalCode(restaurants, selectedRestaurant, postalCode)
 
             if (result.switchRequired) {
                 setLocationSwitchData({
