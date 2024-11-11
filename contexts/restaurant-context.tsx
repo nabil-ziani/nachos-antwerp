@@ -146,16 +146,16 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
 
             // Get position
             const position = await getCurrentPosition()
-            console.log('Got position:', position.coords)
+            // console.log('Got position:', position.coords)
 
             // Find nearest restaurant using the current restaurants data
             const nearest = findNearestRestaurant(currentRestaurants, position.coords.latitude, position.coords.longitude)
 
             if (nearest) {
-                console.log('Found nearest restaurant:', nearest)
+                // console.log('Found nearest restaurant:', nearest)
                 setSelectedRestaurant(nearest)
             } else {
-                console.log('No nearest restaurant found, setting default')
+                // console.log('No nearest restaurant found, setting default')
                 setDefaultRestaurant(currentRestaurants)
             }
         } catch (error) {

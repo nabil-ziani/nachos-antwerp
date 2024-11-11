@@ -19,8 +19,8 @@ function deg2rad(deg: number): number {
 }
 
 export function findNearestRestaurant(restaurants: Restaurant[], userLat: number, userLng: number): Restaurant | null {
-    console.log('Finding nearest restaurant with coordinates:', { userLat, userLng });
-    console.log('Available restaurants:', restaurants);
+    // console.log('Finding nearest restaurant with coordinates:', { userLat, userLng });
+    // console.log('Available restaurants:', restaurants);
 
     if (!restaurants.length) {
         console.log('No restaurants available');
@@ -33,10 +33,10 @@ export function findNearestRestaurant(restaurants: Restaurant[], userLat: number
         r.longitude != null
     );
 
-    console.log('Valid restaurants with coordinates:', validRestaurants);
+    // console.log('Valid restaurants with coordinates:', validRestaurants);
 
     if (!validRestaurants.length) {
-        console.log('No restaurants with valid coordinates, returning first restaurant');
+        // console.log('No restaurants with valid coordinates, returning first restaurant');
         return restaurants[0];
     }
 
@@ -59,18 +59,18 @@ export function findNearestRestaurant(restaurants: Restaurant[], userLat: number
             nearest.longitude
         );
 
-        console.log(`Distance to ${current.name}: ${distanceToCurrent}km`);
-        console.log(`Distance to ${nearest.name}: ${distanceToNearest}km`);
+        // console.log(`Distance to ${current.name}: ${distanceToCurrent}km`);
+        // console.log(`Distance to ${nearest.name}: ${distanceToNearest}km`);
 
         return distanceToCurrent < distanceToNearest ? current : nearest;
     }, validRestaurants[0]);
 
-    console.log('Selected nearest restaurant:', nearest);
+    // console.log('Selected nearest restaurant:', nearest);
     return nearest;
 }
 
 export function getDefaultRestaurant(restaurants: Restaurant[]): Restaurant | null {
-    console.log('Setting default restaurant, restaurants:', restaurants)
+    // console.log('Setting default restaurant, restaurants:', restaurants)
 
     if (!restaurants || restaurants.length === 0) {
         console.error('No restaurants available for setting default')
@@ -81,7 +81,7 @@ export function getDefaultRestaurant(restaurants: Restaurant[]): Restaurant | nu
         r.name.toLowerCase().includes('berchem')
     ) || restaurants[0]
 
-    console.log('Selected default restaurant:', defaultRestaurant)
+    // console.log('Selected default restaurant:', defaultRestaurant)
 
     if (!defaultRestaurant) {
         console.error('No default restaurant found in:', restaurants)

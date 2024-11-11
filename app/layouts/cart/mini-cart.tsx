@@ -12,7 +12,7 @@ const MiniCart = () => {
 
         if (cartNumberEl) {
             const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0)
-            console.log('total quantity: ', totalQuantity)
+            // console.log('total quantity: ', totalQuantity)
             cartNumberEl.innerHTML = String(totalQuantity)
         }
     }, [cartTotal])

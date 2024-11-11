@@ -6,8 +6,8 @@ import { CustomSelect } from './ui/custom-select'
 export function RestaurantSelector() {
     const { selectedRestaurant, setSelectedRestaurant, restaurants, locationStatus, findNearestLocation, isLoading } = useRestaurant()
 
-    console.log('selectedRestaurant', selectedRestaurant)
-    console.log('isLoading: ', isLoading)
+    // console.log('selectedRestaurant', selectedRestaurant)
+    // console.log('isLoading: ', isLoading)
 
     const handleChange = (value: string) => {
         if (value === 'nearest') {
@@ -19,7 +19,7 @@ export function RestaurantSelector() {
         if (restaurant) setSelectedRestaurant(restaurant)
     }
 
-    const options = isLoading 
+    const options = isLoading
         ? [{ value: '', label: 'Locatie laden...', disabled: true }]
         : [
             { value: '', label: 'Kies een locatie', disabled: true },

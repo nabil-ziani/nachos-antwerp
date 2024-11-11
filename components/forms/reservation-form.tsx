@@ -64,7 +64,7 @@ const ReservationForm = () => {
                                 })
                             }
                         }).catch(error => {
-                            console.log(error)
+                            console.error(error)
                             status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het versturen van je bericht</h5>"
                         })
                     }

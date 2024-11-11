@@ -14,7 +14,7 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
     useEffect(() => {
         const checkOrderStatus = async () => {
             try {
-                console.log('Payment Page - Checking order status')
+                // ('Payment Page - Checking order status')
                 const supabase = createClient()
                 const { data: order, error } = await supabase
                     .from('orders')
@@ -24,19 +24,19 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
 
                 if (error) throw error
 
-                console.log('Payment Page - Order status:', order.payment_status)
+                // console.log('Payment Page - Order status:', order.payment_status)
 
                 if (['completed', 'failed', 'cancelled'].includes(order.payment_status)) {
-                    console.log('Payment Page - Redirecting to confirmation')
+                    // console.log('Payment Page - Redirecting to confirmation')
                     router.push(`/order-confirmation/${params.orderId}`)
                     return
                 }
 
                 const storedQrCode = localStorage.getItem(`payment_${params.orderId}`)
-                console.log('Payment Page - Stored QR code exists:', !!storedQrCode)
+                // console.log('Payment Page - Stored QR code exists:', !!storedQrCode)
 
                 if (!storedQrCode) {
-                    console.log('Payment Page - No QR code found, redirecting to checkout')
+                    // console.log('Payment Page - No QR code found, redirecting to checkout')
                     router.push('/checkout')
                     return
                 }

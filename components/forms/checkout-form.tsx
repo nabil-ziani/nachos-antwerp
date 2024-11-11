@@ -25,13 +25,9 @@ const CheckoutForm = () => {
     const { cartTotal: totalAmount, cartItems } = useCart()
     const { selectedRestaurant, restaurants } = useRestaurant()
 
-    const validateForm = (values: CheckoutFormValues) => {
-        return validateCheckoutForm({ values, totalAmount, selectedRestaurant, restaurants });
-    }
-
     useEffect(() => {
         const loadSavedDetails = () => {
-            if (typeof window === 'undefined') return;
+            if (typeof window === 'undefined' || !selectedRestaurant) return;
 
             try {
                 const saved = localStorage.getItem('user-checkout-details')
@@ -47,9 +43,10 @@ const CheckoutForm = () => {
 
                 // If there are validation errors, clear the problematic fields
                 if (Object.keys(errors).length > 0) {
+                    console.log('Validation errors:', errors)
                     Object.keys(errors).forEach(field => {
-                        parsedDetails[field] = ''
-                    })
+                        parsedDetails[field] = defaultValues[field as keyof CheckoutFormValues] || '';
+                    });
                     // Save the cleaned details back to localStorage
                     localStorage.setItem('user-checkout-details', JSON.stringify(parsedDetails))
                 }
@@ -173,7 +170,7 @@ const CheckoutForm = () => {
         <>
             <Formik
                 initialValues={initialValues}
-                validate={validateForm}
+                validate={(values: CheckoutFormValues) => validateCheckoutForm({ values, totalAmount, selectedRestaurant, restaurants })}
                 validateOnMount={true}
                 onSubmit={handleSubmit}
                 enableReinitialize={true}
