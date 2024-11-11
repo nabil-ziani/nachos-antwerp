@@ -27,6 +27,14 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
     const [locationStatus, setLocationStatus] = useState<'prompt' | 'granted' | 'denied' | 'unsupported'>('prompt')
     const [isLoading, setIsLoading] = useState(true)
 
+    // Helper function to set default restaurant
+    const setDefaultRestaurant = (restaurants: Restaurant[]) => {
+        const defaultRestaurant = restaurants.find(r => 
+            r.name.toLowerCase().includes('berchem')
+        ) || restaurants[0]
+        setSelectedRestaurant(defaultRestaurant)
+    }
+
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
@@ -36,37 +44,50 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
                     .from('restaurant')
                     .select('*')
 
-                if (data) {
-                    setRestaurants(data)
-
-                    // Only set default restaurant if no restaurant is selected yet
-                    if (!selectedRestaurant) {
-                        const defaultRestaurant = data.find(r => r.name.toLowerCase().includes('berchem')) || data[0]
-                        setSelectedRestaurant(defaultRestaurant)
-                    }
-                }
-
-                // Check geolocation support and permissions
-                if (!navigator.geolocation) {
-                    setLocationStatus('unsupported')
+                if (!data || data.length === 0) {
+                    console.error('No restaurants found')
                     setIsLoading(false)
                     return
                 }
 
-                const permission = await navigator.permissions.query({ name: 'geolocation' })
-                setLocationStatus(permission.state as 'prompt' | 'granted' | 'denied')
+                setRestaurants(data)
 
-                // Only find nearest location if permission is granted and no restaurant is selected yet
-                if (permission.state === 'granted' && !selectedRestaurant) {
-                    findNearestLocation()
+                // Check geolocation support and permissions
+                if (!navigator.geolocation) {
+                    setLocationStatus('unsupported')
+                    setDefaultRestaurant(data)
+                    setIsLoading(false)
+                    return
                 }
 
-                permission.addEventListener('change', () => {
+                try {
+                    const permission = await navigator.permissions.query({ name: 'geolocation' })
                     setLocationStatus(permission.state as 'prompt' | 'granted' | 'denied')
-                })
+
+                    if (permission.state === 'granted') {
+                        findNearestLocation()
+                    } else {
+                        // Set default for both 'prompt' and 'denied' states
+                        setDefaultRestaurant(data)
+                    }
+
+                    permission.addEventListener('change', function(this: PermissionStatus) {
+                        const newState = this.state as 'prompt' | 'granted' | 'denied'
+                        setLocationStatus(newState)
+                        
+                        if (newState === 'granted') {
+                            findNearestLocation()
+                        } else {
+                            setDefaultRestaurant(restaurants)
+                        }
+                    })
+                } catch (error) {
+                    console.error('Geolocation permission error:', error)
+                    setLocationStatus('unsupported')
+                    setDefaultRestaurant(data)
+                }
             } catch (error) {
                 console.error('Error fetching restaurants:', error)
-                setLocationStatus('denied')
             } finally {
                 setIsLoading(false)
             }
@@ -132,6 +153,12 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
         };
     };
 
+    const handleSetSelectedRestaurant = (restaurant: Restaurant | null) => {
+        console.log('Setting restaurant:', restaurant?.name || 'null')
+        console.trace('Restaurant selection trace:')
+        setSelectedRestaurant(restaurant)
+    }
+
     return (
         <RestaurantContext.Provider value={{
             restaurants,
@@ -140,7 +167,7 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
             isLoading,
             findNearestLocation,
             findRestaurantByPostalCode,
-            setSelectedRestaurant
+            setSelectedRestaurant: handleSetSelectedRestaurant
         }}>
             {children}
         </RestaurantContext.Provider>

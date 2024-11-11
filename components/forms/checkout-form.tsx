@@ -13,11 +13,25 @@ import { DeliveryDetails } from './checkout/delivery-details';
 import { PaymentMethods } from './checkout/payment-methods';
 import { FormButtons } from './checkout/form-buttons';
 import { CheckoutFormValues } from '@/lib/types';
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 const CheckoutForm = () => {
     const [orderId] = useState(crypto.randomUUID())
-    const [savedDetails, setSavedDetails] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [initialValues, setInitialValues] = useState({
+        firstname: '',
+        lastname: '',
+        email: '',
+        tel: '',
+        company: '',
+        city: '',
+        address: '',
+        postcode: '',
+        message: '',
+        payment_method: 'bankoverschrijving',
+        delivery_method: 'afhalen',
+        remember_details: true
+    })
 
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
@@ -29,52 +43,56 @@ const CheckoutForm = () => {
 
     useEffect(() => {
         const loadSavedDetails = () => {
-            if (typeof window === 'undefined') return null;
+            if (typeof window === 'undefined') return;
 
             try {
                 const saved = localStorage.getItem('user-checkout-details')
-                const parsedDetails = saved ? JSON.parse(saved) : null
-
-                if (parsedDetails && selectedRestaurant) {
-                    const errors = validateForm({
-                        ...initialValues,
-                        ...parsedDetails
-                    });
-
-                    if (errors.postcode) {
-                        parsedDetails.postcode = '';
-                        localStorage.setItem('user-checkout-details', JSON.stringify(parsedDetails));
-                    }
+                if (!saved) {
+                    setIsLoading(false)
+                    return
                 }
 
-                return parsedDetails;
+                const parsedDetails = JSON.parse(saved)
+
+                // Validate all fields using existing validation
+                const errors = validateCheckoutForm({ values: parsedDetails, totalAmount, findRestaurantByPostalCode, selectedRestaurant })
+
+                // If there are validation errors, clear the problematic fields
+                if (Object.keys(errors).length > 0) {
+                    Object.keys(errors).forEach(field => {
+                        parsedDetails[field] = ''
+                    })
+                    // Save the cleaned details back to localStorage
+                    localStorage.setItem('user-checkout-details', JSON.stringify(parsedDetails))
+                }
+
+                // Update initialValues with validated details
+                setInitialValues(prev => ({
+                    ...prev,
+                    ...parsedDetails
+                }))
             } catch (error) {
                 console.error('Error loading saved details:', error)
-                return null
+            } finally {
+                setIsLoading(false)
             }
         }
 
-        const details = loadSavedDetails()
-        setSavedDetails(details)
-        setIsLoading(false)
-    }, [selectedRestaurant])
+        loadSavedDetails()
+    }, [selectedRestaurant, findRestaurantByPostalCode, totalAmount])
 
     // Check localStorage before rendering form
-    if (isLoading) return null;
-
-    const initialValues: CheckoutFormValues = {
-        firstname: savedDetails?.firstname || '',
-        lastname: savedDetails?.lastname || '',
-        email: savedDetails?.email || '',
-        tel: savedDetails?.tel || '',
-        company: savedDetails?.company || '',
-        city: savedDetails?.city || '',
-        address: savedDetails?.address || '',
-        postcode: savedDetails?.postcode || '',
-        message: '',
-        payment_method: 'bankoverschrijving',
-        delivery_method: 'afhalen',
-        remember_details: true
+    if (isLoading) {
+        return (
+            <div className="container py-5">
+                <div className="row">
+                    <div className="col-12 text-center">
+                        <LoadingSpinner />
+                        <p className="mt-3">Gegevens laden...</p>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     const handleSubmit = async (values: CheckoutFormValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
@@ -167,6 +185,7 @@ const CheckoutForm = () => {
                 validate={validateForm}
                 validateOnMount={true}
                 onSubmit={handleSubmit}
+                enableReinitialize={true}
             >
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, isValid }) => (
                     <form onSubmit={handleSubmit} id="checkoutForm" action={AppData.settings.formspreeURL} className="tst-checkout-form">

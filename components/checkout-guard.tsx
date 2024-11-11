@@ -15,10 +15,17 @@ export function CheckoutGuard({ children }: { children: React.ReactNode }) {
         }
     }, [cartItems, isLoading, router])
 
+    // Show loading spinner while checking cart state
     if (isLoading) {
-        return <LoadingSpinner />
+        return (
+            <div className="container py-5 text-center">
+                <LoadingSpinner />
+                <p className="mt-3">Even geduld aub...</p>
+            </div>
+        )
     }
 
+    // Don't render anything if cart is empty (prevents flash)
     if (cartItems.length === 0) {
         return null
     }

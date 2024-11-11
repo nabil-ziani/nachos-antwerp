@@ -14,6 +14,7 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
     useEffect(() => {
         const checkOrderStatus = async () => {
             try {
+                console.log('Payment Page - Checking order status')
                 const supabase = createClient()
                 const { data: order, error } = await supabase
                     .from('orders')
@@ -23,16 +24,20 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
 
                 if (error) throw error
 
-                // If payment is completed/failed/cancelled, redirect to confirmation
+                console.log('Payment Page - Order status:', order.payment_status)
+
                 if (['completed', 'failed', 'cancelled'].includes(order.payment_status)) {
+                    console.log('Payment Page - Redirecting to confirmation')
                     router.push(`/order-confirmation/${params.orderId}`)
                     return
                 }
 
-                // Only check QR code if payment is still pending
                 const storedQrCode = localStorage.getItem(`payment_${params.orderId}`)
+                console.log('Payment Page - Stored QR code exists:', !!storedQrCode)
+
                 if (!storedQrCode) {
-                    router.push('/menu')
+                    console.log('Payment Page - No QR code found, redirecting to checkout')
+                    router.push('/checkout')
                     return
                 }
 
@@ -44,8 +49,8 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
                 setQrCode(qrUrl.toString())
                 startPaymentTracking(params.orderId, 'pending')
             } catch (error) {
-                console.error('Error checking order status:', error)
-                router.push('/menu')
+                console.error('Payment Page - Error:', error)
+                router.push('/checkout')
             } finally {
                 setIsLoading(false)
             }

@@ -10,6 +10,7 @@ interface CartState {
     miniCart: boolean
     isLoading: boolean
     setMiniCart: (open: boolean) => void
+    setIsLoading: (loading: boolean) => void
     addToCart: (item: CartItem) => void
     removeFromCart: (itemId: string) => void
     clearCart: () => void
@@ -21,7 +22,8 @@ export const useCart = create<CartState>()(
             cartItems: [],
             cartTotal: 0,
             miniCart: false,
-            isLoading: false,
+            isLoading: true,
+            setIsLoading: (loading) => set({ isLoading: loading }),
             addToCart: (item) => {
                 const existingItem = get().cartItems.find(ci => ci.itemId === item.itemId);
                 if (existingItem) {
@@ -51,7 +53,10 @@ export const useCart = create<CartState>()(
             clearCart: () => set({ cartItems: [], cartTotal: 0 })
         }),
         {
-            name: 'cart-storage'
+            name: 'cart-storage',
+            onRehydrateStorage: () => (state) => {
+                state?.setIsLoading(false);
+            }
         }
     )
 )

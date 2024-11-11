@@ -8,7 +8,7 @@ interface PaymentResultProps {
 }
 
 export function PaymentResult({ status }: PaymentResultProps) {
-    const { cartItems, removeFromCart, clearCart } = useCart()
+    const { clearCart } = useCart()
 
     useEffect(() => {
         if (status === 'completed') {
