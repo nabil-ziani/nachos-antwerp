@@ -9,6 +9,21 @@ interface ValidateCheckoutFormProps {
     restaurants: Restaurant[]
 }
 
+export const defaultValues: CheckoutFormValues = {
+    firstname: '',
+    lastname: '',
+    email: '',
+    tel: '',
+    company: '',
+    city: '',
+    address: '',
+    postcode: '',
+    message: '',
+    payment_method: 'bankoverschrijving',
+    delivery_method: 'afhalen',
+    remember_details: true
+};
+
 export const validateCheckoutForm = ({ values, totalAmount, selectedRestaurant, restaurants }: ValidateCheckoutFormProps) => {
     const errors: FormikErrors<CheckoutFormValues> = {};
 

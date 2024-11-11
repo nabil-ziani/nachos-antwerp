@@ -8,7 +8,7 @@ import { useCart } from '@/hooks/useCart';
 import { useRouter } from 'next/navigation';
 import { useRestaurant } from '@/contexts/restaurant-context';
 import { LocationConfirmation } from '@/components/location-confirmation';
-import { validateCheckoutForm } from '@/lib/checkout-validation';
+import { defaultValues, validateCheckoutForm } from '@/lib/checkout-validation';
 import { DeliveryDetails } from './checkout/delivery-details';
 import { PaymentMethods } from './checkout/payment-methods';
 import { FormButtons } from './checkout/form-buttons';
@@ -19,20 +19,7 @@ import { findRestaurantByPostalCode } from '@/utils/location';
 const CheckoutForm = () => {
     const [orderId] = useState(crypto.randomUUID())
     const [isLoading, setIsLoading] = useState(true)
-    const [initialValues, setInitialValues] = useState({
-        firstname: '',
-        lastname: '',
-        email: '',
-        tel: '',
-        company: '',
-        city: '',
-        address: '',
-        postcode: '',
-        message: '',
-        payment_method: 'bankoverschrijving',
-        delivery_method: 'afhalen',
-        remember_details: true
-    })
+    const [initialValues, setInitialValues] = useState(defaultValues)
 
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
