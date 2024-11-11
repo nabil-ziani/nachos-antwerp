@@ -29,16 +29,25 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
 
     // Helper function to set default restaurant
     const setDefaultRestaurant = (restaurants: Restaurant[]) => {
-        console.log('Setting default restaurant, restaurants:', restaurants);
+        console.log('Setting default restaurant, restaurants:', restaurants)
+        if (!restaurants || restaurants.length === 0) {
+            console.error('No restaurants available for setting default')
+            setIsLoading(false)
+            return
+        }
+        
         const defaultRestaurant = restaurants.find(r =>
             r.name.toLowerCase().includes('berchem')
-        ) || restaurants[0];
-        console.log('Selected default restaurant:', defaultRestaurant);
+        ) || restaurants[0]
+        
+        console.log('Selected default restaurant:', defaultRestaurant)
         if (!defaultRestaurant) {
-            console.error('No default restaurant found in:', restaurants);
-            return;
+            console.error('No default restaurant found in:', restaurants)
+            setIsLoading(false)
+            return
         }
-        setSelectedRestaurant(defaultRestaurant);
+        
+        setSelectedRestaurant(defaultRestaurant)
     }
 
     useEffect(() => {
@@ -135,49 +144,57 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
     }, [])
 
     const findNearestLocation = async () => {
-        setIsLoading(true)
-        // Wait for restaurants data if it's not available
-        if (restaurants.length === 0) {
-            const supabase = createClient()
-            const { data } = await supabase
-                .from('restaurant')
-                .select('*')
-            if (data) {
+        try {
+            setIsLoading(true)
+            
+            // Fetch restaurants if we don't have them
+            let currentRestaurants = restaurants
+            if (currentRestaurants.length === 0) {
+                const supabase = createClient()
+                const { data, error } = await supabase
+                    .from('restaurant')
+                    .select('*')
+                
+                if (error) throw error
+                if (!data || data.length === 0) {
+                    console.error('No restaurants found in database')
+                    setIsLoading(false)
+                    return
+                }
+                
+                currentRestaurants = data
                 setRestaurants(data)
             }
+
+            // Get position
+            const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 })
+            })
+
+            console.log('Got position:', position.coords)
+            
+            // Find nearest restaurant using the current restaurants data
+            const nearest = findNearestRestaurant(
+                currentRestaurants,
+                position.coords.latitude,
+                position.coords.longitude
+            )
+
+            if (nearest) {
+                console.log('Found nearest restaurant:', nearest)
+                setSelectedRestaurant(nearest)
+            } else {
+                console.log('No nearest restaurant found, setting default')
+                setDefaultRestaurant(currentRestaurants)
+            }
+        } catch (error) {
+            console.error('Error in findNearestLocation:', error)
+            setLocationStatus('denied')
+            setDefaultRestaurant(restaurants)
+        } finally {
+            setIsLoading(false)
         }
-
-        return new Promise<void>((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    console.log('Got position:', position.coords);
-                    const nearest = findNearestRestaurant(
-                        restaurants,
-                        position.coords.latitude,
-                        position.coords.longitude
-                    );
-
-                    if (nearest) {
-                        console.log('Found nearest restaurant:', nearest);
-                        setSelectedRestaurant(nearest);
-                    } else {
-                        console.log('No nearest restaurant found, setting default');
-                        setDefaultRestaurant(restaurants);
-                    }
-                    setIsLoading(false)
-                    resolve();
-                },
-                (error) => {
-                    console.error('Geolocation error:', error);
-                    setLocationStatus('denied');
-                    setDefaultRestaurant(restaurants);
-                    setIsLoading(false)
-                    reject(error);
-                },
-                { timeout: 10000 }
-            );
-        });
-    };
+    }
 
     const findRestaurantByPostalCode = (postalCode: string) => {
         // First check current restaurant

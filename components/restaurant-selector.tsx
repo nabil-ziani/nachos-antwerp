@@ -19,19 +19,21 @@ export function RestaurantSelector() {
         if (restaurant) setSelectedRestaurant(restaurant)
     }
 
-    const options = [
-        { value: '', label: 'Kies een locatie', disabled: true },
-        ...(locationStatus === 'prompt' ? [
-            { value: 'nearest', label: '📍 Dichtstbijzijnde locatie' }
-        ] : []),
-        ...(locationStatus === 'denied' ? [
-            { value: '', label: 'ℹ️ Locatie delen uitgeschakeld', disabled: true }
-        ] : []),
-        ...restaurants.map(restaurant => ({
-            value: restaurant.id,
-            label: `🍴 ${restaurant.name}`
-        }))
-    ]
+    const options = isLoading 
+        ? [{ value: '', label: 'Locatie laden...', disabled: true }]
+        : [
+            { value: '', label: 'Kies een locatie', disabled: true },
+            ...(locationStatus === 'prompt' ? [
+                { value: 'nearest', label: '📍 Dichtstbijzijnde locatie' }
+            ] : []),
+            ...(locationStatus === 'denied' ? [
+                { value: '', label: 'ℹ️ Locatie delen uitgeschakeld', disabled: true }
+            ] : []),
+            ...restaurants.map(restaurant => ({
+                value: restaurant.id,
+                label: `🍴 ${restaurant.name}`
+            }))
+        ]
 
     return (
         <div className="tst-restaurant-selector">
