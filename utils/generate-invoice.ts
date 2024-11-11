@@ -1,18 +1,29 @@
 import { jsPDF } from 'jspdf';
 import { getLogoAsBase64 } from './image-to-base64';
+import { registerFonts } from './register-fonts';
 
 // Constants for styling
 const COLORS = {
     primary: '#1a2f33',
     secondary: '#64748b',
     accent: '#f39c12',
-    border: '#e2e8f0'
+    border: 'rgba(26, 47, 51, 0.2)' // Matching your email template divider opacity
 };
 
-const FONTS = {
-    heading: 'Playfair Display',
-    body: 'Josefin Sans'
-};
+// Helper function to draw dotted line
+function drawDottedLine(doc: jsPDF, startX: number, startY: number, endX: number, endY: number) {
+    const dotLength = 1;
+    const gapLength = 1;
+    const numberOfDots = Math.floor((endX - startX) / (dotLength + gapLength));
+
+    doc.setDrawColor(26, 47, 51); // RGB values for your border color
+    doc.setFillColor(26, 47, 51);
+
+    for (let i = 0; i < numberOfDots; i++) {
+        const x = startX + i * (dotLength + gapLength);
+        doc.circle(x, startY, 0.2, 'F');
+    }
+}
 
 export async function generateInvoice(orderData: {
     orderId: string;
@@ -35,32 +46,33 @@ export async function generateInvoice(orderData: {
     });
 
     // Register fonts
-    doc.addFont('/fonts/PlayfairDisplay-Regular.ttf', 'Playfair Display', 'normal');
-    doc.addFont('/fonts/PlayfairDisplay-Bold.ttf', 'Playfair Display', 'bold');
-    doc.addFont('/fonts/JosefinSans-Regular.ttf', 'Josefin Sans', 'normal');
-    doc.addFont('/fonts/JosefinSans-Bold.ttf', 'Josefin Sans', 'bold');
+    const fontsRegistered = registerFonts(doc);
 
-    // Set default font
-    doc.setFont('Josefin Sans', 'normal');
 
-    // Add logo
+    // If fonts fail to register, fallback to helvetica
+    const fonts = {
+        heading: fontsRegistered ? 'Playfair Display' : 'helvetica',
+        body: fontsRegistered ? 'Josefin Sans' : 'helvetica'
+    };
+
+    // Add logo (smaller and better positioned)
     const logoBase64 = getLogoAsBase64();
     if (logoBase64) {
         try {
-            doc.addImage(logoBase64, 'PNG', 20, 20, 40, 40);
+            doc.addImage(logoBase64, 'PNG', 20, 20, 30, 30);
         } catch (error) {
             console.error('Failed to add logo:', error);
         }
     }
 
-    // Header section
-    doc.setFont('Playfair Display', 'bold');
+    // Header section (moved right to align with content)
+    doc.setFont(fonts.heading, 'bold');
     doc.setFontSize(24);
     doc.setTextColor(COLORS.primary);
-    doc.text("Nacho's Antwerp", 70, 35);
+    doc.text("Nacho's Antwerp", 60, 35);
 
-    // Company info
-    doc.setFont('Josefin Sans', 'normal');
+    // Company info (better aligned)
+    doc.setFont(fonts.body, 'normal');
     doc.setFontSize(10);
     doc.setTextColor(COLORS.secondary);
     doc.text([
@@ -69,107 +81,109 @@ export async function generateInvoice(orderData: {
         '2600 Berchem',
         'Tel: +32 467 07 18 74',
         'bestellingen@nachosantwerp.be'
-    ], 70, 45);
+    ], 60, 45);
 
-    // Invoice details box
-    doc.setDrawColor(COLORS.border);
-    doc.setFillColor(247, 248, 250); // Light gray background
-    doc.roundedRect(140, 20, 50, 40, 3, 3, 'FD');
-
-    doc.setFont('Playfair Display', 'bold');
-    doc.setFontSize(12);
+    // Invoice details (right-aligned)
+    doc.setFont(fonts.heading, 'bold');
+    doc.setFontSize(14);
     doc.setTextColor(COLORS.accent);
-    doc.text('FACTUUR', 145, 30);
+    doc.text('FACTUUR', 150, 30);
 
-    doc.setFont('Josefin Sans', 'normal');
+    doc.setFont(fonts.body, 'normal');
     doc.setFontSize(10);
     doc.setTextColor(COLORS.secondary);
     doc.text([
         `Nummer: ${orderData.orderId}`,
         `Datum: ${orderData.date.toLocaleDateString('nl-BE')}`,
-    ], 145, 38);
+    ], 150, 40);
 
-    // Client details
-    doc.setFillColor(247, 248, 250);
-    doc.roundedRect(20, 70, 170, 35, 3, 3, 'FD');
+    // Dotted line separator (matching your email style)
+    drawDottedLine(doc, 20, 65, 190, 65);
 
-    doc.setFont('Playfair Display', 'bold');
+    // Client details (cleaner layout)
+    doc.setFont(fonts.heading, 'bold');
     doc.setFontSize(12);
-    doc.text('FACTUUR VOOR', 25, 80);
+    doc.setTextColor(COLORS.primary);
+    doc.text('FACTUUR VOOR', 20, 80);
 
-    doc.setFont('Josefin Sans', 'normal');
+    doc.setFont(fonts.body, 'normal');
     doc.setFontSize(10);
     doc.text([
         orderData.company.name,
         orderData.company.vatNumber ? `BTW: ${orderData.company.vatNumber}` : '',
-    ], 25, 88);
+    ], 20, 90);
 
-    // Items table
+    // Items table (with dotted lines between items)
     const tableTop = 120;
     let currentY = tableTop;
 
     // Table header
-    doc.setFillColor(247, 248, 250);
-    doc.rect(20, currentY, 170, 10, 'F');
-
-    doc.setFont('Playfair Display', 'bold');
+    doc.setFont(fonts.heading, 'bold');
     doc.setFontSize(10);
     doc.setTextColor(COLORS.primary);
-    doc.text('OMSCHRIJVING', 25, currentY + 7);
-    doc.text('AANTAL', 100, currentY + 7);
-    doc.text('PRIJS', 130, currentY + 7);
-    doc.text('TOTAAL', 160, currentY + 7);
 
-    currentY += 15;
+    // Column headers
+    const columns = {
+        description: { x: 20, width: 80 },
+        quantity: { x: 110, width: 20 },
+        price: { x: 140, width: 25 },
+        total: { x: 170, width: 25 }
+    };
+
+    doc.text('OMSCHRIJVING', columns.description.x, currentY);
+    doc.text('AANTAL', columns.quantity.x, currentY);
+    doc.text('PRIJS', columns.price.x, currentY);
+    doc.text('TOTAAL', columns.total.x, currentY);
+
+    currentY += 5;
+    drawDottedLine(doc, 20, currentY, 190, currentY);
+    currentY += 10;
 
     // Table items
-    doc.setFont('Josefin Sans', 'normal');
+    doc.setFont(fonts.body, 'normal');
     doc.setTextColor(COLORS.secondary);
 
     orderData.items.forEach(item => {
-        doc.text(item.title, 25, currentY);
-        doc.text(item.quantity.toString(), 100, currentY);
-        doc.text(`€${item.price.toFixed(2)}`, 130, currentY);
-        doc.text(`€${(item.quantity * item.price).toFixed(2)}`, 160, currentY);
+        doc.text(item.title, columns.description.x, currentY);
+        doc.text(item.quantity.toString(), columns.quantity.x, currentY);
+        doc.text(`€${item.price.toFixed(2)}`, columns.price.x, currentY);
+        doc.text(`€${(item.quantity * item.price).toFixed(2)}`, columns.total.x, currentY);
+
         currentY += 8;
+        drawDottedLine(doc, 20, currentY - 3, 190, currentY - 3);
     });
 
     // Totals section
     currentY += 10;
-    doc.setDrawColor(COLORS.border);
-    doc.line(20, currentY, 190, currentY);
-    currentY += 10;
-
     const totalExclVAT = orderData.total / 1.21;
 
-    // Totals alignment
-    const totalsX = 130;
-    const totalsValueX = 160;
-
-    doc.setFont('Josefin Sans', 'normal');
-    doc.text('Subtotaal excl. BTW:', totalsX, currentY);
-    doc.text(`€${totalExclVAT.toFixed(2)}`, totalsValueX, currentY);
+    // Right-aligned totals
+    doc.setFont(fonts.body, 'normal');
+    doc.text('Subtotaal excl. BTW:', 140, currentY);
+    doc.text(`€${totalExclVAT.toFixed(2)}`, 175, currentY, { align: 'right' });
     currentY += 8;
 
-    doc.text('BTW 21%:', totalsX, currentY);
-    doc.text(`€${(orderData.total - totalExclVAT).toFixed(2)}`, totalsValueX, currentY);
+    doc.text('BTW 21%:', 140, currentY);
+    doc.text(`€${(orderData.total - totalExclVAT).toFixed(2)}`, 175, currentY, { align: 'right' });
     currentY += 8;
 
-    doc.setFont('Playfair Display', 'bold');
-    doc.setTextColor(COLORS.primary);
-    doc.text('TOTAAL incl. BTW:', totalsX, currentY);
-    doc.text(`€${orderData.total.toFixed(2)}`, totalsValueX, currentY);
+    doc.setFont(fonts.heading, 'bold');
+    doc.setTextColor(COLORS.accent);
+    doc.text('TOTAAL incl. BTW:', 140, currentY);
+    doc.text(`€${orderData.total.toFixed(2)}`, 175, currentY, { align: 'right' });
 
-    // Footer
+    // Footer with dotted line above
     const footerY = 270;
-    doc.setFont('Josefin Sans', 'normal');
+    drawDottedLine(doc, 20, footerY - 10, 190, footerY - 10);
+
+    doc.setFont(fonts.body, 'normal');
     doc.setFontSize(8);
     doc.setTextColor(COLORS.secondary);
     doc.text([
         "Nacho's Antwerp",
         'www.nachosantwerp.be',
         'Betalingsvoorwaarden: Direct bij bestelling'
-    ], 20, footerY, { align: 'left' });
+    ], 20, footerY);
 
     // Return as Buffer
     return Buffer.from(doc.output('arraybuffer'));
