@@ -68,6 +68,8 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
                                     name: data.customer_name,
                                     email: data.customer_email,
                                     phone: data.customer_phone,
+                                    company: data.customer_company,
+                                    vatNumber: data.customer_vatnumber,
                                     address: data.delivery_method === 'leveren'
                                         ? `${data.delivery_address.street}, ${data.delivery_address.postcode} ${data.delivery_address.city}`
                                         : null

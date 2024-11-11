@@ -41,6 +41,7 @@ export interface CheckoutFormValues {
     email: string
     tel: string
     company: string
+    vatNumber: string
     city: string
     address: string
     postcode: string

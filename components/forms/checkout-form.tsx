@@ -106,6 +106,7 @@ const CheckoutForm = () => {
                     email: values.email,
                     tel: values.tel,
                     company: values.company,
+                    vatNumber: values.vatNumber,
                     city: values.city,
                     address: values.address,
                     postcode: values.postcode,
@@ -125,7 +126,8 @@ const CheckoutForm = () => {
                     customer_name: `${values.firstname} ${values.lastname}`,
                     customer_email: values.email,
                     customer_phone: values.tel,
-                    customer_company: values.company || null,
+                    customer_company: values.company,
+                    customer_vatnumber: values.vatNumber,
                     delivery_method: values.delivery_method,
                     delivery_address: values.delivery_method === 'leveren' ? {
                         street: values.address,

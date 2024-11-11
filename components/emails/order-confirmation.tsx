@@ -98,17 +98,17 @@ export function OrderConfirmationEmail({ order, customer, restaurant }: OrderCon
                                 {order.type === 'delivery' ? 'Leveringsadres' : 'Afhaaladres'}
                             </Heading>
                             <Text style={infoText}>
-                                {order.type === 'delivery' && customer.address 
-                                    ? customer.address 
+                                {order.type === 'delivery' && customer.address
+                                    ? customer.address
                                     : restaurant.address}
                             </Text>
                             <Text style={estimatedTimeBox}>
-                                <svg 
-                                    width="20" 
-                                    height="20" 
-                                    viewBox="0 0 24 24" 
-                                    fill="none" 
-                                    stroke="currentColor" 
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
                                     style={clockIcon}
                                 >
                                     <circle cx="12" cy="12" r="10" />
@@ -143,6 +143,7 @@ const main = {
     margin: '0',
     padding: '40px 20px',
 };
+
 
 const container = {
     margin: '0 auto',

@@ -14,6 +14,8 @@ interface PayconiqButtonProps {
         lastname: string
         email: string
         tel: string
+        company?: string
+        vatNumber?: string
         delivery_method: string
         street?: string
         number?: string
@@ -68,6 +70,8 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
                     customer_name: `${formValues.firstname} ${formValues.lastname}`,
                     customer_email: formValues.email,
                     customer_phone: formValues.tel,
+                    customer_company: formValues.company,
+                    customer_vatnumber: formValues.vatNumber,
                     delivery_method: formValues.delivery_method,
                     delivery_address: formValues.delivery_method === 'leveren' ? {
                         street: formValues.street,

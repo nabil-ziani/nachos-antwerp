@@ -15,6 +15,7 @@ export const defaultValues: CheckoutFormValues = {
     email: '',
     tel: '',
     company: '',
+    vatNumber: '',
     city: '',
     address: '',
     postcode: '',
@@ -67,13 +68,25 @@ export const validateCheckoutForm = ({ values, totalAmount, selectedRestaurant, 
     // Add strict postal code validation for delivery orders
     if (values.delivery_method === 'leveren' && values.postcode && selectedRestaurant) {
         if (!selectedRestaurant.allowed_postalcodes?.includes(values.postcode)) {
-            const availableRestaurant = restaurants.find(r => 
+            const availableRestaurant = restaurants.find(r =>
                 r.allowed_postalcodes?.includes(values.postcode)
             );
-            
-            errors.postcode = availableRestaurant 
+
+            errors.postcode = availableRestaurant
                 ? `${selectedRestaurant.name} levert niet in ${values.postcode}. Kies ${availableRestaurant.name} voor bezorging in deze zone.`
                 : `We bezorgen niet in ${values.postcode}.`;
+        }
+    }
+
+    if (values.company && !values.vatNumber) {
+        errors.vatNumber = 'BTW nummer is verplicht wanneer een bedrijfsnaam is ingevuld';
+    }
+
+    if (values.vatNumber) {
+        // Basic Belgian VAT number validation
+        const vatRegex = /^BE[0-9]{10}$/;
+        if (!vatRegex.test(values.vatNumber.replace(/\s/g, ''))) {
+            errors.vatNumber = 'Ongeldig BTW nummer formaat (bijv. BE0123456789)';
         }
     }
 

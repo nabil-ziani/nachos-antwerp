@@ -96,6 +96,7 @@ export type Database = {
           order_items: Json
           payment_method: string
           payment_status: string
+          vat_number: string | null
         }
         Insert: {
           amount: number
@@ -112,6 +113,7 @@ export type Database = {
           order_items: Json
           payment_method: string
           payment_status: string
+          vat_number?: string | null
         }
         Update: {
           amount?: number
@@ -128,6 +130,7 @@ export type Database = {
           order_items?: Json
           payment_method?: string
           payment_status?: string
+          vat_number?: string | null
         }
         Relationships: []
       }
