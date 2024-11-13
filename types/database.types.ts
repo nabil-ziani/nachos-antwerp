@@ -88,6 +88,7 @@ export type Database = {
           customer_email: string
           customer_name: string
           customer_phone: string
+          customer_vatnumber: string | null
           delivery_address: Json | null
           delivery_method: string
           id: string
@@ -96,7 +97,7 @@ export type Database = {
           order_items: Json
           payment_method: string
           payment_status: string
-          vat_number: string | null
+          status: string | null
         }
         Insert: {
           amount: number
@@ -105,6 +106,7 @@ export type Database = {
           customer_email: string
           customer_name: string
           customer_phone: string
+          customer_vatnumber?: string | null
           delivery_address?: Json | null
           delivery_method: string
           id?: string
@@ -113,7 +115,7 @@ export type Database = {
           order_items: Json
           payment_method: string
           payment_status: string
-          vat_number?: string | null
+          status?: string | null
         }
         Update: {
           amount?: number
@@ -122,6 +124,7 @@ export type Database = {
           customer_email?: string
           customer_name?: string
           customer_phone?: string
+          customer_vatnumber?: string | null
           delivery_address?: Json | null
           delivery_method?: string
           id?: string
@@ -130,7 +133,7 @@ export type Database = {
           order_items?: Json
           payment_method?: string
           payment_status?: string
-          vat_number?: string | null
+          status?: string | null
         }
         Relationships: []
       }
