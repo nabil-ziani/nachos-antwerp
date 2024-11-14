@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { createClient } from '@/utils/supabase/client'
 import { usePayment } from "@/contexts/payment-context"
+import { useRestaurant } from "@/contexts/restaurant-context"
 
 interface PayconiqButtonProps {
     amount: number
@@ -32,6 +33,7 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
     const [isLoading, setIsLoading] = useState(false)
 
     const { startPaymentTracking } = usePayment()
+    const { selectedRestaurant } = useRestaurant()
 
     const handlePayment = async (e: React.MouseEvent) => {
         e.preventDefault()
@@ -80,6 +82,7 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
                         postal_code: formValues.postal_code
                     } : null,
                     order_items: formValues.cartItems,
+                    restaurant_id: selectedRestaurant?.id,
                     created_at: new Date().toISOString()
                 })
 

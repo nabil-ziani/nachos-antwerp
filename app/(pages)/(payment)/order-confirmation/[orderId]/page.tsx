@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { PaymentResult } from '@/components/payment-result'
+import { useRestaurant } from '@/contexts/restaurant-context'
 
 interface OrderDetails {
     order_id: string
@@ -22,6 +23,8 @@ interface OrderDetails {
 export default function OrderConfirmationPage({ params }: { params: { orderId: string } }) {
     const [order, setOrder] = useState<OrderDetails | null>(null)
     const [emailSent, setEmailSent] = useState(false)
+
+    const { selectedRestaurant } = useRestaurant()
     const router = useRouter()
 
     useEffect(() => {
@@ -75,10 +78,8 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
                                         : null
                                 },
                                 restaurant: {
-                                    name: "Nacho's Antwerp",
-                                    address: data.restaurant_location === 'berchem'
-                                        ? 'Diksmuidelaan 170, 2600 Berchem'
-                                        : 'Oudebareellei 51, 2170 Merksem'
+                                    name: selectedRestaurant?.name || "Nacho's Antwerp",
+                                    address: selectedRestaurant?.address || 'Address not found'
                                 }
                             })
                         })

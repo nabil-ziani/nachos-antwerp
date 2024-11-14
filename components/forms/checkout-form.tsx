@@ -142,6 +142,7 @@ const CheckoutForm = () => {
                         currency: item.currency,
                         image: item.image
                     })),
+                    restaurant_id: selectedRestaurant?.id,
                     notes: values.message
                 };
 
