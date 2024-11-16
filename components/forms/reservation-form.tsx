@@ -1,86 +1,112 @@
 "use client";
 
 import { Formik, FormikErrors } from 'formik';
+import { createClient } from '@/utils/supabase/client';
 import AppData from "@/data/app.json";
 
 interface ReservationFormValues {
-    email: string
-    first_name: string
-    last_name: string
-    time: string
-    date: string
-    person: string
-    message: string
+    email: string;
+    first_name: string;
+    last_name: string;
+    time: string;
+    date: string;
+    person: string;
+    message: string;
 }
 
 const ReservationForm = () => {
+    const supabase = createClient();
+
     return (
         <>
-            {/* contact form */}
             <Formik
                 initialValues={{ email: '', first_name: '', last_name: '', time: '', date: '', person: '', message: '' }}
                 validate={values => {
-                    const errors: FormikErrors<ReservationFormValues> = {}
+                    const errors: FormikErrors<ReservationFormValues> = {};
                     if (!values.email) {
-                        errors.email = 'Verplicht'
+                        errors.email = 'Verplicht';
                     } else if (
                         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
                     ) {
-                        errors.email = 'Ongeldige mailadres'
+                        errors.email = 'Ongeldige mailadres';
                     }
-                    return errors
+                    return errors;
                 }}
-                onSubmit={(values, { setSubmitting }) => {
-                    const form = document.getElementById("reservationForm") as HTMLFormElement
-                    const status = document.getElementById("reservationFormStatus")
-                    const data = new FormData()
+                onSubmit={async (values, { setSubmitting }) => {
+                    const form = document.getElementById("reservationForm") as HTMLFormElement;
+                    const status = document.getElementById("reservationFormStatus");
 
-                    data.append('first_name', values.first_name)
-                    data.append('last_name', values.last_name)
-                    data.append('email', values.email)
-                    data.append('person', values.person)
-                    data.append('time', values.time)
-                    data.append('date', values.date)
-                    data.append('message', values.message)
+                    try {
+                        // Insert reservation into Supabase
+                        const { error } = await supabase
+                            .from('reservations')
+                            .insert({
+                                customer_name: `${values.first_name} ${values.last_name}`,
+                                customer_email: values.email,
+                                date: values.date,
+                                time: values.time,
+                                number_of_people: values.person,
+                                message: values.message
+                            });
 
-                    if (form && status) {
-                        fetch(form.action, {
+                        if (error) {
+                            console.error('Error saving reservation:', error);
+                            if (status) {
+                                status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het opslaan van je reservering</h5>";
+                            }
+                            return;
+                        }
+
+                        // Send email via Formspree
+                        const data = new FormData();
+                        data.append('first_name', values.first_name);
+                        data.append('last_name', values.last_name);
+                        data.append('email', values.email);
+                        data.append('person', values.person);
+                        data.append('time', values.time);
+                        data.append('date', values.date);
+                        data.append('message', values.message);
+
+                        const response = await fetch(form.action, {
                             method: 'POST',
                             body: data,
                             headers: {
                                 'Accept': 'application/json'
                             }
-                        }).then(response => {
-                            if (response.ok) {
-                                status.innerHTML = "<h5>Bedankt voor je bericht!</h5>"
-                                form.reset()
-                            } else {
-                                response.json().then(data => {
-                                    if (Object.hasOwn(data, 'errors')) {
-                                        status.innerHTML = "<h5 style='color:red;'>" + data["errors"].map((error: any) => error["message"]).join(", ") + "</h5>"
-                                    } else {
-                                        status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het versturen van je bericht</h5>"
-                                    }
-                                })
-                            }
-                        }).catch(error => {
-                            console.error(error)
-                            status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het versturen van je bericht</h5>"
-                        })
-                    }
+                        });
 
-                    setSubmitting(false);
+                        if (response.ok) {
+                            if (status) {
+                                status.innerHTML = "<h5>Bedankt voor je bericht!</h5>";
+                            }
+                            form.reset();
+                        } else {
+                            const responseData = await response.json();
+                            if (Object.hasOwn(responseData, 'errors')) {
+                                if (status) {
+                                    status.innerHTML = "<h5 style='color:red;'>" + responseData["errors"].map((error: any) => error["message"]).join(", ") + "</h5>";
+                                }
+                            } else {
+                                if (status) {
+                                    status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het versturen van je bericht</h5>";
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error handling reservation:', error);
+                        if (status) {
+                            status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het verwerken van je reservering</h5>";
+                        }
+                    } finally {
+                        setSubmitting(false);
+                    }
                 }}
             >
                 {({
                     values,
-                    errors,
-                    touched,
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                    isSubmitting,
-                    /* and other goodies */
                 }) => (
                     <form onSubmit={handleSubmit} id="reservationForm" action={AppData.settings.formspreeURL}>
                         <div className="row">
@@ -118,14 +144,14 @@ const ReservationForm = () => {
                                 />
                             </div>
                             <div className="col-6 col-md-4">
-                                <select name="person" className="wide">
+                                <select name="person" className="wide" onChange={handleChange} onBlur={handleBlur} value={values.person}>
                                     <option>Aantal Personen</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
-                                    <option value="3">5</option>
-                                    <option value="3">6 of meer</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6 of meer</option>
                                 </select>
                             </div>
                             <div className="col-6 col-md-4">
@@ -139,7 +165,7 @@ const ReservationForm = () => {
                                 />
                             </div>
                             <div className="col-6 col-md-4">
-                                <select name="time" className="wide">
+                                <select name="time" className="wide" onChange={handleChange} onBlur={handleBlur} value={values.time}>
                                     <option>Tijd</option>
                                     <option value="5:00pm">17:00</option>
                                     <option value="6:00pm">18:00</option>
@@ -168,8 +194,8 @@ const ReservationForm = () => {
                     </form>
                 )}
             </Formik>
-            {/* contact form end */}
         </>
-    );
-};
-export default ReservationForm;
+    )
+}
+
+export default ReservationForm
