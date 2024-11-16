@@ -4,6 +4,7 @@ import { useState } from "react"
 import { createClient } from '@/utils/supabase/client'
 import { usePayment } from "@/contexts/payment-context"
 import { useRestaurant } from "@/contexts/restaurant-context"
+import { geocodeAddress } from '@/utils/geocode';
 
 interface PayconiqButtonProps {
     amount: number
@@ -60,6 +61,18 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
 
             startPaymentTracking(data.paymentId, 'pending')
 
+            let coordinates = null;
+            if (formValues.delivery_method === 'leveren') {
+                const address = `${formValues.street}, ${formValues.postal_code} ${formValues.city}`;
+                coordinates = await geocodeAddress(address);
+
+                if (!coordinates) {
+                    console.error('Failed to geocode address');
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
             // Now save the order to Supabase using the paymentId
             const supabase = createClient()
             const { error: orderError } = await supabase
@@ -81,6 +94,8 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
                         city: formValues.city,
                         postal_code: formValues.postal_code
                     } : null,
+                    latitude: coordinates?.latitude || null,
+                    longitude: coordinates?.longitude || null,
                     order_items: formValues.cartItems,
                     restaurant_id: selectedRestaurant?.id,
                     created_at: new Date().toISOString()

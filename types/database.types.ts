@@ -92,11 +92,14 @@ export type Database = {
           delivery_address: Json | null
           delivery_method: string
           id: string
+          latitude: number | null
+          longitude: number | null
           notes: string | null
           order_id: string
           order_items: Json
           payment_method: string
           payment_status: string
+          restaurant_id: string
           status: string | null
         }
         Insert: {
@@ -110,11 +113,14 @@ export type Database = {
           delivery_address?: Json | null
           delivery_method: string
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           notes?: string | null
           order_id: string
           order_items: Json
           payment_method: string
           payment_status: string
+          restaurant_id: string
           status?: string | null
         }
         Update: {
@@ -128,14 +134,69 @@ export type Database = {
           delivery_address?: Json | null
           delivery_method?: string
           id?: string
+          latitude?: number | null
+          longitude?: number | null
           notes?: string | null
           order_id?: string
           order_items?: Json
           payment_method?: string
           payment_status?: string
+          restaurant_id?: string
           status?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurant"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reservations: {
+        Row: {
+          created_at: string | null
+          customer_email: string
+          customer_name: string
+          date: string
+          id: string
+          message: string | null
+          number_of_people: number
+          restaurant_id: string | null
+          time: string
+        }
+        Insert: {
+          created_at?: string | null
+          customer_email: string
+          customer_name: string
+          date: string
+          id?: string
+          message?: string | null
+          number_of_people: number
+          restaurant_id?: string | null
+          time: string
+        }
+        Update: {
+          created_at?: string | null
+          customer_email?: string
+          customer_name?: string
+          date?: string
+          id?: string
+          message?: string | null
+          number_of_people?: number
+          restaurant_id?: string | null
+          time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurant"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       restaurant: {
         Row: {

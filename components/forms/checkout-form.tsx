@@ -15,6 +15,7 @@ import { FormButtons } from './checkout/form-buttons';
 import { CheckoutFormValues } from '@/lib/types';
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { findRestaurantByPostalCode } from '@/utils/location';
+import { geocodeAddress } from '@/utils/geocode';
 
 const CheckoutForm = () => {
     const [orderId] = useState(crypto.randomUUID())
@@ -117,6 +118,16 @@ const CheckoutForm = () => {
                 localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
             }
 
+            // Geocode address
+            const address = `${values.address}, ${values.postcode} ${values.city}`;
+            const coordinates = await geocodeAddress(address);
+
+            if (!coordinates) {
+                console.error('Failed to geocode address');
+                setSubmitting(false);
+                return;
+            }
+
             if (values.payment_method === 'cash') {
                 const orderData = {
                     order_id: orderId,
@@ -143,7 +154,9 @@ const CheckoutForm = () => {
                         image: item.image
                     })),
                     restaurant_id: selectedRestaurant?.id,
-                    notes: values.message
+                    notes: values.message,
+                    latitude: coordinates.latitude,
+                    longitude: coordinates.longitude,
                 };
 
                 const supabase = createClient();
