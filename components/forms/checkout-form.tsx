@@ -16,6 +16,7 @@ import { CheckoutFormValues } from '@/lib/types';
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { findRestaurantByPostalCode } from '@/utils/location';
 import { geocodeAddress } from '@/utils/geocode';
+import { createOrderData } from '@/utils/order-utils';
 
 const CheckoutForm = () => {
     const [orderId] = useState(crypto.randomUUID())
@@ -128,45 +129,23 @@ const CheckoutForm = () => {
                 return;
             }
 
-            if (values.payment_method === 'cash') {
-                const orderData = {
-                    order_id: orderId,
-                    payment_method: 'cash',
-                    payment_status: 'completed',
-                    amount: totalAmount,
-                    customer_name: `${values.firstname} ${values.lastname}`,
-                    customer_email: values.email,
-                    customer_phone: values.tel,
-                    customer_company: values.company,
-                    customer_vatnumber: values.vatNumber,
-                    delivery_method: values.delivery_method,
-                    delivery_address: values.delivery_method === 'leveren' ? {
-                        street: values.address,
-                        city: values.city,
-                        postcode: values.postcode
-                    } : null,
-                    order_items: cartItems.map(item => ({
-                        title: item.title,
-                        price: item.price,
-                        quantity: item.quantity,
-                        total: item.price * item.quantity,
-                        currency: item.currency,
-                        image: item.image
-                    })),
-                    restaurant_id: selectedRestaurant?.id,
-                    notes: values.message,
-                    latitude: coordinates.latitude,
-                    longitude: coordinates.longitude,
-                };
+            const orderData = createOrderData(
+                orderId,
+                values,
+                totalAmount,
+                cartItems,
+                selectedRestaurant,
+                coordinates
+            );
 
-                const supabase = createClient();
-                const { error: dbError } = await supabase
-                    .from('orders')
-                    .insert([orderData]);
+            const supabase = createClient();
+            const { error: dbError } = await supabase
+                .from('orders')
+                .insert([orderData]);
 
-                if (dbError) throw dbError;
-                router.push(`/order-confirmation/${orderId}`);
-            }
+            if (dbError) throw dbError;
+
+            router.push(`/order-confirmation/${orderId}`);
         } catch (error) {
             console.error('Order submission failed:', error);
             const status = document.getElementById("checkoutFormStatus");

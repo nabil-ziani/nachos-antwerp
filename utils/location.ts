@@ -69,28 +69,6 @@ export function findNearestRestaurant(restaurants: Restaurant[], userLat: number
     return nearest;
 }
 
-export function getDefaultRestaurant(restaurants: Restaurant[]): Restaurant | null {
-    // console.log('Setting default restaurant, restaurants:', restaurants)
-
-    if (!restaurants || restaurants.length === 0) {
-        console.error('No restaurants available for setting default')
-        return null
-    }
-
-    const defaultRestaurant = restaurants.find(r =>
-        r.name.toLowerCase().includes('berchem')
-    ) || restaurants[0]
-
-    // console.log('Selected default restaurant:', defaultRestaurant)
-
-    if (!defaultRestaurant) {
-        console.error('No default restaurant found in:', restaurants)
-        return null
-    }
-
-    return defaultRestaurant
-}
-
 export function findRestaurantByPostalCode(restaurants: Restaurant[], selectedRestaurant: Restaurant | null, postalCode: string) {
     // First check current restaurant
     if (selectedRestaurant?.allowed_postalcodes?.includes(postalCode)) {

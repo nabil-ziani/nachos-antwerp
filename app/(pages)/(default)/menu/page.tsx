@@ -9,7 +9,7 @@ import { createClient } from "@/utils/supabase/server"
 import { MenuItemWithCategory } from "@/lib/types"
 import { Tables } from "@/types/database.types"
 
-const MenuGrid = dynamic(() => import("@/components/menu/menu-grid"), { ssr: false })
+const MenuGrid = dynamic(() => import("@/components/menu/menu-grid"))
 
 export const metadata = {
     title: {
@@ -47,7 +47,7 @@ const Menu = async () => {
 }
 
 async function getMenu() {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data: menu_items, error: menu_items_err } = await supabase
         .from('menu_items')

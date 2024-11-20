@@ -43,8 +43,8 @@ export interface CheckoutFormValues {
     company: string
     vatNumber: string
     city: string
-    address: string
     postcode: string
+    address: string
     message: string
     payment_method: string
     delivery_method: string

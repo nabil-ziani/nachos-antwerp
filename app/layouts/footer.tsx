@@ -1,14 +1,14 @@
 "use client";
 
 import { MouseEvent, useEffect } from "react";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import AppData from "@/data/app.json";
 
 import { ScrollAnimation } from "@/app/common/scroll";
 
-const FooterGallery = dynamic(() => import("@/app/layouts/footer/footer-gallery"), { ssr: false });
+// const FooterGallery = dynamic(() => import("@/app/layouts/footer/footer-gallery"));
 
 const DefaultFooter = () => {
 
@@ -71,7 +71,6 @@ const DefaultFooter = () => {
                     </div>
                 </div>
             </footer>
-            {/* footer end */}
         </>
     );
 };

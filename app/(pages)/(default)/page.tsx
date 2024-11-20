@@ -18,10 +18,10 @@ import { createClient } from "@/utils/supabase/server"
 import { MenuItemWithCategory } from "@/lib/types"
 import { Tables } from "@/types/database.types"
 
-const HeroSlider = dynamic(() => import("@/components/sliders/hero"), { ssr: false });
-const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"), { ssr: false });
+const HeroSlider = dynamic(() => import("@/components/sliders/hero"))
+const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"))
 
-const MenuFiltered = dynamic(() => import("@/components/menu/menu-filtered"), { ssr: false });
+const MenuFiltered = dynamic(() => import("@/components/menu/menu-filtered"))
 
 export const metadata = {
   title: {
@@ -95,7 +95,7 @@ export default async function HomePage() {
 }
 
 async function getMenu() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data: menu_items, error: menu_items_err } = await supabase
     .from('menu_items')

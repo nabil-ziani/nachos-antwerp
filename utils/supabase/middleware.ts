@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
+import { cookies } from 'next/headers';
 
 export const updateSession = async (request: NextRequest) => {
   try {
@@ -14,13 +15,15 @@ export const updateSession = async (request: NextRequest) => {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
-          getAll() {
-            return request.cookies.getAll();
+          async getAll() {
+            const cookieStore = await cookies();
+            return cookieStore.getAll();
           },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value),
-            );
+          async setAll(cookiesToSet) {
+            const cookieStore = await cookies();
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options);
+            });
             response = NextResponse.next({
               request,
             });
@@ -32,8 +35,6 @@ export const updateSession = async (request: NextRequest) => {
       },
     );
 
-    // This will refresh session if expired - required for Server Components
-    // https://supabase.com/docs/guides/auth/server-side/nextjs
     await supabase.auth.getUser();
 
     return response;

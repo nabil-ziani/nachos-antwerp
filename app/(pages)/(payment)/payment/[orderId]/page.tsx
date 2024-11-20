@@ -1,14 +1,17 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePayment } from '@/contexts/payment-context'
 import { createClient } from '@/utils/supabase/client'
 
-export default function PaymentPage({ params }: { params: { orderId: string } }) {
+export default function PaymentPage({ params }: { params: Promise<{ orderId: string }> }) {
     const [qrCode, setQrCode] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(true)
+
     const router = useRouter()
+    const orderId = use(params).orderId
+
     const { startPaymentTracking } = usePayment()
 
     useEffect(() => {
@@ -19,7 +22,7 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
                 const { data: order, error } = await supabase
                     .from('orders')
                     .select('payment_status')
-                    .eq('order_id', params.orderId)
+                    .eq('order_id', orderId)
                     .single()
 
                 if (error) throw error
@@ -28,11 +31,11 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
 
                 if (['completed', 'failed', 'cancelled'].includes(order.payment_status)) {
                     // console.log('Payment Page - Redirecting to confirmation')
-                    router.push(`/order-confirmation/${params.orderId}`)
+                    router.push(`/order-confirmation/${orderId}`)
                     return
                 }
 
-                const storedQrCode = localStorage.getItem(`payment_${params.orderId}`)
+                const storedQrCode = localStorage.getItem(`payment_${orderId}`)
                 // console.log('Payment Page - Stored QR code exists:', !!storedQrCode)
 
                 if (!storedQrCode) {
@@ -47,7 +50,7 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
                 qrUrl.searchParams.set('cl', 'black')
 
                 setQrCode(qrUrl.toString())
-                startPaymentTracking(params.orderId, 'pending')
+                startPaymentTracking(orderId, 'pending')
             } catch (error) {
                 console.error('Payment Page - Error:', error)
                 router.push('/checkout')
@@ -57,7 +60,7 @@ export default function PaymentPage({ params }: { params: { orderId: string } })
         }
 
         checkOrderStatus()
-    }, [params.orderId, router, startPaymentTracking])
+    }, [orderId, router, startPaymentTracking])
 
     if (!qrCode) return null
 

@@ -1,16 +1,28 @@
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 export async function geocodeAddress(address: string): Promise<{ latitude: number, longitude: number } | null> {
-    // TODO: add google maps api key
-    const apiKey = 'GOOGLE_MAPS_API_KEY';
-    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`);
-    const data: any = await response.json();
+    const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+    console.log('Mapbox Access Token:', accessToken);
 
-    if (data.status === 'OK' && data.results.length > 0) {
-        const location = data.results[0].geometry.location;
-        return { latitude: location.lat, longitude: location.lng };
+    try {
+        const response = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json`, {
+            params: {
+                access_token: accessToken,
+                limit: 1
+            }
+        });
+
+        const data = response.data;
+
+        if (data.features && data.features.length > 0) {
+            const location = data.features[0].geometry.coordinates;
+            return { latitude: location[1], longitude: location[0] };
+        }
+
+        console.error('Geocoding failed: No results found');
+        return null;
+    } catch (error) {
+        console.error('Error during geocoding:', error);
+        return null;
     }
-
-    console.error('Geocoding failed:', data.status);
-    return null;
 }

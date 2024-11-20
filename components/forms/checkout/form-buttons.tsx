@@ -23,15 +23,12 @@ export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmoun
                     orderId={orderId}
                     className={`tst-btn tst-btn-with-icon tst-m-0 ${isSubmitting ? 'loading' : ''}`}
                     disabled={isButtonDisabled}
-                    formValues={{
-                        ...values,
-                        cartItems,
-                        delivery_method: values.delivery_method,
-                    }}
-                    onPaymentCreated={(checkoutUrl) => {
-                        // Remove status text update
-                    }}
+                    formValues={{ ...values, cartItems }}
+                    // TODO: Remove this code after testing
+                    onPaymentCreated={(checkoutUrl) => { }}
                     onPaymentError={(error) => {
+                        console.error(error)
+
                         const status = document.getElementById("checkoutFormStatus")
                         if (status) {
                             status.innerHTML = "<h5>Er is een probleem opgetreden. Probeer het opnieuw.</h5>"
@@ -41,7 +38,7 @@ export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmoun
                     <span className="tst-icon">
                         <img src="/img/ui/icons/arrow.svg" alt="icon" />
                     </span>
-                    <span>{isSubmitting ? '' : 'Betaal met Payconiq'}</span>
+                    <span>{isSubmitting ? 'Betalen...' : 'Betaal met Payconiq'}</span>
                     {isSubmitting && <div className="spinner" />}
                 </PayconiqButton>
             ) : (

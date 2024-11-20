@@ -5,24 +5,15 @@ import { createClient } from '@/utils/supabase/client'
 import { usePayment } from "@/contexts/payment-context"
 import { useRestaurant } from "@/contexts/restaurant-context"
 import { geocodeAddress } from '@/utils/geocode';
+import { createOrderData } from "@/utils/order-utils"
+import { CheckoutFormValues } from "@/lib/types"
 
 interface PayconiqButtonProps {
     amount: number
     orderId: string
     className?: string
     disabled?: boolean
-    formValues: {
-        firstname: string
-        lastname: string
-        email: string
-        tel: string
-        company?: string
-        vatNumber?: string
-        delivery_method: string
-        street?: string
-        number?: string
-        city?: string
-        postal_code?: string
+    formValues: CheckoutFormValues & {
         cartItems: any[]
     }
     onPaymentCreated?: (checkoutUrl: string) => void
@@ -43,14 +34,14 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
         try {
             setIsLoading(true)
 
-            // First create Payconiq payment
+            // Create PAYCONIQ payment
             const response = await fetch('/api/payconiq/create-payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     amount,
-                    reference: orderId, // We'll still use this as reference but not as order_id
-                }),
+                    reference: orderId,
+                })
             })
 
             const data = await response.json()
@@ -61,9 +52,10 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
 
             startPaymentTracking(data.paymentId, 'pending')
 
-            let coordinates = null;
+            // Get coordinates of customer address
+            let coordinates = null
             if (formValues.delivery_method === 'leveren') {
-                const address = `${formValues.street}, ${formValues.postal_code} ${formValues.city}`;
+                const address = `${formValues.address}, ${formValues.postcode} ${formValues.city}`;
                 coordinates = await geocodeAddress(address);
 
                 if (!coordinates) {
@@ -73,36 +65,13 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
                 }
             }
 
-            // Now save the order to Supabase using the paymentId
-            const supabase = createClient()
-            const { error: orderError } = await supabase
-                .from('orders')
-                .insert({
-                    order_id: data.paymentId,
-                    amount: amount,
-                    payment_method: 'payconiq',
-                    payment_status: 'pending',
-                    customer_name: `${formValues.firstname} ${formValues.lastname}`,
-                    customer_email: formValues.email,
-                    customer_phone: formValues.tel,
-                    customer_company: formValues.company,
-                    customer_vatnumber: formValues.vatNumber,
-                    delivery_method: formValues.delivery_method,
-                    delivery_address: formValues.delivery_method === 'leveren' ? {
-                        street: formValues.street,
-                        number: formValues.number,
-                        city: formValues.city,
-                        postal_code: formValues.postal_code
-                    } : null,
-                    latitude: coordinates?.latitude || null,
-                    longitude: coordinates?.longitude || null,
-                    order_items: formValues.cartItems,
-                    restaurant_id: selectedRestaurant?.id,
-                    created_at: new Date().toISOString()
-                })
+            const orderData = createOrderData(data.paymentId, formValues, amount, formValues.cartItems, selectedRestaurant, coordinates);
 
-            if (orderError) {
-                throw new Error(`Failed to save order: ${orderError.message}`)
+            const supabase = createClient()
+            const { error: insertError } = await supabase.from('orders').insert(orderData)
+
+            if (insertError) {
+                throw new Error(`Failed to save order: ${insertError.message}`)
             }
 
             // Store QR code

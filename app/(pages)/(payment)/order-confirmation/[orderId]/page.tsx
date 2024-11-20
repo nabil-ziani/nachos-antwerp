@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { PaymentResult } from '@/components/payment-result'
@@ -20,12 +20,14 @@ interface OrderDetails {
     estimated_time?: string
 }
 
-export default function OrderConfirmationPage({ params }: { params: { orderId: string } }) {
+export default function OrderConfirmationPage({ params }: { params: Promise<{ orderId: string }> }) {
     const [order, setOrder] = useState<OrderDetails | null>(null)
     const [emailSent, setEmailSent] = useState(false)
 
     const { selectedRestaurant } = useRestaurant()
     const router = useRouter()
+
+    const orderId = use(params).orderId
 
     useEffect(() => {
         const fetchOrder = async () => {
@@ -33,7 +35,7 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
             const { data, error } = await supabase
                 .from('orders')
                 .select('*')
-                .eq('order_id', params.orderId)
+                .eq('order_id', orderId)
                 .single()
 
             if (error || !data) {
@@ -45,7 +47,7 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
             setOrder(data)
 
             if (data.payment_status === 'completed' && !emailSent) {
-                const emailKey = `email_sent_${params.orderId}`
+                const emailKey = `email_sent_${orderId}`
                 if (!localStorage.getItem(emailKey)) {
                     try {
                         await fetch('/api/email/order-confirmation', {
@@ -92,11 +94,11 @@ export default function OrderConfirmationPage({ params }: { params: { orderId: s
                 }
             }
 
-            localStorage.removeItem(`payment_${params.orderId}`)
+            localStorage.removeItem(`payment_${orderId}`)
         }
 
         fetchOrder()
-    }, [params.orderId, emailSent])
+    }, [orderId, emailSent])
 
     if (!order) return null
 

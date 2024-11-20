@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import React from "react"
 import dynamic from "next/dynamic"
 
 import AppData from "@/data/app.json"
@@ -14,7 +14,7 @@ import CountersSection from "@/components/sections/counters"
 import CallToActionFourSection from "@/components/sections/call-to-action-four"
 import SubscribeSection from "@/components/sections/subscribe"
 
-const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"), { ssr: false });
+const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"));
 
 export const metadata = {
     title: {
