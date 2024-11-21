@@ -13,6 +13,7 @@ interface CustomSelectProps {
     placeholder?: string
     disabled?: boolean
     className?: string
+    testId?: string
 }
 
 export function CustomSelect({
@@ -21,7 +22,8 @@ export function CustomSelect({
     options,
     placeholder = 'Select an option',
     disabled = false,
-    className = ''
+    className = '',
+    testId = 'custom-select'
 }: CustomSelectProps) {
     const [isOpen, setIsOpen] = useState(false)
     const selectRef = useRef<HTMLDivElement>(null)
@@ -53,6 +55,7 @@ export function CustomSelect({
             ref={selectRef}
             className={`tst-custom-select ${className} ${disabled ? 'disabled' : ''}`}
             onClick={handleSelectClick}
+            data-testid={testId}
         >
             <button
                 type="button"
@@ -66,7 +69,7 @@ export function CustomSelect({
 
             {isOpen && (
                 <div className="tst-select-dropdown">
-                    {options.map((option) => (
+                    {options.map((option, idx) => (
                         <button
                             key={option.value}
                             type="button"
@@ -78,6 +81,7 @@ export function CustomSelect({
                                 }
                             }}
                             disabled={option.disabled}
+                            data-testid={`option-${idx}`}
                         >
                             {option.label}
                         </button>

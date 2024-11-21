@@ -40,6 +40,7 @@ export function RestaurantSelector() {
                 options={options}
                 disabled={isLoading}
                 placeholder={isLoading ? 'Locatie laden...' : 'Kies een locatie'}
+                testId="restaurant-selector"
             />
         </div>
     )

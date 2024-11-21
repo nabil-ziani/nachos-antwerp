@@ -1,6 +1,6 @@
 'use client'
 
-import { FormFieldProps, Restaurant } from '@/lib/types';
+import { FormFieldProps } from '@/lib/types';
 
 interface DeliveryDetailsProps extends FormFieldProps { }
 

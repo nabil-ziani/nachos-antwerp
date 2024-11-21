@@ -39,6 +39,12 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
         }
     }, [])
 
+    useEffect(() => {
+        if (restaurants.length > 0) {
+            handleLocationPermission();
+        }
+    }, [restaurants]);
+
     const fetchRestaurants = async () => {
         try {
             const supabase = createClient()
@@ -50,7 +56,6 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
                 return
             }
 
-            console.log('Fetched restaurants:', data)
             setRestaurants(data)
             setSelectedRestaurant(data[0])
         } catch (error) {
@@ -90,8 +95,6 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
     const findNearestLocation = async () => {
         try {
             setIsLoading(true)
-
-            console.log('Attempting to find nearest location. Restaurants:', restaurants)
 
             if (restaurants.length === 0) {
                 console.error('No restaurants available')
