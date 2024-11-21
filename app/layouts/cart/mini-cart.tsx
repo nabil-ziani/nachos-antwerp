@@ -12,7 +12,6 @@ const MiniCart = () => {
 
         if (cartNumberEl) {
             const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0)
-            // console.log('total quantity: ', totalQuantity)
             cartNumberEl.innerHTML = String(totalQuantity)
         }
     }, [cartTotal])
@@ -29,10 +28,10 @@ const MiniCart = () => {
                 <div className="tst-suptitle tst-suptitle-center"></div>
                 <h5>Uw bestelling!</h5>
             </div>
-            <ul className="woocommerce-mini-cart cart_list product_list_widget">
+            <ul className="woocommerce-mini-cart cart_list product_list_widget" data-testid="mini-cart">
                 {cartItems.map((item, key) => (
                     <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`} key={key}>
-                        <a href="#." className="remove remove_from_cart_button" aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
+                        <a href="#." className="remove remove_from_cart_button" data-testid={`remove-from-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`} aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
                         {/* <Link href="/product"> */}
                         <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
                         {item.title}

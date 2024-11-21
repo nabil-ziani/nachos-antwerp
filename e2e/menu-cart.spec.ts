@@ -1,23 +1,38 @@
 import { test, expect } from '@playwright/test';
 
 test.describe.skip('Menu and Cart Tests', () => {
-    test('TC-04: Verify adding menu items to cart', async ({ page }) => {
+    test('TC-04: Customer can add menu items to cart', async ({ page }) => {
+        // Navigate to the menu page
         await page.goto('/menu');
-        await page.click('button#add-to-cart-1'); // Assuming button has an ID
-        const cartCount = page.locator('.cart-count');
+
+        // Add item to cart
+        await page.click('[data-testid="add-to-cart-quesadilla"]');
+
+        // Verify cart count
+        const cartCount = page.locator('[data-testid="cart-amount"]');
         await expect(cartCount).toHaveText('1');
     });
 
-    test('TC-05: Verify viewing cart with selected items', async ({ page }) => {
-        await page.goto('/cart');
-        const cartItems = page.locator('.cart-item');
-        await expect(cartItems).toHaveCount(1);
-    });
+    test('TC-05: Customer can remove items from mini cart', async ({ page }) => {
+        // Navigate to the menu page and add an item to the cart
+        await page.goto('/menu');
+        await page.click('[data-testid="add-to-cart-quesadilla"]');
 
-    test('TC-06: Verify removing items from cart', async ({ page }) => {
-        await page.goto('/cart');
-        await page.click('button#remove-from-cart-1');
-        const cartItems = page.locator('.cart-item');
-        await expect(cartItems).toHaveCount(0);
+        // Mini cart opens automatically when an item is added to the cart
+        await page.waitForSelector('[data-testid="mini-cart"]', { state: 'visible' });
+
+        // Remove item from mini cart
+        await page.click('[data-testid="remove-from-cart-quesadilla"]', { force: true });
+
+        // Wait for the cart count to update
+        await page.waitForFunction(() => {
+            const cartCountElement = document.querySelector('[data-testid="cart-amount"]');
+
+            return cartCountElement && cartCountElement.textContent === '0';
+        }, { timeout: 10000 });
+
+        // Verify the cart is empty
+        const cartCount = page.locator('[data-testid="cart-amount"]');
+        await expect(cartCount).toHaveText('0');
     });
 });

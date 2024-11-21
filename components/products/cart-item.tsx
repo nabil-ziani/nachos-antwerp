@@ -1,3 +1,4 @@
+// ******* IS NOT USED ANYMORE *******
 "use client";
 
 import { useCart } from "@/hooks/useCart";
@@ -47,7 +48,7 @@ const CartItem = ({ item, key }: { item: CartItemType, key: any }) => {
 
     return (
         <>
-            <div className={`tst-cart-item tst-cart-item-${key}`}>
+            <div className={`tst-cart-item tst-cart-item-${key}`} data-testid={`cart-item-${item.title.toLowerCase().replace(/\s+/g, '-')}`}>
                 <div className="row align-items-center">
                     <div className="col-lg-6">
                         <Link className="tst-product" href={`/product`}>

@@ -32,7 +32,7 @@ const MenuItem = ({ item }: { item: CartItem }) => {
 
   return (
     <>
-      <div className="tst-menu-book-item tst-mbi-3" data-swiper-parallax-y="60" data-swiper-parallax-opacity="0" data-swiper-parallax-duration="1000">
+      <div className="tst-menu-book-item tst-mbi-3" data-swiper-parallax-y="60" data-swiper-parallax-opacity="0" data-swiper-parallax-duration="1000" data-testid={`menu-item-${item.itemId}`}>
         <a href={item.image} data-fancybox="menu" className="tst-item-cover-frame tst-cursor-zoom" onClick={(e) => { e.preventDefault(); setImg(true); setImgValue([{ "src": item.image, "alt": item.title }]); }}>
           <img src={item.image} alt={item.title} />
           <span className="tst-overlay"></span>
@@ -50,7 +50,7 @@ const MenuItem = ({ item }: { item: CartItem }) => {
               <div className="tst-price"><span className="tst-symbol">{item.currency}</span>{Number(item.price).toFixed(2)}</div>
             </div>
             <div className="tst-input-number-frame">
-              <div className="tst-input-number-btn tst-add" onClick={(e) => handleAddToCard(e)}>+</div>
+              <div className="tst-input-number-btn tst-add" onClick={(e) => handleAddToCard(e)} data-testid={`add-to-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`}>+</div>
             </div>
           </div>
         </div>

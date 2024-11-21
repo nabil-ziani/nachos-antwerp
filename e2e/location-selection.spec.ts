@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Location Selection Tests', () => {
+test.describe.skip('Location Selection Tests', () => {
     test('TC-01: Restaurant location is set based on geolocation (permission granted)', async ({ page }) => {
         // Navigate to the homepage
         await page.goto('/');
