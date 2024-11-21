@@ -18,7 +18,7 @@ const CartSummary = () => {
     }
 
     return (
-        <div className="tst-pad-type-2 tst-sticky" data-margin-top="120">
+        <div className="tst-pad-type-2 tst-sticky" data-margin-top="120" >
             <div className="tst-co-cart-frame">
                 <div className="tst-cart-table">
                     <div className="tst-cart-table-header">

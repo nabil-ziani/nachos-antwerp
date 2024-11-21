@@ -21,7 +21,7 @@ export function PaymentResult({ status }: PaymentResultProps) {
             case 'completed':
                 return {
                     icon: (
-                        <div className={`tst-status-icon ${status}`}>
+                        <div className={`tst-status-icon ${status}`} data-testid="completed-icon">
                             <svg className="w-20 h-20 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                             </svg>
@@ -34,7 +34,7 @@ export function PaymentResult({ status }: PaymentResultProps) {
             case 'failed':
                 return {
                     icon: (
-                        <div className={`tst-status-icon ${status}`}>
+                        <div className={`tst-status-icon ${status}`} data-testid="failed-icon">
                             <svg className="w-20 h-20 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -47,7 +47,7 @@ export function PaymentResult({ status }: PaymentResultProps) {
             case 'cancelled':
                 return {
                     icon: (
-                        <div className={`tst-status-icon ${status}`}>
+                        <div className={`tst-status-icon ${status}`} data-testid="cancelled-icon">
                             <svg className="w-20 h-20 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
@@ -60,7 +60,7 @@ export function PaymentResult({ status }: PaymentResultProps) {
             default:
                 return {
                     icon: (
-                        <div className="tst-status-icon unknown">
+                        <div className="tst-status-icon unknown" data-testid="unknown-icon">
                             <svg className="w-20 h-20 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>

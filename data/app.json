@@ -32,22 +32,26 @@
             {
                 "label": "Home",
                 "link": "/",
-                "children": 0
+                "children": 0,
+                "testid": "nav-home-link"
             },
             {
                 "label": "Over Ons",
                 "link": "/about",
-                "children": 0
+                "children": 0,
+                "testid": "nav-about-link"
             },
             {
                 "label": "Menu",
                 "link": "/menu",
-                "children": 0
+                "children": 0,
+                "testid": "nav-menu-link"
             },
             {
                 "label": "Contact",
                 "link": "/contact",
-                "children": 0
+                "children": 0,
+                "testid": "nav-contact-link"
             }
         ]
     },

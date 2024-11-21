@@ -90,7 +90,7 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
     }
 
     return (
-        <button onClick={handlePayment} disabled={disabled || isLoading} className={className} type="button">
+        <button onClick={handlePayment} disabled={disabled || isLoading} className={className} type="button" data-testid="place-order-button">
             {children}
         </button>
     )

@@ -46,7 +46,7 @@ const Header = () => {
                             <ul>
                                 {AppData.header.menu.map((item: any, index: any) => (
                                     <li className={`${item.children !== 0 ? "menu-item-has-children" : ""} ${isPathActive(item.link) ? "current-menu-item" : ""}`} key={`header-menu-item-${index}`}>
-                                        <Link href={item.link}>
+                                        <Link href={item.link} data-testid={item.testid}>
                                             {item.label}
                                         </Link>
                                     </li>

@@ -46,7 +46,7 @@ test.describe.skip('Location Selection Tests', () => {
 
         // Manually change the restaurant
         await restaurantSelector.click();
-        const merksemOption = page.locator('[data-testid="option-1"]');
+        const merksemOption = page.locator('[data-testid="option-🍴-nacho\'s-merksem"]');
         await merksemOption.click();
 
         // Verify the restaurant has been changed manually

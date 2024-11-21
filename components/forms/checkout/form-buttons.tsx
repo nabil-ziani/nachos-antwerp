@@ -42,7 +42,7 @@ export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmoun
                     {isSubmitting && <div className="spinner" />}
                 </PayconiqButton>
             ) : (
-                <button type="submit" className="tst-btn tst-btn-with-icon tst-m-0" disabled={isButtonDisabled}>
+                <button type="submit" className="tst-btn tst-btn-with-icon tst-m-0" disabled={isButtonDisabled} data-testid="place-order-button">
                     <span className="tst-icon">
                         <img src="/img/ui/icons/arrow.svg" alt="icon" />
                     </span>

@@ -6,28 +6,28 @@ export const PaymentMethods = ({ values, handleChange }: Pick<FormFieldProps, 'v
             <div>
                 <h5 className="tst-mb-30">Betaalmethode</h5>
                 <ul>
-                    <li className="tst-radio">
+                    <li className="tst-radio" data-testid="payconiq-radio">
                         <input
                             type="radio"
-                            id="option-1"
+                            id="payconiq"
                             name="payment_method"
                             value="bankoverschrijving"
                             checked={values.payment_method === 'bankoverschrijving'}
                             onChange={handleChange}
                         />
-                        <label htmlFor="option-1">Bankoverschrijving</label>
+                        <label htmlFor="payconiq">Bankoverschrijving</label>
                         <div className="tst-check"></div>
                     </li>
-                    <li className="tst-radio">
+                    <li className="tst-radio" data-testid="cash-radio">
                         <input
                             type="radio"
-                            id="option-2"
+                            id="cash"
                             name="payment_method"
                             value="cash"
                             checked={values.payment_method === 'cash'}
                             onChange={handleChange}
                         />
-                        <label htmlFor="option-2">Cash</label>
+                        <label htmlFor="cash">Cash</label>
                         <div className="tst-check"></div>
                     </li>
                 </ul>
@@ -35,28 +35,28 @@ export const PaymentMethods = ({ values, handleChange }: Pick<FormFieldProps, 'v
             <div>
                 <h5 className="tst-mb-30">Afhalen of leveren?</h5>
                 <ul>
-                    <li className="tst-radio">
+                    <li className="tst-radio" data-testid="pickup-radio">
                         <input
                             type="radio"
-                            id="afhalen"
+                            id="pickup"
                             name="delivery_method"
                             value="afhalen"
                             checked={values.delivery_method === 'afhalen'}
                             onChange={handleChange}
                         />
-                        <label htmlFor="afhalen">Afhalen</label>
+                        <label htmlFor="pickup">Afhalen</label>
                         <div className="tst-check"></div>
                     </li>
-                    <li className="tst-radio">
+                    <li className="tst-radio" data-testid="delivery-radio">
                         <input
                             type="radio"
-                            id="leveren"
+                            id="delivery"
                             name="delivery_method"
                             value="leveren"
                             checked={values.delivery_method === 'leveren'}
                             onChange={handleChange}
                         />
-                        <label htmlFor="leveren">Leveren</label>
+                        <label htmlFor="delivery">Leveren</label>
                         <div className="tst-check"></div>
                     </li>
                 </ul>

@@ -81,7 +81,7 @@ export function CustomSelect({
                                 }
                             }}
                             disabled={option.disabled}
-                            data-testid={`option-${idx}`}
+                            data-testid={`option-${option.label.toLowerCase().replace(/\s+/g, '-')}`}
                         >
                             {option.label}
                         </button>
