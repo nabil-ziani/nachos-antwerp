@@ -1,65 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import { LocationSwitchModal } from '@/components/modals/location-switch-modal'
 import { FormFieldProps, Restaurant } from '@/lib/types';
-import { useRestaurant } from '@/contexts/restaurant-context';
-import { findRestaurantByPostalCode } from '@/utils/location';
-
-type LocationSwitchData = {
-    restaurant: Restaurant | null;
-    postalCode: string;
-}
 
 interface DeliveryDetailsProps extends FormFieldProps { }
 
 export const DeliveryDetails = ({ values, errors, touched, handleChange, handleBlur }: DeliveryDetailsProps) => {
-    const [showLocationModal, setShowLocationModal] = useState(false)
-    const [locationSwitchData, setLocationSwitchData] = useState<LocationSwitchData>({ restaurant: null, postalCode: '' })
-
-    const { restaurants, selectedRestaurant, setSelectedRestaurant } = useRestaurant()
-
-    const handlePostcodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const postalCode = e.target.value
-        handleChange(e)
-
-        if (values.delivery_method === 'leveren' && postalCode.length === 4) {
-            const result = findRestaurantByPostalCode(restaurants, selectedRestaurant, postalCode)
-
-            if (result.switchRequired) {
-                setLocationSwitchData({
-                    restaurant: result.restaurant,
-                    postalCode: postalCode
-                })
-                setShowLocationModal(true)
-            }
-        }
-    }
-
     return (
         <>
-            <LocationSwitchModal
-                isOpen={showLocationModal}
-                onClose={() => {
-                    setShowLocationModal(false)
-                    // Reset postcode when user cancels
-                    handleChange({
-                        target: {
-                            name: 'postcode',
-                            value: ''
-                        }
-                    } as React.ChangeEvent<HTMLInputElement>)
-                }}
-                onConfirm={() => {
-                    if (locationSwitchData.restaurant) {
-                        setSelectedRestaurant(locationSwitchData.restaurant)
-                    }
-                    setShowLocationModal(false)
-                }}
-                alternativeRestaurant={locationSwitchData.restaurant}
-                postalCode={locationSwitchData.postalCode}
-            />
-
             <div className="tst-mb-30">
                 <h5>Factuurgegevens</h5>
             </div>
@@ -169,12 +116,12 @@ export const DeliveryDetails = ({ values, errors, touched, handleChange, handleB
                             name="postcode"
                             className={errors.postcode && touched.postcode ? 'error' : ''}
                             required={values.delivery_method === 'leveren'}
-                            onChange={handlePostcodeChange}
+                            onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.postcode}
                         />
                         {errors.postcode && touched.postcode && (
-                            <div className="error-message">{errors.postcode}</div>
+                            <div className="error-message" data-testid="postcode-error">{errors.postcode}</div>
                         )}
                     </div>
                 </div>
