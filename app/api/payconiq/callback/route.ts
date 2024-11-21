@@ -5,9 +5,10 @@ import { createClient } from '@/utils/supabase/server'
 export async function POST(request: NextRequest) {
     try {
         const payload = await request.json()
+        console.log('Received payload:', payload)
 
         // Get the original order_id from the database to compare
-        const supabase = createClient()
+        const supabase = await createClient()
 
         const { data: existingOrder } = await supabase
             .from('orders')

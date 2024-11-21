@@ -17,7 +17,7 @@ export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmoun
 
     return (
         <div className="tst-button-group">
-            {values.payment_method === 'bankoverschrijving' ? (
+            {values.payment_method === 'payconiq' ? (
                 <PayconiqButton
                     amount={totalAmount}
                     orderId={orderId}

@@ -85,7 +85,7 @@ const CheckoutForm = () => {
     const handleSubmit = async (values: CheckoutFormValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         try {
             // Check minimum order amount for delivery orders
-            if (values.delivery_method === 'leveren' && values.postcode) {
+            if (values.delivery_method === 'delivery' && values.postcode) {
                 const { minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode);
                 if (minimumAmount && totalAmount < minimumAmount) {
                     const status = document.getElementById("checkoutFormStatus");

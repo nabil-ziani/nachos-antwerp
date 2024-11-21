@@ -1,6 +1,8 @@
 import { FormFieldProps } from '@/lib/types';
 
 export const PaymentMethods = ({ values, handleChange }: Pick<FormFieldProps, 'values' | 'handleChange'>) => {
+    console.log('PaymentMethods - values:', values)
+
     return (
         <div className="tst-mb-30 tst-space-between">
             <div>
@@ -11,8 +13,8 @@ export const PaymentMethods = ({ values, handleChange }: Pick<FormFieldProps, 'v
                             type="radio"
                             id="payconiq"
                             name="payment_method"
-                            value="bankoverschrijving"
-                            checked={values.payment_method === 'bankoverschrijving'}
+                            value="payconiq"
+                            checked={values.payment_method === 'payconiq'}
                             onChange={handleChange}
                         />
                         <label htmlFor="payconiq">Bankoverschrijving</label>
@@ -40,8 +42,8 @@ export const PaymentMethods = ({ values, handleChange }: Pick<FormFieldProps, 'v
                             type="radio"
                             id="pickup"
                             name="delivery_method"
-                            value="afhalen"
-                            checked={values.delivery_method === 'afhalen'}
+                            value="pickup"
+                            checked={values.delivery_method === 'pickup'}
                             onChange={handleChange}
                         />
                         <label htmlFor="pickup">Afhalen</label>
@@ -52,8 +54,8 @@ export const PaymentMethods = ({ values, handleChange }: Pick<FormFieldProps, 'v
                             type="radio"
                             id="delivery"
                             name="delivery_method"
-                            value="leveren"
-                            checked={values.delivery_method === 'leveren'}
+                            value="delivery"
+                            checked={values.delivery_method === 'delivery'}
                             onChange={handleChange}
                         />
                         <label htmlFor="delivery">Leveren</label>

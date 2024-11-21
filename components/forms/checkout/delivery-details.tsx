@@ -122,7 +122,7 @@ export const DeliveryDetails = ({ values, errors, touched, handleChange, handleB
                             name="postcode"
                             id="checkout-postcode"
                             className={errors.postcode && touched.postcode ? 'error' : ''}
-                            required={values.delivery_method === 'leveren'}
+                            required={values.delivery_method === 'delivery'}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.postcode}
@@ -141,7 +141,7 @@ export const DeliveryDetails = ({ values, errors, touched, handleChange, handleB
                             name="city"
                             id="checkout-city"
                             className={errors.city && touched.city ? 'error' : ''}
-                            required={values.delivery_method === 'leveren'}
+                            required={values.delivery_method === 'delivery'}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.city}
@@ -160,7 +160,7 @@ export const DeliveryDetails = ({ values, errors, touched, handleChange, handleB
                             name="address"
                             id="checkout-address"
                             className={errors.address && touched.address ? 'error' : ''}
-                            required={values.delivery_method === 'leveren'}
+                            required={values.delivery_method === 'delivery'}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.address}

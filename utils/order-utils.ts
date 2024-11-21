@@ -19,7 +19,7 @@ export function createOrderData(
         customer_company: values.company,
         customer_vatnumber: values.vatNumber,
         delivery_method: values.delivery_method,
-        delivery_address: values.delivery_method === 'leveren' ? {
+        delivery_address: values.delivery_method === 'delivery' ? {
             street: values.address,
             city: values.city,
             postcode: values.postcode

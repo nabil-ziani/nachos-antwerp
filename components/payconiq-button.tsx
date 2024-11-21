@@ -54,7 +54,7 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
 
             // Get coordinates of customer address
             let coordinates = null
-            if (formValues.delivery_method === 'leveren') {
+            if (formValues.delivery_method === 'delivery') {
                 const address = `${formValues.address}, ${formValues.postcode} ${formValues.city}`;
                 coordinates = await geocodeAddress(address);
 

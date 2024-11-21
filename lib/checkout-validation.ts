@@ -20,8 +20,8 @@ export const defaultValues: CheckoutFormValues = {
     address: '',
     postcode: '',
     message: '',
-    payment_method: 'bankoverschrijving',
-    delivery_method: 'afhalen',
+    payment_method: 'cash',
+    delivery_method: 'pickup',
     remember_details: true
 };
 
@@ -45,7 +45,7 @@ export const validateCheckoutForm = ({ values, totalAmount, selectedRestaurant, 
     }
 
     // Delivery-specific validation
-    if (values.delivery_method === 'leveren') {
+    if (values.delivery_method === 'delivery') {
         if (!values.address) errors.address = 'Verplicht';
         if (!values.city) errors.city = 'Verplicht';
         if (!values.postcode) {
@@ -56,7 +56,7 @@ export const validateCheckoutForm = ({ values, totalAmount, selectedRestaurant, 
     }
 
     // Add minimum order validation for delivery
-    if (values.delivery_method === 'leveren' && values.postcode) {
+    if (values.delivery_method === 'delivery' && values.postcode) {
         const { restaurant, minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode);
         if (restaurant && minimumAmount) {
             if (totalAmount < minimumAmount) {
@@ -66,7 +66,7 @@ export const validateCheckoutForm = ({ values, totalAmount, selectedRestaurant, 
     }
 
     // Add strict postal code validation for delivery orders
-    if (values.delivery_method === 'leveren' && values.postcode && selectedRestaurant) {
+    if (values.delivery_method === 'delivery' && values.postcode && selectedRestaurant) {
         if (!selectedRestaurant.allowed_postalcodes?.includes(values.postcode)) {
             const availableRestaurant = restaurants.find(r =>
                 r.allowed_postalcodes?.includes(values.postcode)

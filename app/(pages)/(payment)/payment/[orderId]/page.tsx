@@ -17,7 +17,6 @@ export default function PaymentPage({ params }: { params: Promise<{ orderId: str
     useEffect(() => {
         const checkOrderStatus = async () => {
             try {
-                // ('Payment Page - Checking order status')
                 const supabase = createClient()
                 const { data: order, error } = await supabase
                     .from('orders')
@@ -27,19 +26,14 @@ export default function PaymentPage({ params }: { params: Promise<{ orderId: str
 
                 if (error) throw error
 
-                // console.log('Payment Page - Order status:', order.payment_status)
-
                 if (['completed', 'failed', 'cancelled'].includes(order.payment_status)) {
-                    // console.log('Payment Page - Redirecting to confirmation')
                     router.push(`/order-confirmation/${orderId}`)
                     return
                 }
 
                 const storedQrCode = localStorage.getItem(`payment_${orderId}`)
-                // console.log('Payment Page - Stored QR code exists:', !!storedQrCode)
 
                 if (!storedQrCode) {
-                    // console.log('Payment Page - No QR code found, redirecting to checkout')
                     router.push('/checkout')
                     return
                 }
@@ -71,7 +65,7 @@ export default function PaymentPage({ params }: { params: Promise<{ orderId: str
                 <p>Scan de QR code met de Payconiq app</p>
 
                 <div className="tst-payment-qr">
-                    <img src={qrCode} alt="Payment QR Code" />
+                    <img src={qrCode} alt="Payment QR Code" data-testid="payment-qr-code" />
                 </div>
             </div>
         </div>

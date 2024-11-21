@@ -63,7 +63,7 @@ export default function OrderConfirmationPage({ params }: { params: Promise<{ or
                                         currency: '€'
                                     })),
                                     total: data.amount,
-                                    type: data.delivery_method === 'afhalen' ? 'pickup' : 'delivery',
+                                    type: data.delivery_method,
                                     status: 'Bevestigd',
                                     estimatedTime: data.estimated_time || '30-45 minuten',
                                     paymentMethod: data.payment_method,
@@ -75,7 +75,7 @@ export default function OrderConfirmationPage({ params }: { params: Promise<{ or
                                     phone: data.customer_phone,
                                     company: data.customer_company,
                                     vatNumber: data.customer_vatnumber,
-                                    address: data.delivery_method === 'leveren'
+                                    address: data.delivery_method === 'delivery'
                                         ? `${data.delivery_address.street}, ${data.delivery_address.postcode} ${data.delivery_address.city}`
                                         : null
                                 },
