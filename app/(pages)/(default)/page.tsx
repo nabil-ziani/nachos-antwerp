@@ -10,9 +10,6 @@ import FeaturesSection from "@/components/sections/features"
 import ScheduleSection from "@/components/sections/schedule"
 import CountersSection from "@/components/sections/counters"
 import CallToActionSection from "@/components/sections/call-to-action"
-import { createClient } from "@/utils/supabase/server"
-import { MenuItemWithCategory } from "@/lib/types"
-import { Tables } from "@/types/database.types"
 import SubscribeSection from "@/components/sections/subscribe"
 
 const HeroSlider = dynamic(() => import("@/components/sliders/hero"))
