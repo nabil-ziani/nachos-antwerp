@@ -36,7 +36,7 @@ const AboutSection = () => {
                         <img src={Data.image.url} alt={Data.image.alt} className="tst-cover" />
                         <div className="tst-overlay"></div>
                         <div className="tst-btn-animation"></div>
-                        <a className="tst-play-button" onClick={() => setOpen(true)} style={{ "cursor": "pointer" }} data-width="10" data-height="600">
+                        <a className="tst-play-button" onClick={() => setOpen(false)} style={{ "cursor": "pointer" }} data-width="10" data-height="600">
                             <i className="fas fa-play"></i>
                         </a>
                     </div>

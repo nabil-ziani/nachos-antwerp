@@ -22,7 +22,7 @@ const PromoVideoSection = () => {
                         <img src={Data.image.url} alt={Data.image.alt} className="tst-cover animateme" data-when="span" data-from="-1" data-to="2" data-easing="easeinout" data-scale="1.2" />
                         <div className="tst-overlay"></div>
                         <div className="tst-btn-animation"></div>
-                        <a className="tst-play-button" data-fancybox onClick={() => setOpen(true)} style={{ "cursor": "pointer" }} data-width="1000" data-height="600">
+                        <a className="tst-play-button" data-fancybox onClick={() => setOpen(false)} style={{ "cursor": "pointer" }} data-width="1000" data-height="600">
                             <i className="fas fa-play"></i>
                         </a>
                     </div>

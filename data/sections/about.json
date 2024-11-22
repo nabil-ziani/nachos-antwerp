@@ -3,7 +3,7 @@
         "url": "/img/about.jpg",
         "alt": "cover"
     },
-    "video": "https://www.youtube.com/watch?v=SXJqEnauNaY",
+    "video": "#",
     "button": {
         "link": "/about",
         "label": "Lees meer"
