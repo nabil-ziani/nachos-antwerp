@@ -68,13 +68,15 @@ export const validateCheckoutForm = ({ values, totalAmount, selectedRestaurant, 
     // Add strict postal code validation for delivery orders
     if (values.delivery_method === 'delivery' && values.postcode && selectedRestaurant) {
         if (!selectedRestaurant.allowed_postalcodes?.includes(values.postcode)) {
-            const availableRestaurant = restaurants.find(r =>
-                r.allowed_postalcodes?.includes(values.postcode)
-            );
+            //const availableRestaurant = restaurants.find(r =>
+            //    r.allowed_postalcodes?.includes(values.postcode)
+            //);
 
-            errors.postcode = availableRestaurant
-                ? `${selectedRestaurant.name} levert niet in ${values.postcode}. Kies ${availableRestaurant.name} voor bezorging in deze zone.`
-                : `We bezorgen niet in ${values.postcode}.`;
+            errors.postcode = `We bezorgen niet in ${values.postcode}.`;
+
+            // errors.postcode = availableRestaurant
+            //   ? `${selectedRestaurant.name} levert niet in ${values.postcode}. Kies ${availableRestaurant.name} voor bezorging in deze zone.`
+            // : `We bezorgen niet in ${values.postcode}.`;
         }
     }
 

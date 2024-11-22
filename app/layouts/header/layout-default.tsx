@@ -23,7 +23,6 @@ const Header = () => {
     }
 
     useEffect(() => {
-        // close mobile menu
         setMobileMenu(false);
         setMiniCart(false);
         setReservationPopup(false);
@@ -39,7 +38,7 @@ const Header = () => {
                             <Link href="/">
                                 <img src={AppData.header.logo.image} className="tst-logo" alt={AppData.header.logo.alt} />
                             </Link>
-                            <RestaurantSelector />
+                            {/*<RestaurantSelector />*/}
                         </div>
 
                         <nav className={`${mobileMenu ? "tst-active" : ""}`}>

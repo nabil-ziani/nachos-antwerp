@@ -12,6 +12,6 @@ export const contactInfoItems = [
     {
         "icon": "/img/icons/6.svg",
         "title": "Bezoek ons",
-        "text": "Diksmuidelaan 170, 2600 Berchem \n Oudebareellei 51, 2170 Merksem"
+        "text": "Diksmuidelaan 170, 2600 Berchem"
     }
 ]

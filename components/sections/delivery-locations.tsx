@@ -11,7 +11,7 @@ export function DeliveryLocationsSection() {
                 <div className="tst-suptitle tst-suptitle-center tst-mb-15">Bezorggebieden</div>
                 <h3 className="tst-mb-30">Waar bezorgen we?</h3>
                 <p className="tst-text tst-mb-60">
-                    Bekijk hieronder in welke postcodes we bezorgen vanuit onze restaurants.
+                    Bekijk hieronder in welke postcodes we bezorgen vanuit onze restaurant.
                 </p>
             </div>
 

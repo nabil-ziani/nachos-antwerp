@@ -142,4 +142,16 @@
       width: 100%;
     }
   }
+}
+
+.tst-delivery-locations .row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tst-delivery-locations .col-lg-6 {
+  max-width: 100%;
+  flex: 0 0 50%;
+  box-sizing: border-box;
 } 
