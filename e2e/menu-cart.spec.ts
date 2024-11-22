@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe.skip('Menu and Cart Tests', () => {
+test.describe('Menu and Cart Tests', () => {
     test('TC-04: Customer can add menu items to cart', async ({ page }) => {
         // Navigate to the menu page
         await page.goto('/menu');

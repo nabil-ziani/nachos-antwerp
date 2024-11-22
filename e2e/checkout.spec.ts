@@ -3,7 +3,7 @@ import { fillCheckoutForm } from './utils';
 import { v4 as uuidv4 } from 'uuid';
 
 test.describe('Checkout Process Tests', () => {
-    test.skip('TC-06: Customer can place a cash order for pickup', async ({ page }) => {
+    test('TC-06: Customer can place a cash order for pickup', async ({ page }) => {
         // Navigate to the homepage
         await page.goto('/');
 
@@ -73,7 +73,7 @@ test.describe('Checkout Process Tests', () => {
         await expect(page.locator('[data-testid="checkout-message"]')).toHaveValue('Extra opmerkingen');
     });
 
-    test.skip('TC-07: Customer can place a cash order for delivery', async ({ page }) => {
+    test('TC-07: Customer can place a cash order for delivery', async ({ page }) => {
         // Navigate to the homepage
         await page.goto('/');
 
@@ -142,7 +142,7 @@ test.describe('Checkout Process Tests', () => {
         await expect(page.locator('[data-testid="checkout-message"]')).toHaveValue('');
     });
 
-    test.skip('TC-08: Customer can place a Payconiq order for pickup', async ({ page }) => {
+    test('TC-08: Customer can place a Payconiq order for pickup', async ({ page }) => {
         // ***** Preparations *****
         const uniqueOrderId = `order-${uuidv4()}`;
         const mockQrCodeUrl = 'https://via.placeholder.com/150';
@@ -234,7 +234,7 @@ test.describe('Checkout Process Tests', () => {
         await expect(successMessage).toBeVisible();
     });
 
-    test.skip('TC-09: Customer can place a Payconiq order for delivery', async ({ page }) => {
+    test('TC-09: Customer can place a Payconiq order for delivery', async ({ page }) => {
         // ***** Preparations *****
         const uniqueOrderId = `order-${uuidv4()}`;
         const mockQrCodeUrl = 'https://via.placeholder.com/150';
