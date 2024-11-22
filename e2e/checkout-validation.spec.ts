@@ -15,8 +15,4 @@ test.describe.skip('Error Handling Tests', () => {
         const errorMessages = page.locator('.error-message');
         await expect(errorMessages).toHaveCount(7); // Assuming 7 required fields
     });
-
-    test('TC-27: Verify graceful handling of unexpected errors', async ({ page }) => {
-        // This test would require simulating server or network errors.
-    });
 });

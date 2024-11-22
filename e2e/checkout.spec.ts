@@ -3,7 +3,7 @@ import { fillCheckoutForm } from './utils';
 import { v4 as uuidv4 } from 'uuid';
 
 test.describe('Checkout Process Tests', () => {
-    test.skip('Customer can place a cash order for pickup', async ({ page }) => {
+    test.skip('TC-06: Customer can place a cash order for pickup', async ({ page }) => {
         // Navigate to the homepage
         await page.goto('/');
 
@@ -34,8 +34,10 @@ test.describe('Checkout Process Tests', () => {
             postcode: '2600',
             city: 'Berchem',
             address: 'Diksmuidelaan 170',
+            message: 'Extra opmerkingen',
             deliveryMethod: 'pickup',
             paymentMethod: 'cash',
+            rememberDetails: true,
         });
 
         // Place order
@@ -47,9 +49,31 @@ test.describe('Checkout Process Tests', () => {
         // Verify the success message is displayed on the confirmation page
         const successMessage = page.locator('[data-testid="completed-icon"]');
         await expect(successMessage).toBeVisible();
+
+        // Go back to the website
+        await page.click('[data-testid="back-to-website-button"]');
+
+        // Navigate to the menu page
+        await page.click('[data-testid="nav-menu-link"]');
+
+        // Add items to the cart
+        await page.click('[data-testid="add-to-cart-quesadilla"]');
+
+        // Go to checkout
+        await page.click('[data-testid="go-to-checkout-button"]');
+
+        // Verify that the form fields are pre-filled
+        await expect(page.locator('input#checkout-firstname')).toHaveValue('John');
+        await expect(page.locator('input#checkout-lastname')).toHaveValue('Doe');
+        await expect(page.locator('input#checkout-email')).toHaveValue('john.doe@example.com');
+        await expect(page.locator('input#checkout-tel')).toHaveValue('1234567890');
+        await expect(page.locator('input#checkout-postcode')).toHaveValue('2600');
+        await expect(page.locator('input#checkout-city')).toHaveValue('Berchem');
+        await expect(page.locator('input#checkout-address')).toHaveValue('Diksmuidelaan 170');
+        await expect(page.locator('[data-testid="checkout-message"]')).toHaveValue('Extra opmerkingen');
     });
 
-    test.skip('Customer can place a cash order for delivery', async ({ page }) => {
+    test.skip('TC-07: Customer can place a cash order for delivery', async ({ page }) => {
         // Navigate to the homepage
         await page.goto('/');
 
@@ -82,6 +106,7 @@ test.describe('Checkout Process Tests', () => {
             address: 'Diksmuidelaan 170',
             deliveryMethod: 'delivery',
             paymentMethod: 'cash',
+            rememberDetails: false,
         });
 
         // Place order
@@ -93,9 +118,31 @@ test.describe('Checkout Process Tests', () => {
         // Verify the success message is displayed on the confirmation page
         const successMessage = page.locator('[data-testid="completed-icon"]');
         await expect(successMessage).toBeVisible();
+
+        // Go back to the website
+        await page.click('[data-testid="back-to-website-button"]');
+
+        // Navigate to the menu page
+        await page.click('[data-testid="nav-menu-link"]');
+
+        // Add items to the cart
+        await page.click('[data-testid="add-to-cart-quesadilla"]');
+
+        // Go to checkout
+        await page.click('[data-testid="go-to-checkout-button"]');
+
+        // Verify that the form fields are NOT pre-filled
+        await expect(page.locator('input#checkout-firstname')).toHaveValue('');
+        await expect(page.locator('input#checkout-lastname')).toHaveValue('');
+        await expect(page.locator('input#checkout-email')).toHaveValue('');
+        await expect(page.locator('input#checkout-tel')).toHaveValue('');
+        await expect(page.locator('input#checkout-postcode')).toHaveValue('');
+        await expect(page.locator('input#checkout-city')).toHaveValue('');
+        await expect(page.locator('input#checkout-address')).toHaveValue('');
+        await expect(page.locator('[data-testid="checkout-message"]')).toHaveValue('');
     });
 
-    test('Customer can place a Payconiq order for pickup', async ({ page }) => {
+    test.skip('TC-08: Customer can place a Payconiq order for pickup', async ({ page }) => {
         // ***** Preparations *****
         const uniqueOrderId = `order-${uuidv4()}`;
         const mockQrCodeUrl = 'https://via.placeholder.com/150';
@@ -187,7 +234,7 @@ test.describe('Checkout Process Tests', () => {
         await expect(successMessage).toBeVisible();
     });
 
-    test('Customer can place a Payconiq order for delivery', async ({ page }) => {
+    test.skip('TC-09: Customer can place a Payconiq order for delivery', async ({ page }) => {
         // ***** Preparations *****
         const uniqueOrderId = `order-${uuidv4()}`;
         const mockQrCodeUrl = 'https://via.placeholder.com/150';
@@ -279,8 +326,8 @@ test.describe('Checkout Process Tests', () => {
         await expect(successMessage).toBeVisible();
     });
 
-    test.skip('Company places an order and receives an invoice', async ({ page }) => {
-        // TODO: Implement this test
+    test.skip('TC-10: Company places an order and receives an invoice', async ({ page }) => {
+        // TODO: Implement this test (use mailosaur to check if the invoice is received)
     });
 });
 
@@ -289,4 +336,3 @@ test.describe('Checkout Process Tests', () => {
 // - Customer places an order and receives a failed payment email
 // - Customer places an order and cancels the payment
 // - Company places an order and receives an invoice
-

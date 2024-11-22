@@ -90,7 +90,7 @@ export function PaymentResult({ status }: PaymentResultProps) {
 
                 <div className="tst-button-group" style={{ marginTop: '2rem' }}>
                     {(status === 'completed' || status === 'cancelled') && (
-                        <Link href="/" className="tst-btn">
+                        <Link href="/" className="tst-btn" data-testid="back-to-website-button">
                             Terug naar website
                         </Link>
                     )}

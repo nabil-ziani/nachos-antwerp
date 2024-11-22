@@ -15,11 +15,23 @@ export async function fillCheckoutForm(page: Page, details: any) {
     }
 
     if (details.message) {
-        await page.fill('textarea[name="message"]', details.message);
+        await page.fill('[data-testid="checkout-message"]', details.message);
     }
 
     await page.click(`[data-testid="${details.deliveryMethod}-radio"]`, { force: true });
     await page.click(`[data-testid="${details.paymentMethod}-radio"]`, { force: true });
+
+    // Update the selector to target the input element directly
+    const isChecked = await page.isChecked(`input#remember-details`);
+    console.log(`Checkbox initially checked: ${isChecked}`);
+
+    if (details.rememberDetails && !isChecked) {
+        await page.click(`[data-testid="remember-details-checkbox"]`, { force: true });
+        console.log('Checkbox clicked to check it.');
+    } else if (!details.rememberDetails && isChecked) {
+        await page.click(`[data-testid="remember-details-checkbox"]`, { force: true });
+        console.log('Checkbox clicked to uncheck it.');
+    }
 }
 
 /*

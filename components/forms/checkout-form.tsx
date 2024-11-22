@@ -188,6 +188,7 @@ const CheckoutForm = () => {
                         <div className="tst-group-input">
                             <label>Opmerking</label>
                             <textarea
+                                data-testid="checkout-message"
                                 placeholder="Extra opmerkingen"
                                 name="message"
                                 onChange={handleChange}
@@ -197,7 +198,7 @@ const CheckoutForm = () => {
                         </div>
 
                         <div className="tst-group-input">
-                            <div className="tst-radio">
+                            <div className="tst-radio" data-testid="remember-details-checkbox">
                                 <input
                                     type="checkbox"
                                     id="remember-details"
