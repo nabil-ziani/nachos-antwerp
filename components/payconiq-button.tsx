@@ -4,7 +4,7 @@ import { useState } from "react"
 import { createClient } from '@/utils/supabase/client'
 import { usePayment } from "@/contexts/payment-context"
 import { useRestaurant } from "@/contexts/restaurant-context"
-import { geocodeAddress } from '@/utils/geocode';
+// import { geocodeAddress } from '@/utils/geocode';
 import { createOrderData } from "@/utils/order-utils"
 import { CheckoutFormValues } from "@/lib/types"
 
@@ -53,7 +53,7 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
             startPaymentTracking(data.paymentId, 'pending')
 
             // Get coordinates of customer address
-            let coordinates = null
+            /*let coordinates = null
             if (formValues.delivery_method === 'delivery') {
                 const address = `${formValues.address}, ${formValues.postcode} ${formValues.city}`;
                 coordinates = await geocodeAddress(address);
@@ -63,9 +63,9 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
                     setIsLoading(false);
                     return;
                 }
-            }
+            }*/
 
-            const orderData = createOrderData(data.paymentId, formValues, amount, formValues.cartItems, selectedRestaurant, coordinates);
+            const orderData = createOrderData(data.paymentId, formValues, amount, formValues.cartItems, selectedRestaurant);
 
             const supabase = createClient()
             const { error: insertError } = await supabase.from('orders').insert(orderData)

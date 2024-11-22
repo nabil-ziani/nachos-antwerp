@@ -15,7 +15,7 @@ import { FormButtons } from './checkout/form-buttons';
 import { CheckoutFormValues } from '@/lib/types';
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { findRestaurantByPostalCode } from '@/utils/location';
-import { geocodeAddress } from '@/utils/geocode';
+// import { geocodeAddress } from '@/utils/geocode';
 import { createOrderData } from '@/utils/order-utils';
 
 const CheckoutForm = () => {
@@ -117,14 +117,14 @@ const CheckoutForm = () => {
             }
 
             // Geocode address
-            const address = `${values.address}, ${values.postcode} ${values.city}`;
+            /*const address = `${values.address}, ${values.postcode} ${values.city}`;
             const coordinates = await geocodeAddress(address);
 
             if (!coordinates) {
                 console.error('Failed to geocode address');
                 setSubmitting(false);
                 return;
-            }
+            }*/
 
             const orderData = createOrderData(
                 orderId,
@@ -132,7 +132,7 @@ const CheckoutForm = () => {
                 totalAmount,
                 cartItems,
                 selectedRestaurant,
-                coordinates
+                //coordinates
             );
 
             const supabase = createClient();

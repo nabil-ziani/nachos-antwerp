@@ -6,7 +6,7 @@ export function createOrderData(
     totalAmount: number,
     cartItems: CartItem[],
     selectedRestaurant: Restaurant | null,
-    coordinates: { latitude: number; longitude: number } | null
+    //coordinates: { latitude: number; longitude: number } | null
 ) {
     return {
         order_id: orderId,
@@ -34,7 +34,7 @@ export function createOrderData(
         })),
         restaurant_id: selectedRestaurant?.id,
         notes: values.message,
-        latitude: coordinates?.latitude || null,
-        longitude: coordinates?.longitude || null,
+        //latitude: coordinates?.latitude || null,
+        //longitude: coordinates?.longitude || null,
     };
 }
