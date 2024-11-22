@@ -4,13 +4,13 @@ export async function middleware(request: NextRequest) {
   const redirectUrl = request.nextUrl.clone();
 
   // Check if the environment is production
-  if (process.env.NODE_ENV === 'production') {
-    // Exclude the "under construction" page from redirection
-    if (request.nextUrl.pathname !== '/under-construction') {
-      redirectUrl.pathname = '/under-construction';
-      return NextResponse.redirect(redirectUrl);
-    }
-  }
+  //if (process.env.NODE_ENV === 'production') {
+  // Exclude the "under construction" page from redirection
+  //if (request.nextUrl.pathname !== '/under-construction') {
+  //  redirectUrl.pathname = '/under-construction';
+  //  return NextResponse.redirect(redirectUrl);
+  //}
+  //}
 
   return NextResponse.next();
 }

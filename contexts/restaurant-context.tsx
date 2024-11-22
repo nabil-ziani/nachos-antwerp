@@ -3,14 +3,14 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { Restaurant } from '@/lib/types'
 import { createClient } from '@/utils/supabase/client'
-import { checkGeolocationPermission, findNearestRestaurant, getCurrentPosition, LocationPermissionState } from '@/utils/location'
+import { checkGeolocationPermission, LocationPermissionState } from '@/utils/location'
 
 interface RestaurantContextType {
     restaurants: Restaurant[]
     selectedRestaurant: Restaurant | null
     locationStatus: string
     isLoading: boolean
-    findNearestLocation: () => Promise<void>
+    //findNearestLocation: () => Promise<void>
     setSelectedRestaurant: (restaurant: Restaurant | null) => void
 }
 
@@ -69,11 +69,11 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
             const permissionState = await checkGeolocationPermission()
             setLocationStatus(permissionState as LocationPermissionState)
 
-            if (permissionState === 'granted' && restaurants.length > 0) {
+            /*if (permissionState === 'granted' && restaurants.length > 0) {
                 await findNearestLocation()
             } else {
                 setIsLoading(false)
-            }
+            }*/
 
             if (permissionState !== 'unsupported') {
                 const permission = await navigator.permissions.query({ name: 'geolocation' })
@@ -81,9 +81,9 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
                     const newState = this.state as 'prompt' | 'granted' | 'denied'
                     setLocationStatus(newState)
 
-                    if (newState === 'granted' && restaurants.length > 0) {
+                    /*if (newState === 'granted' && restaurants.length > 0) {
                         await findNearestLocation()
-                    }
+                    }*/
                 })
             }
         } catch (error) {
@@ -92,7 +92,7 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
         }
     }
 
-    const findNearestLocation = async () => {
+    /*const findNearestLocation = async () => {
         try {
             setIsLoading(true)
 
@@ -114,10 +114,17 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
         } finally {
             setIsLoading(false)
         }
-    }
+    }*/
 
     return (
-        <RestaurantContext.Provider value={{ restaurants, selectedRestaurant, locationStatus, isLoading, findNearestLocation, setSelectedRestaurant }}>
+        <RestaurantContext.Provider value={{
+            restaurants,
+            selectedRestaurant,
+            locationStatus,
+            isLoading,
+            //findNearestLocation,
+            setSelectedRestaurant
+        }}>
             {children}
         </RestaurantContext.Provider>
     )

@@ -4,13 +4,20 @@ import { useRestaurant } from '@/contexts/restaurant-context'
 import { CustomSelect } from './ui/custom-select'
 
 export function RestaurantSelector() {
-    const { selectedRestaurant, setSelectedRestaurant, restaurants, locationStatus, findNearestLocation, isLoading } = useRestaurant()
+    const {
+        selectedRestaurant,
+        setSelectedRestaurant,
+        restaurants,
+        locationStatus,
+        //findNearestLocation,
+        isLoading
+    } = useRestaurant()
 
     const handleChange = (value: string) => {
-        if (value === 'nearest') {
+        /*if (value === 'nearest') {
             findNearestLocation()
             return
-        }
+        }*/
 
         const restaurant = restaurants.find(r => r.id === value)
         if (restaurant) setSelectedRestaurant(restaurant)
