@@ -17,6 +17,7 @@ import ContactFormSection from "@/components/sections/contact-form"
 import { createClient } from "@/utils/supabase/server"
 import { MenuItemWithCategory } from "@/lib/types"
 import { Tables } from "@/types/database.types"
+import SubscribeSection from "@/components/sections/subscribe"
 
 const HeroSlider = dynamic(() => import("@/components/sliders/hero"))
 const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"))
@@ -47,45 +48,19 @@ export default async function HomePage() {
               <Divider />
               <FeaturesSection />
               <Divider />
-              <CountersSection />
-              <Divider />
               <ScheduleSection />
+              <Divider />
+              <CountersSection />
             </div>
           </div>
         </div>
         <CallToActionSection />
         <div className="tst-content-frame">
           <div className="tst-content-box">
-            <div className="container tst-p-60-0">
-              <MenuFiltered
-                heading={
-                  {
-                    "subtitle": "Menu",
-                    "title": "Ons Menu",
-                    "description": "Geniet van authentieke Mexicaanse smaken met onze heerlijke gerechten!"
-                  }
-                }
-                categories={menu.menu_categories}
-                items={menu.menu_items}
-              />
-            </div>
-          </div>
-        </div>
-        <CallToActionTwoSection />
-        <div className="tst-content-frame">
-          <div className="tst-content-box">
             <div className="container tst-p-60-60">
               <TestimonialSlider />
-            </div>
-          </div>
-        </div>
-        <CallToActionThreeSection />
-        <div className="tst-content-frame">
-          <div className="tst-content-box">
-            <div className="container tst-p-60-60">
-              <ContactInfoSection />
-              <Divider />
-              <ContactFormSection />
+              <Divider onlyBottom={0} />
+              <SubscribeSection />
             </div>
           </div>
         </div>
