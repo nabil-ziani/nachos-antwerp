@@ -35,12 +35,10 @@ export function PaymentProvider({ children }: { children: React.ReactNode }) {
                     filter: `order_id=eq.${orderId}`
                 },
                 (payload) => {
-                    // console.log('Payment status update received:', payload)
                     const newStatus = payload.new.payment_status
                     setPaymentStatus(newStatus)
 
                     if (newStatus === 'completed' || newStatus === 'failed' || newStatus === 'cancelled') {
-                        // console.log(`Payment ${newStatus}, redirecting to confirmation`)
                         router.push(`/order-confirmation/${orderId}`)
                     }
                 }

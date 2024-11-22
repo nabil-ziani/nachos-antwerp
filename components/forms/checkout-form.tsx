@@ -54,10 +54,7 @@ const CheckoutForm = () => {
                 }
 
                 // Update initialValues with validated details
-                setInitialValues(prev => ({
-                    ...prev,
-                    ...parsedDetails
-                }))
+                setInitialValues(prev => ({ ...prev, ...parsedDetails }))
             } catch (error) {
                 console.error('Error loading saved details:', error)
             } finally {
