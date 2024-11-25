@@ -134,7 +134,7 @@ export const DeliveryDetails = ({ values, errors, touched, handleChange, handleB
                 </div>
                 <div className="col-lg-6">
                     <div className="tst-group-input">
-                        <label>Stad</label>
+                        <label>Gemeente</label>
                         <input
                             type="text"
                             placeholder="Berchem"

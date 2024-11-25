@@ -857,6 +857,10 @@ radio
 .tst-space-between {
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .tst-checkout-form {
@@ -935,10 +939,10 @@ radio
   input[type="checkbox"] {
     position: absolute;
     visibility: hidden;
-    
-    &:checked ~ .tst-check {
+
+    &:checked~.tst-check {
       border-color: $ac;
-      
+
       &::before {
         background: $ac;
         border-radius: 2px;
@@ -948,9 +952,9 @@ radio
     }
   }
 
-  input[type="checkbox"] ~ .tst-check {
+  input[type="checkbox"]~.tst-check {
     border-radius: 4px;
-    
+
     &::before {
       border-radius: 2px;
     }
