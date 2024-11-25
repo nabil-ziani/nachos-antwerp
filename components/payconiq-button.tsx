@@ -46,6 +46,8 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
 
             const data = await response.json()
 
+            console.log('Payconiq API Response:', data)
+
             if (!response.ok) {
                 throw new Error(data.details || 'Payment creation failed')
             }
@@ -79,12 +81,15 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
                 localStorage.setItem(`payment_${data.paymentId}`, data._links.qrcode.href)
             }
 
-            const checkoutUrl = data._links?.checkout?.href;
-            if (checkoutUrl) {
-                onPaymentCreated?.(checkoutUrl);
-                window.location.href = checkoutUrl;
+            const deeplinkUrl = data._links?.deeplink?.href
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent)
+
+            if (isMobile && deeplinkUrl) {
+                onPaymentCreated?.(deeplinkUrl)
+                window.location.href = deeplinkUrl
             } else {
-                throw new Error('Checkout URL not found');
+                onPaymentCreated?.('')
+                window.location.href = `/payment/${data.paymentId}`
             }
         } catch (error) {
             console.error('Payment failed:', error)

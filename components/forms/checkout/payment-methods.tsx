@@ -1,7 +1,7 @@
 import { FormFieldProps } from '@/lib/types';
 
 export const PaymentMethods = ({ values, handleChange }: Pick<FormFieldProps, 'values' | 'handleChange'>) => {
-    console.log('PaymentMethods - values:', values)
+    //console.log('PaymentMethods - values:', values)
 
     return (
         <div className="tst-mb-30 tst-space-between">
