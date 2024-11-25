@@ -11,7 +11,7 @@ const MenuItem = ({ item }: { item: CartItem }) => {
   const [img, setImg] = useState(false);
   const [imgValue, setImgValue] = useState<any>([]);
 
-  const { cartItems, cartTotal, addToCart, setMiniCart } = useCart()
+  const { cartItems, cartTotal, addToCart } = useCart()
 
   useEffect(() => {
     const cartNumberEl = document.querySelector('.tst-cart-number')
@@ -23,11 +23,14 @@ const MenuItem = ({ item }: { item: CartItem }) => {
   }, [cartTotal])
 
   const handleAddToCard = (e: MouseEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    // Open mini-cart
-    addToCart(item)
-    setMiniCart(true)
+    // Open mini-cart only on larger screens
+    //if (window.innerWidth > 1024) {
+    // setMiniCart(true);
+    //}
+
+    addToCart(item);
   }
 
   return (

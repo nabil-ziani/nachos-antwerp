@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useEffect, MouseEvent } from "react"
 
 const MiniCart = () => {
-    const { cartItems, cartTotal, removeFromCart } = useCart()
+    const { cartItems, cartTotal, removeFromCart, setMiniCart } = useCart()
 
     useEffect(() => {
         const cartNumberEl = document.querySelector('.tst-cart-number')
@@ -15,6 +15,22 @@ const MiniCart = () => {
             cartNumberEl.innerHTML = String(totalQuantity)
         }
     }, [cartTotal])
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const miniCartElement = document.querySelector('.tst-minicart-window');
+
+            if (miniCartElement && !miniCartElement.contains(event.target as Node)) {
+                setMiniCart(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside as unknown as EventListener);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside as unknown as EventListener);
+        };
+    }, [setMiniCart]);
 
     const handleRemove = (e: MouseEvent, itemId: string) => {
         e.preventDefault()
