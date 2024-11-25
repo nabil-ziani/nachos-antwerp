@@ -9,17 +9,9 @@ export async function POST(request: NextRequest) {
     try {
         const { amount, reference } = await request.json()
 
-        const PAYCONIQ_API_KEY = process.env.NODE_ENV === 'production'
-            ? process.env.PAYCONIQ_API_KEY
-            : process.env.PAYCONIQ_EXT_API_KEY
-
-        const PAYCONIQ_MERCHANT_ID = process.env.NODE_ENV === 'production'
-            ? process.env.PAYCONIQ_MERCHANT_ID
-            : process.env.PAYCONIQ_EXT_MERCHANT_ID
-
-        const PAYCONIQ_PROFILE_ID = process.env.NODE_ENV === 'production'
-            ? process.env.PAYCONIQ_PROFILE_ID
-            : process.env.PAYCONIQ_EXT_PROFILE_ID
+        const PAYCONIQ_API_KEY = process.env.PAYCONIQ_API_KEY;
+        const PAYCONIQ_MERCHANT_ID = process.env.PAYCONIQ_MERCHANT_ID;
+        const PAYCONIQ_PROFILE_ID = process.env.PAYCONIQ_PROFILE_ID;
 
         const response = await fetch(PAYCONIQ_BASE_URL, {
             method: 'POST',
