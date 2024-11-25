@@ -79,8 +79,13 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
                 localStorage.setItem(`payment_${data.paymentId}`, data._links.qrcode.href)
             }
 
-            onPaymentCreated?.(data._links?.deeplink?.href || '')
-            window.location.href = `/payment/${data.paymentId}`
+            const checkoutUrl = data._links?.checkout?.href;
+            if (checkoutUrl) {
+                onPaymentCreated?.(checkoutUrl);
+                window.location.href = checkoutUrl;
+            } else {
+                throw new Error('Checkout URL not found');
+            }
         } catch (error) {
             console.error('Payment failed:', error)
             onPaymentError?.(error as Error)

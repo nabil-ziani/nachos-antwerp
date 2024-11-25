@@ -1,7 +1,7 @@
 {
     "settings": {
         "siteName": "Nacho's Antwerp",
-        "siteDescription": "Mexicaans Restaurant in Berchem en Merksem, Diksmuidelaan 170 en Oudebareellei 51",
+        "siteDescription": "Mexicaans Restaurant in Berchem, Diksmuidelaan 170",
         "bgImage": "/img/bg.jpg",
         "formspreeURL": "https://formspree.io/f/mlderqde",
         "mailchimp": {
