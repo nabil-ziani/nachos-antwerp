@@ -30,7 +30,7 @@
                 "label": "Reserveer een tafel"
             },
             "button2": {
-                "link": "/shop",
+                "link": "/menu",
                 "label": "Online Bestellen"
             }
         },
