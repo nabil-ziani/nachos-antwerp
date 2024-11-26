@@ -1,194 +1,195 @@
 "use client";
 
-import { Formik, FormikErrors } from 'formik';
+import { Formik } from 'formik';
 import { createClient } from '@/utils/supabase/client';
-import AppData from "@/data/app.json";
-
-interface ReservationFormValues {
-    email: string;
-    first_name: string;
-    last_name: string;
-    time: string;
-    date: string;
-    person: string;
-    message: string;
-}
+import { ReservationFormValues, validateReservationForm, defaultValues } from '@/lib/reservation-validation';
+import { useRestaurant } from '@/contexts/restaurant-context';
 
 const ReservationForm = () => {
     const supabase = createClient();
+    const { selectedRestaurant } = useRestaurant();
+
+    const handleSubmit = async (values: ReservationFormValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+        const status = document.getElementById("reservationFormStatus");
+
+        try {
+            const { error } = await supabase
+                .from('reservations')
+                .insert({
+                    customer_name: `${values.firstname} ${values.lastname}`,
+                    customer_email: values.email,
+                    date: values.date,
+                    time: values.time,
+                    number_of_people: values.person,
+                    message: values.message,
+                    restaurant_id: selectedRestaurant?.id
+                });
+
+            if (error) {
+                console.error('Error saving reservation:', error);
+
+                if (status) {
+                    status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het opslaan van je reservering</h5>";
+                }
+                return;
+            }
+
+            // Send reservation notification email to restaurant owner
+            const emailResponse = await fetch('/api/email/reservation-notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reservation: values })
+            });
+
+            if (emailResponse.ok) {
+                if (status) {
+                    status.innerHTML = "<h5 style='color:green;'>We hebben je reservering succesvol ontvangen!</h5>";
+                }
+            } else {
+                console.error('Error sending email:', await emailResponse.json());
+            }
+        } catch (error) {
+            console.error('Error handling reservation:', error);
+
+            if (status) {
+                status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het verwerken van je reservering</h5>";
+            }
+        } finally {
+            setSubmitting(false);
+        }
+    }
 
     return (
         <>
             <Formik
-                initialValues={{ email: '', first_name: '', last_name: '', time: '', date: '', person: '', message: '' }}
-                validate={values => {
-                    const errors: FormikErrors<ReservationFormValues> = {};
-                    if (!values.email) {
-                        errors.email = 'Verplicht';
-                    } else if (
-                        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-                    ) {
-                        errors.email = 'Ongeldige mailadres';
-                    }
-                    return errors;
-                }}
-                onSubmit={async (values, { setSubmitting }) => {
-                    const form = document.getElementById("reservationForm") as HTMLFormElement;
-                    const status = document.getElementById("reservationFormStatus");
-
-                    try {
-                        // Insert reservation into Supabase
-                        const { error } = await supabase
-                            .from('reservations')
-                            .insert({
-                                customer_name: `${values.first_name} ${values.last_name}`,
-                                customer_email: values.email,
-                                date: values.date,
-                                time: values.time,
-                                number_of_people: values.person,
-                                message: values.message
-                            });
-
-                        if (error) {
-                            console.error('Error saving reservation:', error);
-                            if (status) {
-                                status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het opslaan van je reservering</h5>";
-                            }
-                            return;
-                        }
-
-                        // Send email via Formspree
-                        const data = new FormData();
-                        data.append('first_name', values.first_name);
-                        data.append('last_name', values.last_name);
-                        data.append('email', values.email);
-                        data.append('person', values.person);
-                        data.append('time', values.time);
-                        data.append('date', values.date);
-                        data.append('message', values.message);
-
-                        const response = await fetch(form.action, {
-                            method: 'POST',
-                            body: data,
-                            headers: {
-                                'Accept': 'application/json'
-                            }
-                        });
-
-                        if (response.ok) {
-                            if (status) {
-                                status.innerHTML = "<h5>Bedankt voor je bericht!</h5>";
-                            }
-                            form.reset();
-                        } else {
-                            const responseData = await response.json();
-                            if (Object.hasOwn(responseData, 'errors')) {
-                                if (status) {
-                                    status.innerHTML = "<h5 style='color:red;'>" + responseData["errors"].map((error: any) => error["message"]).join(", ") + "</h5>";
-                                }
-                            } else {
-                                if (status) {
-                                    status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het versturen van je bericht</h5>";
-                                }
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Error handling reservation:', error);
-                        if (status) {
-                            status.innerHTML = "<h5 style='color:red;'>Oeps! Er ging iets mis tijdens het verwerken van je reservering</h5>";
-                        }
-                    } finally {
-                        setSubmitting(false);
-                    }
-                }}
+                initialValues={defaultValues}
+                validate={(values: ReservationFormValues) => validateReservationForm(values)}
+                validateOnMount={true}
+                onSubmit={handleSubmit}
+                enableReinitialize={true}
             >
-                {({
-                    values,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                }) => (
-                    <form onSubmit={handleSubmit} id="reservationForm" action={AppData.settings.formspreeURL}>
+                {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, isValid }) => (
+                    <form onSubmit={handleSubmit} id="reservationForm" className="tst-reservation-form">
                         <div className="row">
                             <div className="col-6 col-md-4">
-                                <input
-                                    type="text"
-                                    placeholder="Voornaam"
-                                    name="first_name"
-                                    required={true}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.first_name}
-                                />
+                                <div className="tst-group-input">
+                                    <input
+                                        type="text"
+                                        placeholder="Voornaam"
+                                        name="firstname"
+                                        className={errors.firstname && touched.firstname ? 'error' : ''}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.firstname}
+                                    />
+                                    {errors.firstname && touched.firstname && (
+                                        <div className="error-message">{errors.firstname}</div>
+                                    )}
+                                </div>
                             </div>
                             <div className="col-6 col-md-4">
-                                <input
-                                    type="text"
-                                    placeholder="Familienaam"
-                                    name="last_name"
-                                    required={true}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.last_name}
-                                />
+                                <div className="tst-group-input">
+                                    <input
+                                        type="text"
+                                        placeholder="Familienaam"
+                                        name="lastname"
+                                        required={true}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.lastname}
+                                    />
+                                    {errors.lastname && touched.lastname && (
+                                        <div className="error-message">{errors.lastname}</div>
+                                    )}
+                                </div>
                             </div>
                             <div className="col-6 col-md-4">
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    name="email"
-                                    required={true}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.email}
-                                />
+                                <div className="tst-group-input">
+                                    <input
+                                        type="email"
+                                        placeholder="Email"
+                                        name="email"
+                                        required={true}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.email}
+                                    />
+                                    {errors.email && touched.email && (
+                                        <div className="error-message">{errors.email}</div>
+                                    )}
+                                </div>
                             </div>
                             <div className="col-6 col-md-4">
-                                <select name="person" className="wide" onChange={handleChange} onBlur={handleBlur} value={values.person}>
-                                    <option>Aantal Personen</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6 of meer</option>
-                                </select>
+                                <div className="tst-group-input">
+                                    <select name="person" className="wide" onChange={handleChange} onBlur={handleBlur} value={values.person}>
+                                        <option>Aantal Personen</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6 of meer</option>
+                                    </select>
+                                    {errors.person && touched.person && (
+                                        <div className="error-message">{errors.person}</div>
+                                    )}
+                                </div>
                             </div>
                             <div className="col-6 col-md-4">
-                                <input
-                                    type="date"
-                                    name="date"
-                                    required={true}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.date}
-                                />
+                                <div className="tst-group-input">
+                                    <input
+                                        type="date"
+                                        name="date"
+                                        required={true}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.date}
+                                    />
+                                    {errors.date && touched.date && (
+                                        <div className="error-message">{errors.date}</div>
+                                    )}
+                                </div>
                             </div>
                             <div className="col-6 col-md-4">
-                                <select name="time" className="wide" onChange={handleChange} onBlur={handleBlur} value={values.time}>
-                                    <option>Tijd</option>
-                                    <option value="5:00pm">17:00</option>
-                                    <option value="6:00pm">18:00</option>
-                                    <option value="7:00pm">19:00</option>
-                                    <option value="8:00pm">20:00</option>
-                                    <option value="9:00pm">21:00</option>
-                                    <option value="10:00pm">22:00</option>
-                                    <option value="11:00pm">23:00</option>
-                                </select>
+                                <div className="tst-group-input">
+                                    <select name="time" className="wide" onChange={handleChange} onBlur={handleBlur} value={values.time}>
+                                        <option>Tijd</option>
+                                        <option value="5:00pm">17:00</option>
+                                        <option value="6:00pm">18:00</option>
+                                        <option value="7:00pm">19:00</option>
+                                        <option value="8:00pm">20:00</option>
+                                        <option value="9:00pm">21:00</option>
+                                        <option value="10:00pm">22:00</option>
+                                        <option value="11:00pm">23:00</option>
+                                    </select>
+                                    {errors.time && touched.time && (
+                                        <div className="error-message">{errors.time}</div>
+                                    )}
+                                </div>
                             </div>
                             <div className="col-12">
-                                <textarea
-                                    placeholder="Bericht"
-                                    name="message"
-                                    required={true}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.message}
-                                    rows={4}
-                                />
+                                <div className="tst-group-input">
+                                    <textarea
+                                        placeholder="Bericht"
+                                        name="message"
+                                        required={true}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.message}
+                                        rows={4}
+                                    />
+                                    {errors.message && touched.message && (
+                                        <div className="error-message">{errors.message}</div>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                        <button className="tst-btn" type="submit" name="button">Reserveer Tafel</button>
+                        <button className="tst-btn" type="submit" name="button" disabled={!isValid || isSubmitting}>
+                            <span>{isSubmitting ? 'Laden...' : 'Reserveer Tafel'}</span>
+                            {isSubmitting && <div className="spinner" />}
+                        </button>
 
                         <div id="reservationFormStatus" className="tst-form-status"></div>
                     </form>

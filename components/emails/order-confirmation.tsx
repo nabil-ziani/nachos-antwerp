@@ -11,6 +11,7 @@ import {
     Text
 } from '@react-email/components';
 import { Font } from './custom-font';
+
 interface OrderConfirmationEmailProps {
     order: {
         id: string;

@@ -1,7 +1,6 @@
 "use client";
 
 import { Formik } from 'formik';
-import AppData from "@/data/app.json";
 import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { useCart } from '@/hooks/useCart';
@@ -168,16 +167,10 @@ const CheckoutForm = () => {
                 enableReinitialize={true}
             >
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, isValid }) => (
-                    <form onSubmit={handleSubmit} id="checkoutForm" action={AppData.settings.formspreeURL} className="tst-checkout-form">
+                    <form onSubmit={handleSubmit} id="checkoutForm" className="tst-checkout-form">
                         <LocationConfirmation selectedRestaurant={selectedRestaurant} />
 
-                        <DeliveryDetails
-                            values={values}
-                            errors={errors}
-                            touched={touched}
-                            handleChange={handleChange}
-                            handleBlur={handleBlur}
-                        />
+                        <DeliveryDetails values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
 
                         <div className="tst-mb-30">
                             <h5>Extra informatie</h5>
@@ -208,10 +201,7 @@ const CheckoutForm = () => {
                             </div>
                         </div>
 
-                        <PaymentMethods
-                            values={values}
-                            handleChange={handleChange}
-                        />
+                        <PaymentMethods values={values} handleChange={handleChange} />
 
                         <FormButtons
                             values={values}

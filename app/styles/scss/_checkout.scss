@@ -1,4 +1,5 @@
-.tst-checkout-form {
+.tst-checkout-form,
+.tst-reservation-form {
     .tst-group-input {
         margin-bottom: 2rem;
         position: relative;
@@ -19,6 +20,7 @@
         }
 
         .error-message {
+            text-align: left;
             color: #FF5252;
             font-size: 0.875rem;
             margin-top: 0.25rem;
