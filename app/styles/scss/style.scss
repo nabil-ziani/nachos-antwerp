@@ -58,16 +58,16 @@ p.s. I am available for Freelance hire (UI design, web development). mail: mille
 
 
 --------------------------------------------*/
-@import 'variables';
-@import 'transitions';
-@import 'common';
-@import 'frame';
-@import 'content';
-@import 'menu';
-@import 'shop';
-@import 'custom';
-@import 'delivery-locations';
-@import 'custom-select';
-@import "checkout";
-@import 'modal';
-@import 'loading';
+@use 'variables';
+@use 'transitions';
+@use 'common';
+@use 'frame';
+@use 'content';
+@use 'menu';
+@use 'shop';
+@use 'custom';
+@use 'delivery-locations';
+@use 'custom-select';
+@use "checkout";
+@use 'modal';
+@use 'loading';

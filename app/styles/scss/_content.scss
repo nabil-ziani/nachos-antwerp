@@ -1,3 +1,5 @@
+@use 'variables';
+
 /**********************************
 
 content
@@ -40,7 +42,7 @@ banner
         top: 20px;
         height: 100%;
         width: 150%;
-        transition: $tr-md;
+        transition: variables.$tr-md;
 
         &.tst-active {
           transform: scale(1.5);
@@ -56,7 +58,7 @@ banner
       background-image: linear-gradient(270deg, rgba(4, 25, 29, .1) 0%, rgba(4, 25, 29, .7) 70%);
       width: 100%;
       height: 100%;
-      transition: $tr-md;
+      transition: variables.$tr-md;
 
       &.tst-with-map {
         pointer-events: all;
@@ -81,10 +83,10 @@ banner
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: $tr-sm;
+      transition: variables.$tr-sm;
 
       &.tst-active {
-        background-color: $ac;
+        background-color: variables.$ac;
       }
     }
 
@@ -238,7 +240,7 @@ call to action
         top: 20px;
         height: 100%;
         width: 150%;
-        transition: $tr-md;
+        transition: variables.$tr-md;
 
         &.tst-active {
           transform: scale(1.5);
@@ -254,7 +256,7 @@ call to action
       background-image: linear-gradient(270deg, rgba(4, 25, 29, .1) 0%, rgba(4, 25, 29, .7) 70%);
       width: 100%;
       height: 100%;
-      transition: $tr-md;
+      transition: variables.$tr-md;
 
       &.tst-with-map {
         pointer-events: all;
@@ -279,10 +281,10 @@ call to action
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: $tr-sm;
+      transition: variables.$tr-sm;
 
       &.tst-active {
-        background-color: $ac;
+        background-color: variables.$ac;
       }
     }
   }
@@ -362,14 +364,14 @@ about
     width: 70px;
     margin-left: -35px;
     margin-top: -35px;
-    background-color: $ac;
+    background-color: variables.$ac;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.11);
     font-size: 18px;
     padding-left: 3px;
-    transition: $tr-sm;
+    transition: variables.$tr-sm;
 
     &:hover {
       filter: brightness(108%);
@@ -390,7 +392,7 @@ about
     width: 90px;
     margin-left: -45px;
     margin-top: -45px;
-    background-color: $card;
+    background-color: variables.$card;
     box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.11);
     animation: pulse 1s infinite;
   }
@@ -413,7 +415,7 @@ about
   text-align: center;
   opacity: 0.3;
   margin-bottom: 60px;
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
 
   & img {
     margin: 0 auto;
@@ -493,7 +495,7 @@ banner sm
     width: 100%;
     height: 370px;
     text-align: center;
-    background-color: $card;
+    background-color: variables.$card;
     padding: 60px 0;
     border-radius: 0 5px 5px 0;
   }
@@ -516,7 +518,7 @@ banner sm
       border-radius: 5px;
       background-color: #fff;
       border: none;
-      background-color: $card;
+      background-color: variables.$card;
 
       &::placeholder {
         opacity: 0.8;
@@ -570,7 +572,7 @@ team
   overflow: hidden;
   width: 100%;
   margin-bottom: 60px;
-  background-color: $card;
+  background-color: variables.$card;
   box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.15);
   border-radius: 5px;
 
@@ -589,7 +591,7 @@ team
       height: 100%;
       object-fit: cover;
       object-position: top;
-      transition: $tr-md;
+      transition: variables.$tr-md;
     }
   }
 
@@ -630,21 +632,21 @@ body .tst-testimonials-slider {
   border: dotted 2px rgba(26, 47, 51, .2);
   margin-bottom: 60px;
   cursor: default;
-  transition: $tr-md;
+  transition: variables.$tr-md;
 
   & .tst-quote {
     width: 100px;
-    color: $ac;
+    color: variables.$ac;
     line-height: 100px;
     position: absolute;
     top: -90px;
     opacity: 0;
     right: -20px;
-    font-family: $pf;
+    font-family: variables.$pf;
     font-size: 220px;
     font-style: italic;
     text-shadow: 0 2px 7px rgba(26, 47, 51, 0.15);
-    transition: $tr-lg;
+    transition: variables.$tr-lg;
   }
 
   & .tst-testimonial-bottom {
@@ -679,7 +681,7 @@ body .tst-testimonials-slider {
 
 .swiper-slide-active {
   & .tst-testimonial-card {
-    background-color: $card;
+    background-color: variables.$card;
     box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.11);
     border-color: transparent;
 
@@ -708,7 +710,7 @@ blog
 }
 
 .tst-blog-card {
-  background-color: $card;
+  background-color: variables.$card;
   box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.11);
   border-radius: 5px;
 
@@ -729,13 +731,13 @@ blog
       height: 100%;
       object-fit: cover;
       object-position: center;
-      transition: $tr-md;
+      transition: variables.$tr-md;
     }
 
     & .tst-card-badge {
       padding: 5px 10px 3px;
       border-radius: 3px;
-      background-color: $ac;
+      background-color: variables.$ac;
       position: absolute;
       font-weight: 800;
       top: 30px;
@@ -745,15 +747,15 @@ blog
       letter-spacing: 1px;
 
       &.tst-auxiliary-color-1 {
-        background-color: $auxc1;
+        background-color: variables.$auxc1;
       }
 
       &.tst-auxiliary-color-2 {
-        background-color: $auxc2;
+        background-color: variables.$auxc2;
       }
 
       &.tst-auxiliary-color-3 {
-        background-color: $auxc3;
+        background-color: variables.$auxc3;
       }
     }
   }
@@ -882,7 +884,7 @@ comments
   width: calc(100% - 90px);
   float: right;
   position: relative;
-  background-color: $card;
+  background-color: variables.$card;
   border-radius: 5px;
   padding: 30px;
   margin-bottom: 30px;
@@ -1008,7 +1010,7 @@ footer {
         left: 0;
         object-fit: cover;
         object-position: center;
-        transition: $tr-md;
+        transition: variables.$tr-md;
       }
 
       & .tst-overlay {
@@ -1022,13 +1024,13 @@ footer {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: $wl1;
+        color: variables.$wl1;
         opacity: 0;
-        transition: $tr-sm;
+        transition: variables.$tr-sm;
 
         & i {
           transform: scale(.6);
-          transition: $tr-md;
+          transition: variables.$tr-md;
         }
       }
 
@@ -1099,7 +1101,7 @@ popup
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: $tr-md;
+  transition: variables.$tr-md;
 
   & .tst-popup-frame {
     position: relative;
@@ -1108,10 +1110,10 @@ popup
     text-align: center;
     width: 50%;
     padding: 60px 30px 30px;
-    background-color: $wl1;
+    background-color: variables.$wl1;
     box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.15);
     border-radius: 10px;
-    transition: $tr-md;
+    transition: variables.$tr-md;
 
     &:before {
       content: '';
@@ -1121,7 +1123,7 @@ popup
       z-index: 999;
       top: -10px;
       border-radius: 5px 5px 0 0;
-      background-color: $wl1;
+      background-color: variables.$wl1;
       opacity: 0.2;
       left: 15px;
     }
@@ -1133,7 +1135,7 @@ popup
       position: absolute;
       bottom: -10px;
       border-radius: 0 0 5px 5px;
-      background-color: $wl1;
+      background-color: variables.$wl1;
       opacity: 0.2;
       left: 15px;
     }
@@ -1143,10 +1145,10 @@ popup
       top: 30px;
       cursor: pointer;
       right: 30px;
-      transition: $tr-sm;
+      transition: variables.$tr-sm;
 
       &:hover {
-        color: $auxc1;
+        color: variables.$auxc1;
         transform: scale(1.2);
       }
     }
@@ -1184,7 +1186,7 @@ breadcrumbs
 .tst-breadcrumbs {
   position: relative;
   display: inline-flex;
-  background-color: $ac;
+  background-color: variables.$ac;
   padding: 0;
   margin: 0;
   padding: 0 30px;
@@ -1199,9 +1201,9 @@ breadcrumbs
     position: absolute;
     bottom: -7px;
     border-radius: 0 0 5px 5px;
-    background-color: $wl1;
+    background-color: variables.$wl1;
     opacity: 0.15;
-    transition: $tr-sm;
+    transition: variables.$tr-sm;
     left: 10px;
   }
 
@@ -1222,9 +1224,9 @@ breadcrumbs
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 1px;
-      font-family: $sf;
+      font-family: variables.$sf;
       margin: 0;
-      transition: $tr-sm;
+      transition: variables.$tr-sm;
     }
 
     &.tst-active {
@@ -1258,7 +1260,7 @@ timeline
     margin-left: -2px;
     height: 100%;
     width: 4px;
-    background-color: $ac;
+    background-color: variables.$ac;
   }
 
   & .tst-timeline-item {
@@ -1276,7 +1278,7 @@ timeline
         position: relative;
         width: 20%;
         filter: brightness(80%);
-        transition: $tr-md;
+        transition: variables.$tr-md;
 
         & img {
           border-radius: 10px;
@@ -1311,7 +1313,7 @@ timeline
         height: 4px;
         width: 50px;
         border-radius: 3px;
-        background-color: $ac;
+        background-color: variables.$ac;
       }
 
       &:after {
@@ -1323,9 +1325,9 @@ timeline
         height: 20px;
         width: 20px;
         border-radius: 50%;
-        box-shadow: 0 0 0 4px $bg;
-        border: solid 4px $ac;
-        background-color: $bg;
+        box-shadow: 0 0 0 4px variables.$bg;
+        border: solid 4px variables.$ac;
+        background-color: variables.$bg;
       }
     }
 
@@ -1462,7 +1464,7 @@ new menu
       left: 50%;
       margin-top: -20px;
       margin-left: -20px;
-      background-color: $ac;
+      background-color: variables.$ac;
       height: 40px;
       width: 40px;
       display: flex;
@@ -1473,7 +1475,7 @@ new menu
       box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.11);
       transform: scale(.5);
       opacity: 0;
-      transition: $tr-md;
+      transition: variables.$tr-md;
     }
 
     &:hover {
@@ -1501,7 +1503,7 @@ new menu
 
       & .tst-price {
         line-height: 20px;
-        background-color: $ac;
+        background-color: variables.$ac;
         padding: 7px 10px 0;
         border-radius: 3px;
         font-weight: 600;
@@ -1595,7 +1597,7 @@ new menu
     background-image: linear-gradient(270deg, rgba(4, 25, 29, .1) 0%, rgba(4, 25, 29, .7) 70%);
     width: 100%;
     height: 100%;
-    transition: $tr-md;
+    transition: variables.$tr-md;
   }
 
   & .tsc-ilust-text {
@@ -1635,12 +1637,12 @@ sidebar
 .tst-sidebar-frame {
   width: 100%;
   padding: 30px;
-  background-color: $bg;
+  background-color: variables.$bg;
   box-shadow: 0 0 10px 0 rgba(26, 47, 51, 0.11);
   border-radius: 5px;
 
   & .tst-sidebar {
-    border: dotted 3px $wl2;
+    border: dotted 3px variables.$wl2;
     padding: 30px;
   }
 
@@ -1677,7 +1679,7 @@ sidebar
       position: relative;
       padding: 0 20px;
       font-size: 14px;
-      background-color: $wl2;
+      background-color: variables.$wl2;
       display: block;
       width: 100%;
       border: none;
@@ -1691,7 +1693,7 @@ sidebar
       height: 100%;
       width: 50px;
       border: none;
-      background-color: $ac;
+      background-color: variables.$ac;
       transition: 0.3s ease-in-out;
     }
   }
@@ -1729,9 +1731,9 @@ sidebar
       a {
         display: block;
         font-size: 16px;
-        background-color: $ac;
+        background-color: variables.$ac;
         padding: 2px 5px;
-        color: $dl1;
+        color: variables.$dl1;
         transition: 0.3s ease-in-out;
       }
     }

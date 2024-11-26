@@ -1,3 +1,5 @@
+@use 'variables';
+
 /**********************************
 
 common
@@ -19,7 +21,7 @@ scrollbar
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $ac;
+  background: variables.$ac;
   border-radius: 2px;
 }
 
@@ -37,10 +39,10 @@ typography
 }
 
 body {
-  color: $dl1;
+  color: variables.$dl1;
   font-size: 18px;
   font-weight: 400;
-  font-family: $sf;
+  font-family: variables.$sf;
   background-size: 100%;
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
@@ -68,7 +70,7 @@ a:hover {
 
   &.tst-color {
     &:hover {
-      color: $ac;
+      color: variables.$ac;
     }
   }
 }
@@ -85,7 +87,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: $pf;
+  font-family: variables.$pf;
   font-weight: 900;
   margin: 0;
 }
@@ -122,16 +124,16 @@ h6 {
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 1px;
-  font-family: $sf;
+  font-family: variables.$sf;
   margin: 0;
 }
 
 .tst-text {
   font-size: 17px;
   font-weight: 400;
-  font-family: $sf;
+  font-family: variables.$sf;
   margin: 0;
-  color: $dl1t;
+  color: variables.$dl1t;
 
   &.tst-text-lg {
     font-size: 18px;
@@ -143,7 +145,7 @@ h6 {
   h4,
   h5,
   h6 {
-    color: $dl1;
+    color: variables.$dl1;
   }
 
   h1,
@@ -198,21 +200,21 @@ h6 {
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 1px;
-  font-family: $sf;
+  font-family: variables.$sf;
   margin: 0;
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
 }
 
 .tst-icon-link {
   font-size: 14px;
   letter-spacing: 2px;
-  font-family: $sf;
+  font-family: variables.$sf;
   margin: 0 15px 0 0;
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
 
   &:hover {
     opacity: 1;
-    color: $ac;
+    color: variables.$ac;
   }
 }
 
@@ -222,7 +224,7 @@ h6 {
   font-size: 12px;
   letter-spacing: 1px;
   font-weight: 800;
-  font-family: $sf;
+  font-family: variables.$sf;
   margin: 0;
   padding-left: 45px;
 
@@ -234,7 +236,7 @@ h6 {
     position: absolute;
     left: 0;
     top: 4px;
-    background-color: $ac;
+    background-color: variables.$ac;
   }
 
   &.tst-suptitle-center {
@@ -262,7 +264,7 @@ h6 {
 .tst-spacer {
   height: 0;
   margin: 60px 0;
-  border-bottom: dotted 4px $dl1t;
+  border-bottom: dotted 4px variables.$dl1t;
   opacity: 0.3;
 
   &.tst-spacer-only-bottom-space {
@@ -274,14 +276,14 @@ h6 {
   }
 
   &.tst-white {
-    border-bottom: dotted 4px $wl1t;
+    border-bottom: dotted 4px variables.$wl1t;
   }
 }
 
 .tst-spacer-sm {
   height: 1px;
   margin: 15px 0;
-  border-bottom: dotted 2px $dl1t;
+  border-bottom: dotted 2px variables.$dl1t;
   opacity: 0.3;
 }
 
@@ -290,35 +292,35 @@ h6 {
 }
 
 .tst-white {
-  color: $wl1;
+  color: variables.$wl1;
 }
 
 a.tst-white {
-  color: $wl1;
+  color: variables.$wl1;
   opacity: 0.8;
 
   &:hover {
-    color: $wl1;
+    color: variables.$wl1;
     opacity: 1;
   }
 }
 
 .tst-white-2 {
-  color: $wl2;
+  color: variables.$wl2;
 }
 
 a.tst-white-2 {
-  color: $wl2;
+  color: variables.$wl2;
   opacity: 0.9;
 
   &:hover {
-    color: $wl2;
+    color: variables.$wl2;
     opacity: 1;
   }
 }
 
 .tst-color {
-  color: $ac;
+  color: variables.$ac;
 }
 
 .tst-right {
@@ -447,19 +449,19 @@ buttons
 .tst-btn {
   position: relative;
   padding: 0 30px;
-  background-color: $ac;
+  background-color: variables.$ac;
   display: inline-block;
   height: 50px;
   line-height: 54px;
   cursor: pointer;
-  font-family: $sf;
+  font-family: variables.$sf;
   margin-right: 5px;
   text-transform: uppercase;
   font-size: 12px;
   letter-spacing: 1px;
   font-weight: 800;
   border: none;
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
   border-radius: 5px;
   white-space: nowrap;
 
@@ -474,9 +476,9 @@ buttons
     position: absolute;
     bottom: -7px;
     border-radius: 0 0 5px 5px;
-    background-color: $wl1;
+    background-color: variables.$wl1;
     opacity: 0.15;
-    transition: $tr-sm;
+    transition: variables.$tr-sm;
     left: 10px;
   }
 
@@ -618,7 +620,7 @@ buttons
 
   &.tst-added {
     cursor: not-allowed;
-    background-color: $auxc2;
+    background-color: variables.$auxc2;
   }
 }
 
@@ -634,7 +636,7 @@ form {
     margin-bottom: 30px;
     padding: 0 20px;
     box-shadow: 0 2px 5px 0 rgba(26, 47, 51, 0.11);
-    color: $dl1 !important;
+    color: variables.$dl1 !important;
     opacity: 1;
     font-size: 14px;
     font-weight: 400;
@@ -644,7 +646,7 @@ form {
     }
 
     &::placeholder {
-      color: $dl1 !important;
+      color: variables.$dl1 !important;
       opacity: 0.6;
       font-size: 14px;
       font-weight: 400;
@@ -659,7 +661,7 @@ form {
     margin-bottom: 30px;
     padding: 0 20px;
     box-shadow: 0 2px 5px 0 rgba(26, 47, 51, 0.11);
-    color: $dl1 !important;
+    color: variables.$dl1 !important;
     opacity: 1;
     font-size: 14px;
     font-weight: 400;
@@ -682,7 +684,7 @@ textarea {
   margin-bottom: 30px;
   padding: 15px 20px;
   box-shadow: 0 2px 5px 0 rgba(26, 47, 51, 0.11);
-  color: $dl1 !important;
+  color: variables.$dl1 !important;
   opacity: 1;
   font-size: 14px;
   font-weight: 400;
@@ -692,7 +694,7 @@ textarea {
   }
 
   &::placeholder {
-    color: $dl1 !important;
+    color: variables.$dl1 !important;
     opacity: 0.6;
     font-size: 14px;
     font-weight: 400;
@@ -771,18 +773,18 @@ spaces
 
     a {
       position: relative;
-      background-color: $wl2;
+      background-color: variables.$wl2;
       text-align: center;
       display: block;
       height: 55px;
       width: 55px;
       padding-top: 15px;
-      color: $dl1;
+      color: variables.$dl1;
     }
 
     &.tst-active {
       a {
-        background-color: $ac;
+        background-color: variables.$ac;
       }
     }
   }
@@ -799,11 +801,11 @@ spaces
     margin: 2.5px 5px;
     font-size: 16px;
     font-weight: 500;
-    color: $dl1;
+    color: variables.$dl1;
     transition: 0.3s ease-in-out;
 
     &:hover {
-      color: $dl1t;
+      color: variables.$dl1t;
     }
   }
 }
@@ -817,10 +819,10 @@ spaces
   a {
     display: inline-block;
     font-size: 16px;
-    background-color: $ac;
+    background-color: variables.$ac;
     padding: 2px 5px;
     margin: 2.5px 5px;
-    color: $dl1;
+    color: variables.$dl1;
     transition: 0.3s ease-in-out;
 
     &:hover {
@@ -910,7 +912,7 @@ radio
   top: 0;
   left: 0;
   z-index: 5;
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
 }
 
 .tst-radio .tst-check::before {
@@ -923,15 +925,15 @@ radio
   top: 2px;
   left: 2px;
   margin: auto;
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
 }
 
 .tst-radio input[type=radio]:checked~.tst-check {
-  border-color: $ac;
+  border-color: variables.$ac;
 }
 
 .tst-radio input[type=radio]:checked~.tst-check::before {
-  background: $ac;
+  background: variables.$ac;
 }
 
 // Checkbox specific styles (after the radio styles)
@@ -941,10 +943,10 @@ radio
     visibility: hidden;
 
     &:checked~.tst-check {
-      border-color: $ac;
+      border-color: variables.$ac;
 
       &::before {
-        background: $ac;
+        background: variables.$ac;
         border-radius: 2px;
         width: 13px;
         height: 13px;

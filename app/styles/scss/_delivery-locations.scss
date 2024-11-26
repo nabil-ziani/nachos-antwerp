@@ -1,3 +1,5 @@
+@use 'variables';
+
 .tst-delivery-locations {
   padding: 60px 0;
 
@@ -15,30 +17,30 @@
     }
 
     h5 {
-      color: $ac;
-      font-family: $pf;
+      color: variables.$ac;
+      font-family: variables.$pf;
       font-weight: 700;
     }
 
     .tst-text {
-      color: $dl1;
+      color: variables.$dl1;
       margin-bottom: 15px;
     }
 
     .tst-postal-codes {
-      border-top: 1px solid rgba($dl1, 0.1);
+      border-top: 1px solid rgba(variables.$dl1, 0.1);
       padding-top: 15px;
 
       strong {
         display: block;
         margin-bottom: 10px;
-        color: $dl1;
-        font-family: $sf;
+        color: variables.$dl1;
+        font-family: variables.$sf;
         font-size: 14px;
       }
 
       p {
-        color: $dl2;
+        color: variables.$dl2;
         font-size: 14px;
         line-height: 1.6;
         margin: 0;
@@ -70,7 +72,7 @@
   .tst-location-button {
     background: transparent;
     border: none;
-    color: $dl2;
+    color: variables.$dl2;
     font-size: 12px;
     padding: 4px 8px;
     cursor: pointer;
@@ -82,7 +84,7 @@
     white-space: nowrap;
 
     &:hover {
-      color: $ac;
+      color: variables.$ac;
     }
 
     i {
@@ -98,9 +100,9 @@
     width: 100%;
     padding: 8px 30px 8px 12px;
     border-radius: 5px;
-    border: 1px solid rgba($dl1, 0.2);
+    border: 1px solid rgba(variables.$dl1, 0.2);
     background-color: #fff;
-    color: $dl1;
+    color: variables.$dl1;
     font-size: 14px;
     cursor: pointer;
     appearance: none;
@@ -112,7 +114,7 @@
 
     &:focus {
       outline: none;
-      border-color: $ac;
+      border-color: variables.$ac;
     }
 
     &:disabled {
@@ -123,7 +125,7 @@
 
     option {
       background-color: #fff;
-      color: $dl1;
+      color: variables.$dl1;
       padding: 8px;
     }
   }
@@ -131,7 +133,7 @@
   @media (max-width: 991px) {
     margin: 15px 0;
     width: 100%;
-    
+
     .tst-location-prompt {
       position: relative;
       top: 0;
@@ -154,4 +156,4 @@
   max-width: 100%;
   flex: 0 0 50%;
   box-sizing: border-box;
-} 
+}

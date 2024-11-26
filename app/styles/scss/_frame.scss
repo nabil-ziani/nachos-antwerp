@@ -1,3 +1,5 @@
+@use 'variables';
+
 /**********************************
 
 frame
@@ -25,7 +27,7 @@ preloader
 
     & span {
       position: absolute;
-      border: 6px solid $ac;
+      border: 6px solid variables.$ac;
       border-top: 6px solid transparent;
       border-radius: 999px;
 
@@ -96,7 +98,7 @@ marcup
   box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.40);
   margin-left: 45px;
   margin-right: 45px;
-  background-color: $bg;
+  background-color: variables.$bg;
 
   &:before {
     content: '';
@@ -106,7 +108,7 @@ marcup
     z-index: 999;
     top: -10px;
     border-radius: 5px 5px 0 0;
-    background-color: $wl1;
+    background-color: variables.$wl1;
     opacity: 0.2;
     left: 15px;
   }
@@ -118,7 +120,7 @@ marcup
     position: absolute;
     bottom: -10px;
     border-radius: 0 0 5px 5px;
-    background-color: $wl1;
+    background-color: variables.$wl1;
     opacity: 0.2;
     left: 15px;
   }
@@ -151,9 +153,9 @@ menu
     height: 80px;
     padding: 0 30px;
     border-radius: 10px 10px;
-    background-color: $card;
+    background-color: variables.$card;
     box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.20);
-    transition: $tr-md;
+    transition: variables.$tr-md;
 
     &:after {
       content: '';
@@ -162,7 +164,7 @@ menu
       position: absolute;
       bottom: -10px;
       border-radius: 0 0 5px 5px;
-      background-color: $wl1;
+      background-color: variables.$wl1;
       opacity: 0.15;
       left: 15px;
     }
@@ -260,15 +262,15 @@ menu
             font-size: 12px;
             letter-spacing: 1px;
             font-weight: 800;
-            font-family: $sf;
+            font-family: variables.$sf;
             margin: 0;
-            transition: $tr-sm;
+            transition: variables.$tr-sm;
           }
 
           &.current-menu-item {
             &:after {
               content: '';
-              background-color: $ac;
+              background-color: variables.$ac;
               position: absolute;
               bottom: 0;
               height: 4px;
@@ -292,10 +294,10 @@ menu
             top: 90px;
             left: 0;
             border-radius: 5px;
-            background-color: $ac;
+            background-color: variables.$ac;
             flex-direction: column;
             box-shadow: 0 3px 5px 0 rgba(26, 47, 51, 0.20);
-            transition: $tr-sm;
+            transition: variables.$tr-sm;
 
             &:before {
               height: 10px;
@@ -315,7 +317,7 @@ menu
               position: absolute;
               bottom: -7px;
               border-radius: 0 0 5px 5px;
-              background-color: $wl1;
+              background-color: variables.$wl1;
               opacity: 0.15;
               left: 10px;
             }
@@ -385,7 +387,7 @@ menu
         &>li {
           &:hover {
             &>a {
-              color: $ac;
+              color: variables.$ac;
             }
           }
 
@@ -427,8 +429,8 @@ menu
           top: 0;
           right: 0;
           font-weight: 600;
-          background-color: $auxc2;
-          color: $wl1;
+          background-color: variables.$auxc2;
+          color: variables.$wl1;
           height: 15px;
           width: 15px;
           font-size: 12px;
@@ -470,7 +472,7 @@ menu
               width: 19px;
               height: 0.10em;
               border-radius: 3px;
-              background: $dl1;
+              background: variables.$dl1;
               transition: 0.4s ease-in-out;
               backface-visibility: hidden;
             }
@@ -546,10 +548,10 @@ menu
         position: absolute;
         left: 10px;
         top: 90px;
-        background-color: $card;
+        background-color: variables.$card;
         width: calc(100% - 20px);
         border-radius: 5px;
-        transition: $tr-md;
+        transition: variables.$tr-md;
 
         &.tst-active {
           opacity: 1;
@@ -564,7 +566,7 @@ menu
           position: absolute;
           bottom: -10px;
           border-radius: 0 0 5px 5px;
-          background-color: $card;
+          background-color: variables.$card;
           opacity: 0.15;
           left: 15px;
         }
@@ -587,7 +589,7 @@ menu
               }
 
               &>a {
-                color: $ac;
+                color: variables.$ac;
               }
             }
 
@@ -601,7 +603,7 @@ menu
               overflow: hidden;
               box-shadow: none;
               height: auto;
-              transition: $tr-lg;
+              transition: variables.$tr-lg;
 
               & li {
                 &:first-child {
@@ -648,7 +650,7 @@ scroll hint
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: $bg;
+  background-color: variables.$bg;
 
   &:after {
     transform: scaleX(1.25) scaleY(1.09);
@@ -659,7 +661,7 @@ scroll hint
     border-radius: 1000px 1000px 0 0;
     position: absolute;
     top: -11.6%;
-    background-color: $wl1;
+    background-color: variables.$wl1;
     z-index: -2;
   }
 
@@ -669,7 +671,7 @@ scroll hint
     position: relative;
     height: 40px;
     width: 25px;
-    border: solid 2px $dl1;
+    border: solid 2px variables.$dl1;
     border-radius: 20px;
 
     &:before {
@@ -677,7 +679,7 @@ scroll hint
       height: 4px;
       width: 4px;
       border-radius: 50%;
-      background-color: $dl1;
+      background-color: variables.$dl1;
       position: absolute;
       top: 7px;
       left: 50%;
@@ -706,7 +708,7 @@ fade scroll object
 .tst-fade-up {
   opacity: 0;
   transform: translateY(90px) scale(.97);
-  transition: $tr-lg;
+  transition: variables.$tr-lg;
 
   &.tst-active {
     opacity: 1;
@@ -717,7 +719,7 @@ fade scroll object
 .tst-fade-down {
   opacity: 0;
   transform: translateY(-90px) scale(.97);
-  transition: $tr-lg;
+  transition: variables.$tr-lg;
 
   &.tst-active {
     opacity: 1;

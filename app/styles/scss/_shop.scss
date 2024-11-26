@@ -1,3 +1,5 @@
+@use 'variables';
+
 /**********************************
 
 shop
@@ -14,9 +16,9 @@ minicart
   position: absolute;
   top: 90px;
   right: 0;
-  background-color: $card;
+  background-color: variables.$card;
   box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.11);
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
 
   &.tst-active {
     pointer-events: all;
@@ -31,7 +33,7 @@ minicart
     position: absolute;
     bottom: -10px;
     border-radius: 0 0 5px 5px;
-    background-color: $bg;
+    background-color: variables.$bg;
     opacity: 0.15;
     left: 15px;
   }
@@ -39,7 +41,7 @@ minicart
   & .tst-minicart-header {
     text-align: center;
     padding: 30px;
-    background-color: $card;
+    background-color: variables.$card;
     border-radius: 10px 10px 0 0;
     border-bottom: solid 1px rgba(26, 47, 51, 0.05);
   }
@@ -48,7 +50,7 @@ minicart
     margin: 0;
     padding: 30px 26px 15px 30px;
     width: 415px;
-    background-color: $bg;
+    background-color: variables.$bg;
     overflow: scroll;
     overflow-x: hidden;
     height: 100%;
@@ -58,7 +60,7 @@ minicart
     & .woocommerce-mini-cart-item {
       width: 100%;
       display: flex;
-      background-color: $card;
+      background-color: variables.$card;
       flex-direction: column;
       justify-content: center;
       padding: 0 50px 0 160px;
@@ -75,7 +77,7 @@ minicart
         font-size: 12px;
         font-weight: 800;
         letter-spacing: 1px;
-        font-family: $sf;
+        font-family: variables.$sf;
         margin: 0;
         display: -webkit-box;
         -webkit-line-clamp: 1;
@@ -100,13 +102,13 @@ minicart
         position: absolute;
         height: 14px;
         width: 14px;
-        color: $bg;
-        background-color: $auxc1;
+        color: variables.$bg;
+        background-color: variables.$auxc1;
         font-size: 20px;
         margin-top: -7px;
         top: 50%;
         right: 20px;
-        // transition: $tr-sm;
+        // transition: variables.$tr-sm;
       }
 
       & .attachment-woocommerce_thumbnail {
@@ -141,7 +143,7 @@ minicart
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 1px;
-      font-family: $sf;
+      font-family: variables.$sf;
     }
 
     & .woocommerce-Price-amount {
@@ -191,7 +193,7 @@ product card
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
-    font-family: $sf;
+    font-family: variables.$sf;
     margin: 0;
   }
 }
@@ -210,7 +212,7 @@ product card
   position: relative;
   overflow: hidden;
   border-radius: 5px;
-  background-color: $card;
+  background-color: variables.$card;
   box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.20);
   margin-bottom: 60px;
 
@@ -232,7 +234,7 @@ product card
         object-fit: cover;
         object-position: center;
         display: block;
-        transition: $tr-md;
+        transition: variables.$tr-md;
       }
     }
 
@@ -338,9 +340,9 @@ sidebar
         font-size: 12px;
         font-weight: 800;
         letter-spacing: 1px;
-        font-family: $sf;
+        font-family: variables.$sf;
         margin: 0;
-        transition: $tr-sm;
+        transition: variables.$tr-sm;
         margin-bottom: 15px;
 
         & .count {
@@ -354,10 +356,10 @@ sidebar
           text-align: center;
           height: 15px;
           width: auto;
-          color: $bg;
-          background-color: $auxc2;
+          color: variables.$bg;
+          background-color: variables.$auxc2;
           font-size: 12px;
-          transition: $tr-sm;
+          transition: variables.$tr-sm;
         }
       }
     }
@@ -367,7 +369,7 @@ sidebar
     & li {
       width: 100%;
       display: flex;
-      background-color: $card;
+      background-color: variables.$card;
       flex-direction: column;
       justify-content: center;
       padding: 0 15px 0 160px !important;
@@ -384,7 +386,7 @@ sidebar
         font-size: 12px;
         font-weight: 800;
         letter-spacing: 1px;
-        font-family: $sf;
+        font-family: variables.$sf;
         margin: 0 0 10px;
 
         & .product-title {
@@ -461,7 +463,7 @@ sidebar
 }
 
 .woocommerce-ordering {
-  background-color: $card;
+  background-color: variables.$card;
   border-radius: 5px;
   padding-left: 20px;
   position: relative;
@@ -502,7 +504,7 @@ sidebar
     &::placeholder {
       font-size: 16px;
       font-weight: 300;
-      color: $dl1;
+      color: variables.$dl1;
     }
 
     &:focus {
@@ -513,18 +515,18 @@ sidebar
   & button {
     position: relative;
     padding: 0 20px;
-    background-color: $ac;
+    background-color: variables.$ac;
     display: inline-block;
     height: 50px;
     line-height: 54px;
     cursor: pointer;
-    font-family: $sf;
+    font-family: variables.$sf;
     text-transform: uppercase;
     font-size: 12px;
     letter-spacing: 1px;
     font-weight: 800;
     border: none;
-    transition: $tr-sm;
+    transition: variables.$tr-sm;
     border-radius: 5px;
 
     & i {
@@ -547,19 +549,19 @@ cart
   & button {
     position: relative;
     padding: 0 30px !important;
-    background-color: $ac !important;
+    background-color: variables.$ac !important;
     display: inline-block;
     height: 50px !important;
     line-height: 54px !important;
     cursor: pointer;
-    color: $dl1 !important;
-    font-family: $sf;
+    color: variables.$dl1 !important;
+    font-family: variables.$sf;
     text-transform: uppercase;
     font-size: 12px !important;
     letter-spacing: 1px;
     font-weight: 800;
     border: none;
-    transition: $tr-sm;
+    transition: variables.$tr-sm;
     border-radius: 5px !important;
 
     &:hover {
@@ -577,7 +579,7 @@ cart
     &::placeholder {
       font-size: 16px;
       font-weight: 300;
-      color: $dl1;
+      color: variables.$dl1;
     }
 
     &:focus {
@@ -587,7 +589,7 @@ cart
 }
 
 table {
-  background-color: $card;
+  background-color: variables.$card;
   width: 100%;
   box-shadow: 0 5px 10px 0 rgba(26, 47, 51, 0.10);
   border: none !important;
@@ -605,7 +607,7 @@ table {
         font-size: 12px;
         font-weight: 800;
         letter-spacing: 1px;
-        font-family: $sf;
+        font-family: variables.$sf;
       }
     }
   }
@@ -666,7 +668,7 @@ table {
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 1px;
-      font-family: $sf;
+      font-family: variables.$sf;
     }
 
     &.product-remove {
@@ -674,13 +676,13 @@ table {
 
       & a.remove {
         transform: scale(.8);
-        transition: $tr-sm;
+        transition: variables.$tr-sm;
         line-height: 16px;
         width: 20px;
         height: 20px;
         font-weight: 300;
-        background-color: $auxc1;
-        color: $bg !important;
+        background-color: variables.$auxc1;
+        color: variables.$bg !important;
         opacity: 1;
 
         &:hover {
@@ -737,7 +739,7 @@ table {
               font-size: 12px;
               font-weight: 800;
               letter-spacing: 1px;
-              font-family: $sf;
+              font-family: variables.$sf;
             }
 
             & .woocommerce-Price-currencySymbol {
@@ -770,7 +772,7 @@ table {
               font-size: 12px;
               font-weight: 800;
               letter-spacing: 1px;
-              font-family: $sf;
+              font-family: variables.$sf;
             }
 
             & .woocommerce-Price-currencySymbol {
@@ -798,19 +800,19 @@ table {
 .checkout-button {
   position: relative;
   padding: 0 30px !important;
-  background-color: $ac !important;
+  background-color: variables.$ac !important;
   display: inline-block;
   height: 50px !important;
   line-height: 54px !important;
   cursor: pointer;
-  color: $dl1 !important;
-  font-family: $sf;
+  color: variables.$dl1 !important;
+  font-family: variables.$sf;
   text-transform: uppercase;
   font-size: 12px !important;
   letter-spacing: 1px;
   font-weight: 800;
   border: none;
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
   border-radius: 5px !important;
 
   &:hover {
@@ -823,7 +825,7 @@ table {
   & a {
     font-weight: 600;
     font-size: 18px;
-    font-family: $pf !important;
+    font-family: variables.$pf !important;
   }
 }
 
@@ -854,7 +856,7 @@ cart
 ***************************/
 .tst-co-cart-frame {
   padding: 30px;
-  background-color: $wl2;
+  background-color: variables.$wl2;
 }
 
 .tst-remove {
@@ -869,7 +871,7 @@ cart
   text-align: center;
   line-height: 30px;
   transform: rotate(45deg);
-  transition: $tr-sm;
+  transition: variables.$tr-sm;
 
   &:hover {
     filter: brightness(102%);
@@ -877,7 +879,7 @@ cart
 }
 
 .tst-price-1 {
-  color: $dl1t;
+  color: variables.$dl1t;
   font-size: 17px;
 
   & span {
@@ -886,7 +888,7 @@ cart
 }
 
 .tst-price-2 {
-  color: $dl1;
+  color: variables.$dl1;
   font-weight: 500;
   font-size: 17px;
 
@@ -1084,7 +1086,7 @@ product
 
     & .tst-price {
       height: 70px;
-      background-color: $ac;
+      background-color: variables.$ac;
       padding: 0 20px;
       font-weight: 500;
       font-size: 32px;
@@ -1116,14 +1118,14 @@ product
 
   & .tst-input-number-btn {
     border-radius: 50%;
-    background-color: $ac;
+    background-color: variables.$ac;
     cursor: pointer;
     width: 30px;
     height: 30px;
     text-align: center;
     line-height: 30px;
     border: none;
-    transition: $tr-sm;
+    transition: variables.$tr-sm;
 
     &:hover {
       filter: brightness(110%);
@@ -1138,7 +1140,7 @@ product
     text-align: center;
     height: 50px;
     width: 60px;
-    background-color: $bg;
+    background-color: variables.$bg;
     position: relative;
     // padding: 0 20px;
     display: block;
@@ -1176,7 +1178,7 @@ gallery
     object-fit: cover;
     object-position: center;
     transform: scale(1.001);
-    transition: $tr-sm;
+    transition: variables.$tr-sm;
   }
 
   & .tst-zoom {
@@ -1242,21 +1244,21 @@ filter
     font-weight: 800;
     margin-right: 10px;
     background-color: rgba(26, 47, 51, 0.1);
-    transition: $tr-sm;
-    color: $dl1;
+    transition: variables.$tr-sm;
+    color: variables.$dl1;
 
     &:last-child {
       margin-right: 0;
     }
 
     &.tst-active {
-      background-color: $ac;
-      color: $dl1;
+      background-color: variables.$ac;
+      color: variables.$dl1;
     }
 
     &:hover {
       filter: brightness(102%);
-      color: $dl1;
+      color: variables.$dl1;
     }
   }
 }
@@ -1282,7 +1284,7 @@ badge
   z-index: 2;
   top: 15px;
   left: 15px;
-  background-color: $ac;
+  background-color: variables.$ac;
   padding: 3px 10px;
   font-size: 14px;
   display: flex;
@@ -1314,25 +1316,25 @@ stars
 
   & li {
     margin-right: 5px;
-    color: $ac;
+    color: variables.$ac;
     font-size: 14px;
 
     &.tst-empty {
-      color: $dl1t;
+      color: variables.$dl1t;
       filter: brightness(95%);
     }
 
     & span {
       font-size: 14px;
-      color: $dl1;
+      color: variables.$dl1;
       white-space: nowrap;
     }
   }
 
   &.tst-unrated {
     & li {
-      color: $dl1 !important;
-      text-shadow: 0 0 1px $dl1t;
+      color: variables.$dl1 !important;
+      text-shadow: 0 0 1px variables.$dl1t;
 
       & span {
         text-shadow: none;
@@ -1355,9 +1357,9 @@ features
     min-width: 62px;
     margin-right: 30px;
     font-family: var(--font-josefin_sans), cursive;
-    color: $bg;
+    color: variables.$bg;
     -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: $dl1;
+    -webkit-text-stroke-color: variables.$dl1;
     font-size: 42px;
     font-weight: bold;
     line-height: 36px;
@@ -1414,7 +1416,7 @@ list
         display: block;
         text-decoration: none;
         color: inherit;
-        transition: $tr-sm;
+        transition: variables.$tr-sm;
 
         &:hover {
           transform: translateX(10px);
@@ -1424,12 +1426,12 @@ list
 
     & span {
       font-size: 14px;
-      color: $dl1t;
+      color: variables.$dl1t;
 
       &.tst-number {
         background-color: rgba(26, 47, 51, 0.2);
         padding: 2px 5px;
-        color: $dl1;
+        color: variables.$dl1;
       }
     }
 
