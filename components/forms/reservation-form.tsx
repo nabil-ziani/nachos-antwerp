@@ -9,7 +9,7 @@ const ReservationForm = () => {
     const supabase = createClient();
     const { selectedRestaurant } = useRestaurant();
 
-    const handleSubmit = async (values: ReservationFormValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+    const handleSubmit = async (values: ReservationFormValues, { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void, resetForm: () => void }) => {
         const status = document.getElementById("reservationFormStatus");
 
         try {
@@ -48,6 +48,8 @@ const ReservationForm = () => {
                 if (status) {
                     status.innerHTML = "<h5 style='color:green;'>We hebben je reservering succesvol ontvangen!</h5>";
                 }
+                // Reset form after successful submission
+                resetForm();
             } else {
                 console.error('Error sending email:', await emailResponse.json());
             }

@@ -38,7 +38,7 @@ export default async function HomePage() {
               <FeaturesSection />
               <Divider />
               <ScheduleSection />
-              <Divider />
+              <Divider onlyBottom={0} />
               <CountersSection />
             </div>
           </div>

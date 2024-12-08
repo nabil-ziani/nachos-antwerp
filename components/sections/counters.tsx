@@ -19,7 +19,7 @@ const CountersSection = () => {
           <div className="col-sm-6 col-lg-3" key={`counters-item-${key}`}>
 
             {/* counter */}
-            <div className="tst-count tst-mb-70">
+            <div className="tst-count">
               <div className="h3 tst-mb-15"><span className="tst-number" data-count={item.value}>0</span><span className="tst-color">{item.value_after}</span></div>
               <div className="tst-label">{item.label}</div>
             </div>

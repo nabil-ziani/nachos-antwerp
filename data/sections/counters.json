@@ -6,19 +6,19 @@
             "label": "Opening"
         },
         {
-            "value": "50",
-            "value_after": "+",
-            "label": "Dagelijkse bestellingen"
+            "value": "25",
+            "value_after": "",
+            "label": "Authentieke gerechten"
         },
         {
-            "value": "22",
-            "value_after": "+",
-            "label": "Gerechten"
+            "value": "7",
+            "value_after": "",
+            "label": "Dagen per week"
         },
         {
-            "value": "100",
-            "value_after": "%",
-            "label": "Positieve feedback"
+            "value": "1",
+            "value_after": "",
+            "label": "Locatie"
         }
     ]
 }
