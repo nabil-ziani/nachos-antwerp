@@ -2,12 +2,14 @@
 
 import { useCart } from "@/hooks/useCart";
 import Link from "next/link"
-import { useEffect, MouseEvent } from "react"
+import { useEffect, MouseEvent, useRef } from "react"
 
 const MiniCart = () => {
     const { cartItems, cartTotal, removeFromCart, setMiniCart } = useCart()
+    const miniCartRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        console.log('MiniCart mounted');
         const cartNumberEl = document.querySelector('.tst-cart-number')
 
         if (cartNumberEl) {
@@ -17,29 +19,38 @@ const MiniCart = () => {
     }, [cartTotal])
 
     useEffect(() => {
+        console.log('Setting up click outside handler');
         const handleClickOutside = (event: MouseEvent) => {
-            const miniCartElement = document.querySelector('.tst-minicart-window');
+            // Ignore clicks on the cart button itself
+            if ((event.target as Element).closest('.tst-cart')) {
+                return;
+            }
 
-            if (miniCartElement && !miniCartElement.contains(event.target as Node)) {
+            // Check if click is outside the mini-cart
+            if (miniCartRef.current && !miniCartRef.current.contains(event.target as Node)) {
+                console.log('Click outside detected, closing mini-cart');
                 setMiniCart(false);
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside as unknown as EventListener);
+        // Only use mousedown event to prevent conflicts
+        document.addEventListener('mousedown', handleClickOutside as any);
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside as unknown as EventListener);
+            console.log('Cleaning up click outside handler');
+            document.removeEventListener('mousedown', handleClickOutside as any);
         };
     }, [setMiniCart]);
 
     const handleRemove = (e: MouseEvent, itemId: string) => {
         e.preventDefault()
-
+        e.stopPropagation()
         removeFromCart(itemId)
     }
 
+    console.log('MiniCart rendering, items:', cartItems.length);
     return (
-        <>
+        <div ref={miniCartRef}>
             <div className="tst-minicart-header">
                 <div className="tst-suptitle tst-suptitle-center"></div>
                 <h5>Uw bestelling!</h5>
@@ -48,24 +59,42 @@ const MiniCart = () => {
                 {cartItems.map((item, key) => (
                     <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`} key={key}>
                         <a href="#." className="remove remove_from_cart_button" data-testid={`remove-from-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`} aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
-                        {/* <Link href="/product"> */}
                         <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
                         {item.title}
-                        {/* </Link> */}
-                        <span className="quantity">{item.quantity} × <span className="woocommerce-Price-amount amount"><bdi><span className="woocommerce-Price-currencySymbol">{item.currency}</span>{item.price}</bdi></span></span>
+                        {item.selectedOptions && item.selectedOptions.length > 0 && (
+                            <div className="text-sm text-gray-500 mt-1">
+                                {item.selectedOptions.map((opt, idx) => (
+                                    <span key={idx}>{opt.name}: {opt.value}{idx < item.selectedOptions!.length - 1 ? ', ' : ''}</span>
+                                ))}
+                            </div>
+                        )}
+                        <span className="quantity">{item.quantity} × <span className="woocommerce-Price-amount amount">
+                            <bdi>
+                                <span className="text-nacho-500">
+                                    <span className="woocommerce-Price-currencySymbol">{item.currency}</span>
+                                    {(item.price * 0.9).toFixed(2)}
+                                </span>
+                            </bdi>
+                        </span></span>
                     </li>
                 ))}
             </ul>
             <p className="woocommerce-mini-cart__total total">
-                <strong>Totaal:</strong> <span className="woocommerce-Price-amount amount"><bdi><span className="woocommerce-Price-currencySymbol">€</span>{cartTotal.toFixed(2)}</bdi></span>
+                <strong>Totaal:</strong> <span className="woocommerce-Price-amount amount">
+                    <bdi>
+                        <span className="text-nacho-500">
+                            <span className="woocommerce-Price-currencySymbol">€</span>
+                            {(cartTotal * 0.9).toFixed(2)}
+                        </span>
+                    </bdi>
+                </span>
             </p>
             <p className="woocommerce-mini-cart__buttons buttons">
-                {/* <Link href="/cart" className="tst-btn tst-btn-2">Bekijk bestelling</Link> */}
                 {cartItems.length > 0 && (
                     <Link href="/checkout" className="tst-btn" data-testid="go-to-checkout-button">Afrekenen</Link>
                 )}
             </p>
-        </>
+        </div>
     );
 };
 export default MiniCart;

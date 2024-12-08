@@ -22,6 +22,7 @@ const ReservationForm = () => {
                     time: values.time,
                     number_of_people: values.person,
                     message: values.message,
+                    phone_number: values.phone,
                     restaurant_id: selectedRestaurant?.id
                 });
 
@@ -95,7 +96,7 @@ const ReservationForm = () => {
                                         type="text"
                                         placeholder="Familienaam"
                                         name="lastname"
-                                        required={true}
+                                        className={errors.lastname && touched.lastname ? 'error' : ''}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.lastname}
@@ -105,13 +106,13 @@ const ReservationForm = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="col-6 col-md-4">
+                            <div className="col-12 col-md-4">
                                 <div className="tst-group-input">
                                     <input
                                         type="email"
                                         placeholder="Email"
                                         name="email"
-                                        required={true}
+                                        className={errors.email && touched.email ? 'error' : ''}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.email}
@@ -121,10 +122,16 @@ const ReservationForm = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="col-6 col-md-4">
+                            <div className="col-6 col-md-3">
                                 <div className="tst-group-input">
-                                    <select name="person" className="wide" onChange={handleChange} onBlur={handleBlur} value={values.person}>
-                                        <option>Aantal Personen</option>
+                                    <select 
+                                        name="person" 
+                                        className={errors.person && touched.person ? 'error wide' : 'wide'} 
+                                        onChange={handleChange} 
+                                        onBlur={handleBlur} 
+                                        value={values.person}
+                                    >
+                                        <option value="">Aantal Personen</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -137,12 +144,12 @@ const ReservationForm = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="col-6 col-md-4">
+                            <div className="col-6 col-md-3">
                                 <div className="tst-group-input">
                                     <input
                                         type="date"
                                         name="date"
-                                        required={true}
+                                        className={errors.date && touched.date ? 'error' : ''}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.date}
@@ -152,20 +159,45 @@ const ReservationForm = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="col-6 col-md-4">
+                            <div className="col-6 col-md-3">
                                 <div className="tst-group-input">
-                                    <select name="time" className="wide" onChange={handleChange} onBlur={handleBlur} value={values.time}>
-                                        <option>Tijd</option>
-                                        <option value="5:00pm">17:00</option>
-                                        <option value="6:00pm">18:00</option>
-                                        <option value="7:00pm">19:00</option>
-                                        <option value="8:00pm">20:00</option>
-                                        <option value="9:00pm">21:00</option>
-                                        <option value="10:00pm">22:00</option>
-                                        <option value="11:00pm">23:00</option>
+                                    <select 
+                                        name="time" 
+                                        className={errors.time && touched.time ? 'error wide' : 'wide'} 
+                                        onChange={handleChange} 
+                                        onBlur={handleBlur} 
+                                        value={values.time}
+                                    >
+                                        <option value="">Tijdstip</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="18:30">18:30</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="19:30">19:30</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="20:30">20:30</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="21:30">21:30</option>
                                     </select>
                                     {errors.time && touched.time && (
                                         <div className="error-message">{errors.time}</div>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="col-6 col-md-3">
+                                <div className="tst-group-input">
+                                    <input
+                                        type="tel"
+                                        placeholder="Telefoonnummer"
+                                        name="phone"
+                                        className={errors.phone && touched.phone ? 'error' : ''}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.phone}
+                                    />
+                                    {errors.phone && touched.phone && (
+                                        <div className="error-message">{errors.phone}</div>
                                     )}
                                 </div>
                             </div>

@@ -163,6 +163,7 @@ export type Database = {
           id: string
           message: string | null
           number_of_people: number
+          phone_number: string | null
           restaurant_id: string | null
           time: string
         }
@@ -174,6 +175,7 @@ export type Database = {
           id?: string
           message?: string | null
           number_of_people: number
+          phone_number?: string | null
           restaurant_id?: string | null
           time: string
         }
@@ -185,6 +187,7 @@ export type Database = {
           id?: string
           message?: string | null
           number_of_people?: number
+          phone_number?: string | null
           restaurant_id?: string | null
           time?: string
         }

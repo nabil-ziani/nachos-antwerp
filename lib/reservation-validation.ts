@@ -8,6 +8,7 @@ export interface ReservationFormValues {
     date: string;
     person: string;
     message: string;
+    phone: string;
 }
 
 export const defaultValues: ReservationFormValues = {
@@ -18,6 +19,7 @@ export const defaultValues: ReservationFormValues = {
     date: '',
     person: '',
     message: '',
+    phone: '',
 };
 
 export const validateReservationForm = (values: ReservationFormValues) => {
@@ -25,6 +27,7 @@ export const validateReservationForm = (values: ReservationFormValues) => {
 
     if (!values.firstname) errors.firstname = 'Verplicht';
     if (!values.lastname) errors.lastname = 'Verplicht';
+    if (!values.phone) errors.phone = 'Verplicht';
 
     if (!values.email) {
         errors.email = 'Verplicht';

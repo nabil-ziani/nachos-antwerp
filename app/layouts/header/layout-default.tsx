@@ -66,8 +66,11 @@ const Header = () => {
                                 Reservatie</a>
                             <div className="tst-minicart">
                                 <a href="#." className={`tst-cart ${miniCart ? "tst-active" : ""}`} data-testid="open-cart-button" onClick={(e) => {
-                                    setMiniCart(!miniCart)
-                                    e.preventDefault()
+                                    console.log('Cart clicked, current miniCart state:', miniCart);
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setMiniCart(!miniCart);
+                                    console.log('New miniCart state:', !miniCart);
                                 }}>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
                                         <path
@@ -76,7 +79,7 @@ const Header = () => {
                                     <div className="tst-cart-number" data-testid="cart-amount">{cartItems.reduce((total, item) => total + item.quantity, 0)}</div>
                                 </a>
 
-                                <div className={`tst-minicart-window ${miniCart ? "tst-active" : ""}`}>
+                                <div className={`tst-minicart-window ${miniCart ? "tst-active" : ""}`} style={{ zIndex: 1000 }}>
                                     <MiniCart />
                                 </div>
                             </div>

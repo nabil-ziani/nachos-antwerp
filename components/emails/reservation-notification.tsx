@@ -20,6 +20,7 @@ interface ReservationNotificationEmailProps {
         time: string;
         person: string;
         message: string;
+        phone: string;
     };
 }
 
@@ -53,6 +54,9 @@ export const ReservationNotificationEmail = ({ reservation }: ReservationNotific
                             <Heading as="h2" style={subheading}>Details</Heading>
                             <Text style={infoText}>
                                 {reservation.firstname} {reservation.lastname} heeft een reservering gemaakt voor {reservation.date} om {reservation.time} voor {reservation.person} personen.
+                            </Text>
+                            <Text style={infoText}>
+                                Telefoonnummer: {reservation.phone}
                             </Text>
                             <Hr style={divider} />
                             <Text style={subText}>
