@@ -11,8 +11,9 @@ import PromoVideoSection from "@/components/sections/promo-video"
 import FeaturesSection from "@/components/sections/features"
 import ScheduleSection from "@/components/sections/schedule"
 import CountersSection from "@/components/sections/counters"
-import CallToActionFourSection from "@/components/sections/call-to-action-four"
+import CallToActionSection from "@/components/sections/call-to-action"
 import SubscribeSection from "@/components/sections/subscribe"
+import CallToActionFourSection from "@/components/sections/call-to-action-four"
 
 const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"));
 
