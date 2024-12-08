@@ -47,7 +47,10 @@ const CartSummary = () => {
                                     </Link>
                                 </div>
                                 <div className="col-lg-3 text-md-right">
-                                    <div className="tst-price-2"><span>Totaal: </span>{item.currency}{item.price}</div>
+                                    <div className="tst-price-2">
+                                        <span>Totaal: </span>
+                                        {item.currency}{(item.price * (item.quantity || 1)).toFixed(2)}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -67,50 +70,38 @@ const CartSummary = () => {
 
                         <div className="tst-discount-section">
                             <div className="tst-discount-code">
-                                <div className="row">
-                                    <div className="col-5">
-                                        <div className="tst-total-title">Kortingscode:</div>
-                                    </div>
-                                    <div className="col-7">
-                                        <div className="tst-code-display text-right">
-                                            <span className="tst-code">WEBSITE</span>
-                                            <span className="tst-discount-badge">- €{(cartTotal * 0.1).toFixed(2)}</span>
-                                        </div>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div className="tst-total-title">Kortingscode:</div>
+                                    <div className="tst-code-display text-right">
+                                        <span className="tst-code">WEBSITE</span>
+                                        <span className="tst-discount-badge">- €{(cartTotal * 0.1).toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>
                             {tacoTuesdayDiscount > 0 && (
                                 <div className="tst-discount-amount">
-                                    <div className="row">
-                                        <div className="col-7">
-                                            <div className="tst-total-title">
-                                                <GiTacos size={18} />
-                                                {"  "}Taco Tuesday:
-                                            </div>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div className="tst-total-title">
+                                            <GiTacos size={18} />
+                                            {"  "}Taco Tuesday:
                                         </div>
-                                        <div className="col-5">
-                                            <div className="tst-price-2 text-right text-nacho-500">- €{tacoTuesdayDiscount.toFixed(2)}</div>
-                                        </div>
+                                        <div className="tst-price-2 text-right text-nacho-500">- €{tacoTuesdayDiscount.toFixed(2)}</div>
                                     </div>
                                 </div>
                             )}
                         </div>
 
                         <div className="tst-realy-sum">
-                            <div className="row">
-                                <div className="col-6">
-                                    <div className="tst-total-title">Totaal:</div>
-                                </div>
-                                <div className="col-6">
-                                    <div className="tst-price-2 text-right">€{(cartTotal * 0.9 - tacoTuesdayDiscount).toFixed(2)}</div>
-                                </div>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div className="tst-total-title">Totaal:</div>
+                                <div className="tst-price-2 text-right">€{(cartTotal * 0.9 - tacoTuesdayDiscount).toFixed(2)}</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {isTuesday() && (
+            {isTuesday() && showTacoReminder && (
                 <div className="tst-cart-promo">
                     <div className="tst-cart-promo__icon">
                         <GiTacos size={24} />
@@ -119,15 +110,9 @@ const CartSummary = () => {
                         <div className="tst-cart-promo__title">
                             Taco Tuesday
                         </div>
-                        {showTacoReminder ? (
-                            <div className="tst-cart-promo__message">
-                                Voeg 2 taco's aan je winkelmand toe om te genieten van de 1+1 gratis promo!
-                            </div>
-                        ) : tacoTuesdayDiscount > 0 ? (
-                            <div className="tst-cart-promo__message">
-                                Taco Tuesday korting toegepast!
-                            </div>
-                        ) : null}
+                        <div className="tst-cart-promo__message">
+                            Voeg 2 taco's aan je winkelmand toe om te genieten van de 1+1 gratis promo!
+                        </div>
                     </div>
                 </div>
             )}
