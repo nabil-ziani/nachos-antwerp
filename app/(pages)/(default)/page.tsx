@@ -11,6 +11,7 @@ import ScheduleSection from "@/components/sections/schedule"
 import CountersSection from "@/components/sections/counters"
 import CallToActionSection from "@/components/sections/call-to-action"
 import SubscribeSection from "@/components/sections/subscribe"
+import CallToActionTacoSection from "@/components/sections/call-to-action-taco"
 
 const HeroSlider = dynamic(() => import("@/components/sliders/hero"))
 const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"))
@@ -43,7 +44,7 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-        <CallToActionSection />
+        <CallToActionTacoSection />
         <div className="tst-content-frame">
           <div className="tst-content-box">
             <div className="container tst-p-60-60">
