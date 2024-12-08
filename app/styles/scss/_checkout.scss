@@ -259,6 +259,8 @@
         border-bottom: 1px solid rgba(26, 47, 51, 0.1);
 
         .tst-total-title {
+            display: flex;
+            gap: 8px;
             font-size: 14px;
             color: #1a2f33;
             opacity: 0.8;
@@ -274,7 +276,7 @@
             padding: 8px 12px;
             border-radius: 5px;
             box-shadow: 0 2px 5px 0 rgba(26, 47, 51, 0.05);
-            
+
             .tst-code {
                 font-family: var(--font-josefin_sans);
                 font-weight: 600;
@@ -282,7 +284,7 @@
                 color: #1a2f33;
                 font-size: 14px;
             }
-            
+
             .tst-discount-badge {
                 background-color: #1a2f33;
                 color: #fff;
@@ -295,7 +297,7 @@
 
         .tst-discount-amount {
             margin-top: 10px;
-            
+
             .tst-price-2 {
                 color: #1a2f33;
                 opacity: 0.8;
@@ -303,4 +305,58 @@
             }
         }
     }
+}
+
+.tst-cart-promo {
+    background: rgb(229, 235, 239);
+    padding: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &__icon {
+        background: var(--tst-primary);
+        color: var(--tst-white);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    &__content {
+        flex-grow: 1;
+    }
+
+    &__title {
+        font-weight: 600;
+        color: var(--tst-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    &__message {
+        font-size: 0.875rem;
+        color: var(--tst-dark);
+        line-height: 1.4;
+    }
+}
+
+.tst-cart-summary {
+    &__row {
+        &--discount {
+            color: var(--tst-primary);
+            font-weight: 500;
+        }
+    }
+}
+
+.tst-cart-box {
+    background: var(--tst-white);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: var(--tst-shadow-1);
 }
