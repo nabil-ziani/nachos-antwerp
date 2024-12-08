@@ -12,6 +12,8 @@ import CountersSection from "@/components/sections/counters"
 import CallToActionSection from "@/components/sections/call-to-action"
 import SubscribeSection from "@/components/sections/subscribe"
 import CallToActionTacoSection from "@/components/sections/call-to-action-taco"
+import ContactFormSection from "@/components/sections/contact-form";
+import ReservationSection from "@/components/sections/reservation-form"
 
 const HeroSlider = dynamic(() => import("@/components/sliders/hero"))
 const TestimonialSlider = dynamic(() => import("@/components/sliders/testimonial"))
@@ -39,18 +41,30 @@ export default async function HomePage() {
               <FeaturesSection />
               <Divider />
               <ScheduleSection />
-              <Divider onlyBottom={0} />
-              <CountersSection />
+              {/*<Divider onlyBottom={0} />
+              <CountersSection />*/}
             </div>
           </div>
         </div>
-        <CallToActionTacoSection />
+
+        <CallToActionSection />
+
         <div className="tst-content-frame">
           <div className="tst-content-box">
             <div className="container tst-p-60-60">
               <TestimonialSlider />
-              <Divider onlyBottom={0} />
-              <SubscribeSection />
+            </div>
+          </div>
+        </div>
+
+        <CallToActionTacoSection />
+
+        <div className="tst-content-frame">
+          <div className="tst-content-box">
+            <div className="container tst-p-60-60">
+              <ReservationSection />
+              {/*<Divider onlyBottom={0} />
+              <SubscribeSection />*/}
             </div>
           </div>
         </div>
