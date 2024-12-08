@@ -9,7 +9,6 @@ const MiniCart = () => {
     const miniCartRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        console.log('MiniCart mounted');
         const cartNumberEl = document.querySelector('.tst-cart-number')
 
         if (cartNumberEl) {
@@ -19,7 +18,6 @@ const MiniCart = () => {
     }, [cartTotal])
 
     useEffect(() => {
-        console.log('Setting up click outside handler');
         const handleClickOutside = (event: MouseEvent) => {
             // Ignore clicks on the cart button itself
             if ((event.target as Element).closest('.tst-cart')) {
@@ -28,7 +26,6 @@ const MiniCart = () => {
 
             // Check if click is outside the mini-cart
             if (miniCartRef.current && !miniCartRef.current.contains(event.target as Node)) {
-                console.log('Click outside detected, closing mini-cart');
                 setMiniCart(false);
             }
         };
@@ -37,7 +34,6 @@ const MiniCart = () => {
         document.addEventListener('mousedown', handleClickOutside as any);
 
         return () => {
-            console.log('Cleaning up click outside handler');
             document.removeEventListener('mousedown', handleClickOutside as any);
         };
     }, [setMiniCart]);
@@ -48,7 +44,6 @@ const MiniCart = () => {
         removeFromCart(itemId)
     }
 
-    console.log('MiniCart rendering, items:', cartItems.length);
     return (
         <div ref={miniCartRef}>
             <div className="tst-minicart-header">
@@ -61,13 +56,6 @@ const MiniCart = () => {
                         <a href="#." className="remove remove_from_cart_button" data-testid={`remove-from-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`} aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
                         <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
                         {item.title}
-                        {item.selectedOptions && item.selectedOptions.length > 0 && (
-                            <div className="text-sm text-gray-500 mt-1">
-                                {item.selectedOptions.map((opt, idx) => (
-                                    <span key={idx}>{opt.name}: {opt.value}{idx < item.selectedOptions!.length - 1 ? ', ' : ''}</span>
-                                ))}
-                            </div>
-                        )}
                         <span className="quantity">{item.quantity} × <span className="woocommerce-Price-amount amount">
                             <bdi>
                                 <span className="text-nacho-500">
