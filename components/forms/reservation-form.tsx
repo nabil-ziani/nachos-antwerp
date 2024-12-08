@@ -79,6 +79,7 @@ const ReservationForm = () => {
                             <div className="col-6 col-md-4">
                                 <div className="tst-group-input">
                                     <input
+                                        required={true}
                                         type="text"
                                         placeholder="Voornaam"
                                         name="firstname"
@@ -95,6 +96,7 @@ const ReservationForm = () => {
                             <div className="col-6 col-md-4">
                                 <div className="tst-group-input">
                                     <input
+                                        required={true}
                                         type="text"
                                         placeholder="Familienaam"
                                         name="lastname"
@@ -111,6 +113,7 @@ const ReservationForm = () => {
                             <div className="col-12 col-md-4">
                                 <div className="tst-group-input">
                                     <input
+                                        required={true}
                                         type="email"
                                         placeholder="Email"
                                         name="email"
@@ -126,11 +129,12 @@ const ReservationForm = () => {
                             </div>
                             <div className="col-6 col-md-3">
                                 <div className="tst-group-input">
-                                    <select 
-                                        name="person" 
-                                        className={errors.person && touched.person ? 'error wide' : 'wide'} 
-                                        onChange={handleChange} 
-                                        onBlur={handleBlur} 
+                                    <select
+                                        required={true}
+                                        name="person"
+                                        className={errors.person && touched.person ? 'error wide' : 'wide'}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
                                         value={values.person}
                                     >
                                         <option value="">Aantal Personen</option>
@@ -149,6 +153,7 @@ const ReservationForm = () => {
                             <div className="col-6 col-md-3">
                                 <div className="tst-group-input">
                                     <input
+                                        required={true}
                                         type="date"
                                         name="date"
                                         className={errors.date && touched.date ? 'error' : ''}
@@ -163,11 +168,12 @@ const ReservationForm = () => {
                             </div>
                             <div className="col-6 col-md-3">
                                 <div className="tst-group-input">
-                                    <select 
-                                        name="time" 
-                                        className={errors.time && touched.time ? 'error wide' : 'wide'} 
-                                        onChange={handleChange} 
-                                        onBlur={handleBlur} 
+                                    <select
+                                        required={true}
+                                        name="time"
+                                        className={errors.time && touched.time ? 'error wide' : 'wide'}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
                                         value={values.time}
                                     >
                                         <option value="">Tijdstip</option>
@@ -190,6 +196,7 @@ const ReservationForm = () => {
                             <div className="col-6 col-md-3">
                                 <div className="tst-group-input">
                                     <input
+                                        required={true}
                                         type="tel"
                                         placeholder="Telefoonnummer"
                                         name="phone"
@@ -220,10 +227,16 @@ const ReservationForm = () => {
                                 </div>
                             </div>
                         </div>
-                        <button className="tst-btn" type="submit" name="button" disabled={!isValid || isSubmitting}>
-                            <span>{isSubmitting ? 'Laden...' : 'Reserveer Tafel'}</span>
-                            {isSubmitting && <div className="spinner" />}
-                        </button>
+                        <div className="col-12">
+                            <button
+                                type="submit"
+                                className="tst-btn tst-btn-md"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Laden...' : 'Reserveer nu'}
+                                {isSubmitting && <div className="spinner" />}
+                            </button>
+                        </div>
 
                         <div id="reservationFormStatus" className="tst-form-status"></div>
                     </form>
