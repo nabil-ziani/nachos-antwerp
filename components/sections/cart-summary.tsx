@@ -50,13 +50,50 @@ const CartSummary = () => {
                     ))}
 
                     <div className="tst-cart-total tst-cart-total-2">
+                        <div className="tst-subtotal">
+                            <div className="row">
+                                <div className="col-6">
+                                    <div className="tst-total-title">Subtotaal:</div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="tst-price-2 text-right">€{cartTotal.toFixed(2)}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="tst-discount-section">
+                            <div className="tst-discount-code">
+                                <div className="row">
+                                    <div className="col-6">
+                                        <div className="tst-total-title">Kortingscode:</div>
+                                    </div>
+                                    <div className="col-6">
+                                        <div className="tst-code-display text-right">
+                                            <span className="tst-code">WEBSITE</span>
+                                            <span className="tst-discount-badge">-10%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="tst-discount-amount">
+                                <div className="row">
+                                    <div className="col-6">
+                                        <div className="tst-total-title">Korting:</div>
+                                    </div>
+                                    <div className="col-6">
+                                        <div className="tst-price-2 text-right text-nacho-500">- €{(cartTotal * 0.1).toFixed(2)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="tst-realy-sum">
                             <div className="row">
                                 <div className="col-6">
                                     <div className="tst-total-title">Totaal:</div>
                                 </div>
                                 <div className="col-6">
-                                    <div className="tst-price-2 text-right">€{cartTotal.toFixed(2)}</div>
+                                    <div className="tst-price-2 text-right">€{(cartTotal * 0.9).toFixed(2)}</div>
                                 </div>
                             </div>
                         </div>

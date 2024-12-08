@@ -36,12 +36,12 @@
         },
         {
             "title": "Bestel Online",
-            "subtitle": "Takeaway & Levering",
+            "subtitle": "10% Korting op je bestelling",
             "image": {
                 "url": "/img/banners/banner-3.jpg",
                 "alt": "cover"
             },
-            "text": "Geniet van onze authentieke Mexicaanse gerechten <br>bij je thuis of haal ze af in ons restaurant!",
+            "text": "Geniet van onze authentieke Mexicaanse gerechten<br>met 10% korting bij afhaal of online bestellen!",
             "button1": {
                 "link": "/contact",
                 "label": "Vind Ons"
