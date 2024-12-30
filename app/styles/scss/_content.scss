@@ -315,9 +315,7 @@ call to action
     margin: 0 auto;
 
     @media (max-width: 991px) {
-      width: 280px;
-      height: 280px;
-      margin: 20px auto;
+      display: none;
     }
 
     &__icon {
@@ -396,6 +394,10 @@ call to action
       text-align: center;
       height: auto;
       padding: 60px 0;
+    }
+
+    & .tst-cta {
+      padding: 0 20px;
     }
   }
 }

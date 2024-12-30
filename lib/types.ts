@@ -1,5 +1,29 @@
 import { Tables } from "@/types/database.types"
 
+export type VariationOption = {
+    name: string
+    price?: number
+    isVegetarian?: boolean
+    isVegan?: boolean
+    isGlutenFree?: boolean
+    quantity?: number
+}
+
+export type VariationGroup = {
+    title: string
+    description?: string
+    type: 'single' | 'multiple'
+    required?: boolean
+    options: VariationOption[]
+    maxSelections?: number
+}
+
+export type CartItemVariation = {
+    name: string
+    price?: number
+    quantity: number
+}
+
 export type CartItem = {
     itemId: string
     title: string
@@ -8,6 +32,10 @@ export type CartItem = {
     quantity: number
     price: number
     currency: string
+    selectedVariations?: {
+        [groupTitle: string]: CartItemVariation[]
+    }
+    variations?: VariationGroup[]
 }
 
 export type MenuCategory = Tables<'menu_categories'>
@@ -31,6 +59,10 @@ export type MenuItemWithCategory = {
     currency: string
     image_url: string
     extra_info: string
+    variations?: {
+        name: string
+        price?: number
+    }[]
     category: MenuCategory
 }
 

@@ -53,7 +53,8 @@ const MenuFiltered = ({ heading = 0, categories, items }: MenuFilteredProps) => 
                                                 image: item.image_url,
                                                 price: item.price,
                                                 currency: item.currency,
-                                                quantity: 1
+                                                quantity: 1,
+                                                variations: item.variations
                                             }} />
                                         </div>
                                     ))}

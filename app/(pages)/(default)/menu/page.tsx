@@ -51,11 +51,14 @@ async function getMenu() {
 
     const { data: menu_items, error: menu_items_err } = await supabase
         .from('menu_items')
-        .select(`*, category(*)`)
+        .select(`
+            *,
+            category(*)
+        `)
         .returns<MenuItemWithCategory[]>()
 
     if (menu_items_err) {
-        console.error('Error fetching menu items:', menu_items_err);
+        console.error('Error fetching menu items:', menu_items_err)
     }
 
     const { data: menu_categories, error: menu_categories_err } = await supabase
@@ -64,8 +67,14 @@ async function getMenu() {
         .returns<Tables<'menu_categories'>[]>()
 
     if (menu_categories_err) {
-        console.error('Error fetching menu categories:', menu_categories_err);
+        console.error('Error fetching menu categories:', menu_categories_err)
     }
+
+    // For debugging
+    console.log('Menu items with variations:', menu_items?.map(item => ({
+        title: item.title,
+        variations: item.variations
+    })))
 
     return { menu_items, menu_categories }
 }
