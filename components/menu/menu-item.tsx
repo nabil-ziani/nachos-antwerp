@@ -204,9 +204,9 @@ const MenuItem = ({ item }: { item: CartItem }) => {
                             }}
                           >
                             <span className="tst-variation-name">{option.name}</span>
-                            {option.price && option.price > 0 && (
-                              <span className="tst-price-badge">€{option.price.toFixed(2)}</span>
-                            )}
+                            {(option.price && option.price > 0) ? (
+                              <span className="tst-price-badge">+ €{option.price.toFixed(2)}</span>
+                            ) : null}
                           </button>
 
                           {group.type === 'multiple' && (
