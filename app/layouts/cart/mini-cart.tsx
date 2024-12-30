@@ -74,37 +74,67 @@ const MiniCart = () => {
                 <h5>Uw bestelling!</h5>
             </div>
             <ul className="woocommerce-mini-cart cart_list product_list_widget" data-testid="mini-cart">
-                {cartItems.map((item, key) => (
-                    <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`} key={key}>
-                        <a href="#." className="remove remove_from_cart_button" data-testid={`remove-from-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`} aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
-                        <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
-                        <div className="tst-cart-item-details">
-                            <div className="tst-cart-item-title">{item.title}</div>
-                            <div className="tst-cart-item-variations">
-                                {renderVariations(item)}
+                {cartItems.length === 0 ? (
+                    <div className="empty-cart-message">
+                        <p>Uw winkelmand is leeg</p>
+                    </div>
+                ) : (
+                    cartItems.map((item, key) => (
+                        <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`} key={key}>
+                            <a href="#." className="remove remove_from_cart_button" data-testid={`remove-from-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`} aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
+                            <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
+                            <div className="tst-cart-item-details">
+                                <div className="tst-cart-item-title">{item.title}</div>
+                                <div className="tst-cart-item-variations">
+                                    {renderVariations(item)}
+                                </div>
+                                <span className="quantity">{item.quantity} × <span className="woocommerce-Price-amount amount">
+                                    <bdi>
+                                        <span className="text-nacho-500">
+                                            <span className="woocommerce-Price-currencySymbol">{item.currency}</span>
+                                            {(item.price + (item.selectedVariations ? Object.values(item.selectedVariations).flat().reduce((total, variation) => total + (variation.price || 0) * (variation.quantity || 1), 0) : 0)).toFixed(2)}
+                                        </span>
+                                    </bdi>
+                                </span></span>
                             </div>
-                            <span className="quantity">{item.quantity} × <span className="woocommerce-Price-amount amount">
-                                <bdi>
-                                    <span className="text-nacho-500">
-                                        <span className="woocommerce-Price-currencySymbol">{item.currency}</span>
-                                        {(item.price + (item.selectedVariations ? Object.values(item.selectedVariations).flat().reduce((total, variation) => total + (variation.price || 0) * (variation.quantity || 1), 0) : 0)).toFixed(2)}
-                                    </span>
-                                </bdi>
-                            </span></span>
-                        </div>
-                    </li>
-                ))}
+                        </li>
+                    ))
+                )}
             </ul>
-            <p className="woocommerce-mini-cart__total total">
-                <strong>Totaal:</strong> <span className="woocommerce-Price-amount amount">
-                    <bdi>
-                        <span className="text-nacho-500">
-                            <span className="woocommerce-Price-currencySymbol">€</span>
-                            {(cartTotal * 0.9).toFixed(2)}
+            {cartItems.length > 0 && (
+                <>
+                    <p className="woocommerce-mini-cart__total subtotal">
+                        <strong>Subtotaal:</strong> <span className="woocommerce-Price-amount amount">
+                            <bdi>
+                                <span className="text-nacho-500">
+                                    <span className="woocommerce-Price-currencySymbol">€</span>
+                                    {cartTotal.toFixed(2)}
+                                </span>
+                            </bdi>
                         </span>
-                    </bdi>
-                </span>
-            </p>
+                    </p>
+                    <p className="woocommerce-mini-cart__total discount">
+                        <strong>Korting (10%):</strong> <span className="woocommerce-Price-amount amount">
+                            <bdi>
+                                <span className="text-nacho-500">
+                                    <span className="woocommerce-Price-currencySymbol">- €</span>
+                                    {(cartTotal * 0.1).toFixed(2)}
+                                </span>
+                            </bdi>
+                        </span>
+                    </p>
+                    <p className="woocommerce-mini-cart__total total">
+                        <strong>Totaal:</strong> <span className="woocommerce-Price-amount amount">
+                            <bdi>
+                                <span className="text-nacho-500">
+                                    <span className="woocommerce-Price-currencySymbol">€</span>
+                                    {(cartTotal * 0.9).toFixed(2)}
+                                </span>
+                            </bdi>
+                        </span>
+                    </p>
+                </>
+            )}
             <p className="woocommerce-mini-cart__buttons buttons">
                 {cartItems.length > 0 && (
                     <button

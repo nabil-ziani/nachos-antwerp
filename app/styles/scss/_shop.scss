@@ -57,6 +57,17 @@ minicart
     max-height: 400px;
     box-shadow: inset 0 5px 5px 0 rgba(26, 47, 51, 0.05);
 
+    .empty-cart-message {
+      text-align: center;
+      padding: 30px 0;
+
+      p {
+        margin: 0;
+        font-size: 16px;
+        color: variables.$dl1t;
+      }
+    }
+
     & .woocommerce-mini-cart-item {
       width: 100%;
       display: flex;
@@ -131,12 +142,29 @@ minicart
   }
 
   & .woocommerce-mini-cart__total {
-    border-top: solid 1px rgba(26, 47, 51, 0.05);
-    padding: 30px 30px 15px;
     margin: 0;
-    text-align: center;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f2f3f5;
+
+    &.subtotal {
+      border-top: 1px solid #f2f3f5;
+      padding: 15px 30px 5px;
+    }
+
+    &.discount {
+      padding: 5px 30px;
+      border-top: none;
+      color: variables.$ac;
+    }
+
+    &.total {
+      border-top: 2px solid #f2f3f5;
+      padding: 15px 30px;
+      font-weight: 600;
+    }
 
     & strong {
       text-transform: uppercase;
