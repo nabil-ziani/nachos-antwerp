@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { PaymentResult } from '@/components/payment-result'
 import { useRestaurant } from '@/contexts/restaurant-context'
+import { sendWhatsAppNotification } from '@/utils/whatsapp'
 
 interface OrderDetails {
     order_id: string
@@ -85,11 +86,21 @@ export default function OrderConfirmationPage({ params }: { params: Promise<{ or
                                 }
                             })
                         })
+
+                        await sendWhatsAppNotification({
+                            orderId: data.order_id,
+                            customerName: data.customer_name,
+                            customerPhone: data.customer_phone,
+                            deliveryMethod: data.delivery_method,
+                            totalAmount: data.amount,
+                            items: data.order_items
+                        })
+
                         setEmailSent(true)
                         localStorage.setItem(emailKey, 'true')
                         localStorage.removeItem('cart-storage')
                     } catch (error) {
-                        console.error('Failed to send confirmation email:', error)
+                        console.error('Failed to send notifications:', error)
                     }
                 }
             }
