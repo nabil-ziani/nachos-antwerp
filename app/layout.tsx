@@ -1,6 +1,8 @@
 import { Josefin_Sans, Playfair_Display } from 'next/font/google'
 import { RestaurantProvider } from '@/contexts/restaurant-context'
 import { PaymentProvider } from '@/contexts/payment-context'
+import { Suspense } from 'react'
+import Loading from './loading'
 
 const josefin_sans = Josefin_Sans({
   weight: ['100', '200', '300', '400', '500', '600', '700'],
@@ -51,7 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RestaurantProvider>
           <PaymentProvider>
             <div id="tst-app" className="tst-app">
-              {children}
+              <Suspense fallback={<Loading />}>
+                {children}
+              </Suspense>
               <ToastContainer />
             </div>
           </PaymentProvider>

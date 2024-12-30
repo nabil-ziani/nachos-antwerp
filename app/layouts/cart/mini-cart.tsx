@@ -3,8 +3,12 @@
 import { useCart } from "@/hooks/useCart";
 import Link from "next/link"
 import { useEffect, MouseEvent, useRef } from "react"
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 const MiniCart = () => {
+    const router = useRouter()
+    const [isNavigating, setIsNavigating] = useState(false)
     const { cartItems, cartTotal, removeFromCart, setMiniCart } = useCart()
     const miniCartRef = useRef<HTMLDivElement>(null);
 
@@ -44,6 +48,11 @@ const MiniCart = () => {
         removeFromCart(itemId)
     }
 
+    const handleCheckout = () => {
+        setIsNavigating(true)
+        router.push('/checkout')
+    }
+
     return (
         <div ref={miniCartRef}>
             <div className="tst-minicart-header">
@@ -79,7 +88,15 @@ const MiniCart = () => {
             </p>
             <p className="woocommerce-mini-cart__buttons buttons">
                 {cartItems.length > 0 && (
-                    <Link href="/checkout" className="tst-btn" data-testid="go-to-checkout-button">Afrekenen</Link>
+                    <button
+                        onClick={handleCheckout}
+                        className={`tst-btn ${isNavigating ? 'loading' : ''}`}
+                        disabled={isNavigating}
+                        data-testid="go-to-checkout-button"
+                    >
+                        {isNavigating ? 'Even geduld...' : 'Afrekenen'}
+                        {isNavigating && <div className="spinner" />}
+                    </button>
                 )}
             </p>
         </div>
