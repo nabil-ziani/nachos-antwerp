@@ -7,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
     try {
-        const { order, customer, restaurant } = await request.json();
+        const { order } = await request.json();
 
         const emailSubject = process.env.NODE_ENV === 'production'
             ? 'Bedankt voor je bestelling bij Nacho\'s Antwerp'
@@ -17,18 +17,18 @@ export async function POST(request: Request) {
             ? 'bestellingen@nachosantwerp.be'
             : 'dev@nachosantwerp.be';
 
-        const emailHtml = await render(OrderConfirmationEmail({ order, customer, restaurant }));
+        const emailHtml = await render(OrderConfirmationEmail({ order }));
 
         let attachments = [];
 
         // Generate invoice if company is present
-        if (customer.company) {
+        if (order.customer.company) {
             try {
                 const invoicePdf = await generateInvoice({
                     orderId: order.id,
                     company: {
-                        name: customer.company,
-                        vatNumber: customer.vatNumber
+                        name: order.customer.company,
+                        vatNumber: order.customer.vatNumber
                     },
                     items: order.items,
                     total: order.total,
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
         const data = await resend.emails.send({
             from: `Nacho's Antwerp <${fromEmail}>`,
-            to: customer.email,
+            to: order.customer.email,
             subject: emailSubject,
             html: emailHtml,
             attachments

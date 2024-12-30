@@ -12,7 +12,6 @@ interface MenuFilteredProps {
     items: MenuItemWithCategory[] | null
 }
 
-
 const MenuFiltered = ({ heading = 0, categories, items }: MenuFilteredProps) => {
     return (
         <>
@@ -54,7 +53,14 @@ const MenuFiltered = ({ heading = 0, categories, items }: MenuFilteredProps) => 
                                                 price: item.price,
                                                 currency: item.currency,
                                                 quantity: 1,
-                                                variations: item.variations
+                                                variations: item.variations ? [{
+                                                    title: 'Opties',
+                                                    type: 'single',
+                                                    options: item.variations.map(v => ({
+                                                        name: v.name,
+                                                        price: v.price
+                                                    }))
+                                                }] : undefined
                                             }} />
                                         </div>
                                     ))}
