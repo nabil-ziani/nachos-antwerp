@@ -18,7 +18,7 @@ const SubscribeSection = () => {
                             <p className="tst-text tst-white-2 tst-text-shadow tst-mb-30" dangerouslySetInnerHTML={{ __html: Data.description }} />
                             <form action={AppData.settings.mailchimp.url} method="post" target="_blank">
                                 <input type="email" placeholder="Geef je e-mailadres in" name="EMAIL" required />
-                                <button className="tst-btn" type="submit">Subscribe</button>
+                                <button className="tst-btn" type="submit">Abonneer</button>
                             </form>
                         </div>
                     </div>

@@ -70,6 +70,7 @@ async function About() {
                             <ScheduleSection />
                             <Divider onlyBottom={0} />
                             <CountersSection />
+                            <Divider onlyBottom={0} />
                         </div>
                     </div>
                 </div>
