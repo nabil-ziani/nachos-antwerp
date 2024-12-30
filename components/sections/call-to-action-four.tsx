@@ -1,5 +1,6 @@
 import Data from "@/data/sections/call-to-action-4.json";
 import Link from "next/link";
+import { BsCalendarCheck } from "react-icons/bs";
 
 const CallToActionFourSection = () => {
     return (
@@ -28,11 +29,18 @@ const CallToActionFourSection = () => {
                             {/* text end */}
 
                         </div>
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 d-flex justify-content-center">
 
-                            {/* image */}
-                            <img src={Data.image.url} alt={Data.image.alt} className="tst-cta-image tst-fade-up" />
-                            {/* image end */}
+                            {/* calendar icon */}
+                            <div className="tst-cta-discount">
+                                <div className="tst-cta-discount__icon">
+                                    <BsCalendarCheck size={200} color="#fff" />
+                                </div>
+                                <div className="tst-cta-discount__badge">
+                                    <span>RESERVEER</span>
+                                </div>
+                            </div>
+                            {/* calendar icon end */}
 
                         </div>
                     </div>
