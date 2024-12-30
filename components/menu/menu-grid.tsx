@@ -52,14 +52,7 @@ const MenuGrid = ({ categories, items, columns = 2 }: MenuGridProps) => {
                                     price: item.price,
                                     currency: item.currency,
                                     quantity: 1,
-                                    variations: item.variations ? [{
-                                        title: 'Opties',
-                                        type: 'single',
-                                        options: item.variations.map(v => ({
-                                            name: v.name,
-                                            price: v.price
-                                        }))
-                                    }] : undefined
+                                    variations: item.variations
                                 }} />
                             </div>
                         ))}

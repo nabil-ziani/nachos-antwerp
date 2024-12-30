@@ -59,10 +59,7 @@ export type MenuItemWithCategory = {
     currency: string
     image_url: string
     extra_info: string
-    variations?: {
-        name: string
-        price?: number
-    }[]
+    variations?: VariationGroup[]
     category: MenuCategory
 }
 
