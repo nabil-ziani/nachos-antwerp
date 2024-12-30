@@ -5,19 +5,40 @@ export const isTuesday = () => {
 export const getTacoTuesdayDiscount = (items: any[]) => {
     if (!isTuesday()) return 0;
 
-    // Count total number of tacos including quantities
-    const tacoCount = items
+    // Filter taco items and calculate their total prices including variations
+    const tacoItems = items
         .filter(item => item.title.toLowerCase().includes('taco'))
-        .reduce((total, item) => total + (item.quantity || 1), 0);
+        .map(item => {
+            const variationsTotal = item.selectedVariations
+                ? Object.values(item.selectedVariations).flat().reduce((total: number, variation: any) =>
+                    total + (variation.price || 0) * (variation.quantity || 1), 0)
+                : 0;
 
-    // If we have at least 2 tacos, give discount for half of them
+            return {
+                ...item,
+                totalPrice: item.price + variationsTotal,
+                quantity: item.quantity || 1
+            };
+        });
+
+    // Calculate total number of tacos
+    const tacoCount = tacoItems.reduce((total, item) => total + item.quantity, 0);
+
     if (tacoCount >= 2) {
-        const tacosToDiscount = Math.floor(tacoCount / 2);
-        const tacoItems = items
-            .filter(item => item.title.toLowerCase().includes('taco'))
-            .slice(0, 1); // We only need one item since we'll multiply by quantity
+        // Sort tacos by total price (including variations) to find the cheapest ones
+        const sortedTacos = tacoItems.flatMap(item =>
+            Array(item.quantity).fill({ ...item, singlePrice: item.totalPrice })
+        ).sort((a, b) => a.singlePrice - b.singlePrice);
 
-        return tacoItems[0].price * tacosToDiscount;
+        // Calculate how many tacos should be discounted (half of total, rounded down)
+        const tacosToDiscount = Math.floor(tacoCount / 2);
+
+        // Sum up the prices of the cheapest tacos
+        const discountAmount = sortedTacos
+            .slice(0, tacosToDiscount)
+            .reduce((total, item) => total + item.singlePrice, 0);
+
+        return discountAmount;
     }
 
     return 0;
@@ -30,6 +51,5 @@ export const shouldShowTacoTuesdayReminder = (items: any[]) => {
         .filter(item => item.title.toLowerCase().includes('taco'))
         .reduce((total, item) => total + (item.quantity || 1), 0);
 
-    console.log('tacoCount including quantities:', tacoCount);
     return tacoCount < 2;
 }; 
