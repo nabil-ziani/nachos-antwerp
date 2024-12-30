@@ -25,27 +25,37 @@ export const useCart = create<CartState>()(
             isLoading: true,
             setIsLoading: (loading) => set({ isLoading: loading }),
             addToCart: (item) => {
+                const itemTotalPrice = item.price + (item.selectedVariations ?
+                    Object.values(item.selectedVariations).flat().reduce((total, variation) =>
+                        total + (variation.price || 0) * (variation.quantity || 1), 0
+                    ) : 0);
+
                 const existingItem = get().cartItems.find(ci => ci.itemId === item.itemId);
                 if (existingItem) {
                     set({
                         cartItems: get().cartItems.map(ci =>
                             ci.itemId === item.itemId ? { ...ci, quantity: ci.quantity + 1 } : ci
                         ),
-                        cartTotal: get().cartTotal + item.price
+                        cartTotal: get().cartTotal + itemTotalPrice
                     });
                 } else {
                     set({
                         cartItems: [...get().cartItems, { ...item, quantity: 1 }],
-                        cartTotal: get().cartTotal + item.price
+                        cartTotal: get().cartTotal + itemTotalPrice
                     });
                 }
             },
             removeFromCart: (itemId) => {
                 const item = get().cartItems.find(ci => ci.itemId === itemId);
                 if (item) {
+                    const itemTotalPrice = item.price + (item.selectedVariations ?
+                        Object.values(item.selectedVariations).flat().reduce((total, variation) =>
+                            total + (variation.price || 0) * (variation.quantity || 1), 0
+                        ) : 0);
+
                     set({
                         cartItems: get().cartItems.filter(ci => ci.itemId !== itemId),
-                        cartTotal: get().cartTotal - (item.price * item.quantity)
+                        cartTotal: get().cartTotal - (itemTotalPrice * item.quantity)
                     });
                 }
             },

@@ -70,7 +70,7 @@ const CartSummary = () => {
                                 <div className="col-lg-3 text-md-right">
                                     <div className="tst-price-2">
                                         <span>Totaal: </span>
-                                        {item.currency}{(item.price * (item.quantity || 1)).toFixed(2)}
+                                        {item.currency}{((item.price + (item.selectedVariations ? Object.values(item.selectedVariations).flat().reduce((total, variation) => total + (variation.price || 0) * (variation.quantity || 1), 0) : 0)) * (item.quantity || 1)).toFixed(2)}
                                     </div>
                                 </div>
                             </div>

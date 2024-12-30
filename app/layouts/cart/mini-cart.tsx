@@ -87,7 +87,7 @@ const MiniCart = () => {
                                 <bdi>
                                     <span className="text-nacho-500">
                                         <span className="woocommerce-Price-currencySymbol">{item.currency}</span>
-                                        {(item.price * 0.9).toFixed(2)}
+                                        {(item.price + (item.selectedVariations ? Object.values(item.selectedVariations).flat().reduce((total, variation) => total + (variation.price || 0) * (variation.quantity || 1), 0) : 0)).toFixed(2)}
                                     </span>
                                 </bdi>
                             </span></span>
