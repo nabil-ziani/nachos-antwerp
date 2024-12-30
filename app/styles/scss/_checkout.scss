@@ -381,17 +381,17 @@
     .tst-cart-promo {
         margin: 1rem -1rem;
         border-radius: 0;
-        
+
         &__icon {
             width: 36px;
             height: 36px;
-            
+
             svg {
                 width: 18px;
                 height: 18px;
             }
         }
-        
+
         &__message {
             font-size: 0.8125rem;
         }
@@ -405,7 +405,7 @@
         .tst-cart-item {
             .row {
                 flex-direction: column;
-                
+
                 .col-lg-3 {
                     text-align: left;
                     margin-top: 0.5rem;
@@ -419,6 +419,43 @@
             padding: 1rem;
             margin: 1rem -1rem;
             border-radius: 0;
+        }
+    }
+}
+
+.tst-variations-summary {
+    margin: 5px 0;
+
+    .tst-variation-group {
+        margin-bottom: 8px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .tst-variation-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #64748b;
+        margin-bottom: 2px;
+
+        .tst-variation-name {
+            font-style: italic;
+        }
+
+        .tst-variation-price {
+            color: var(--tst-accent-1);
+            font-weight: 500;
+        }
+
+        .tst-variation-quantity {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
         }
     }
 }

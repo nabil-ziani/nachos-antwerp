@@ -1,10 +1,9 @@
 "use client"
 
-import { useCart } from "@/hooks/useCart";
-import Link from "next/link"
-import { useEffect, MouseEvent, useRef } from "react"
+import Link from 'next/link'
+import { useCart } from "@/hooks/useCart"
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useRef, useEffect, MouseEvent } from 'react'
 
 const MiniCart = () => {
     const router = useRouter()
@@ -23,18 +22,15 @@ const MiniCart = () => {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // Ignore clicks on the cart button itself
             if ((event.target as Element).closest('.tst-cart')) {
                 return;
             }
 
-            // Check if click is outside the mini-cart
             if (miniCartRef.current && !miniCartRef.current.contains(event.target as Node)) {
                 setMiniCart(false);
             }
         };
 
-        // Only use mousedown event to prevent conflicts
         document.addEventListener('mousedown', handleClickOutside as any);
 
         return () => {
@@ -53,6 +49,24 @@ const MiniCart = () => {
         router.push('/checkout')
     }
 
+    const renderVariations = (item: any) => {
+        if (!item.selectedVariations) return null;
+
+        return Object.entries(item.selectedVariations).map(([groupTitle, variations]: [string, any]) => (
+            variations.map((variation: any) => (
+                <div key={`${groupTitle}-${variation.name}`} className="tst-variation-info">
+                    <span className="tst-variation-name">{variation.name}</span>
+                    {variation.price > 0 && (
+                        <span className="tst-variation-price">+€{variation.price.toFixed(2)}</span>
+                    )}
+                    {variation.quantity > 1 && (
+                        <span className="tst-variation-quantity">x{variation.quantity}</span>
+                    )}
+                </div>
+            ))
+        ));
+    };
+
     return (
         <div ref={miniCartRef}>
             <div className="tst-minicart-header">
@@ -64,15 +78,20 @@ const MiniCart = () => {
                     <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`} key={key}>
                         <a href="#." className="remove remove_from_cart_button" data-testid={`remove-from-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`} aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
                         <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
-                        {item.title}
-                        <span className="quantity">{item.quantity} × <span className="woocommerce-Price-amount amount">
-                            <bdi>
-                                <span className="text-nacho-500">
-                                    <span className="woocommerce-Price-currencySymbol">{item.currency}</span>
-                                    {(item.price * 0.9).toFixed(2)}
-                                </span>
-                            </bdi>
-                        </span></span>
+                        <div className="tst-cart-item-details">
+                            <div className="tst-cart-item-title">{item.title}</div>
+                            <div className="tst-cart-item-variations">
+                                {renderVariations(item)}
+                            </div>
+                            <span className="quantity">{item.quantity} × <span className="woocommerce-Price-amount amount">
+                                <bdi>
+                                    <span className="text-nacho-500">
+                                        <span className="woocommerce-Price-currencySymbol">{item.currency}</span>
+                                        {(item.price * 0.9).toFixed(2)}
+                                    </span>
+                                </bdi>
+                            </span></span>
+                        </div>
                     </li>
                 ))}
             </ul>

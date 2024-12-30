@@ -5,137 +5,129 @@ import {
     Heading,
     Hr,
     Html,
-    Link,
     Preview,
     Section,
-    Text
+    Text,
+    Row,
+    Column
 } from '@react-email/components';
 import { Font } from './custom-font';
 
 interface OrderConfirmationEmailProps {
     order: {
-        id: string;
-        type: 'delivery' | 'pickup';
-        status: string;
-        items: Array<{
-            title: string;
-            quantity: number;
-            price: number;
-            options?: string;
-        }>;
+        items: any[];
         total: number;
-        paymentMethod: string;
-        paymentStatus: string;
-    };
-    customer: {
-        name?: string;
-        address?: string;
-    };
-    restaurant: {
-        name: string;
-        address: string;
+        customer: {
+            name: string;
+            email: string;
+            address: string;
+            postcode: string;
+            city: string;
+            message?: string;
+        };
+        delivery_method: string;
+        payment_method: string;
     };
 }
 
-export function OrderConfirmationEmail({ order, customer, restaurant }: OrderConfirmationEmailProps) {
+const renderVariations = (item: any) => {
+    if (!item.selectedVariations) return null;
+
+    return Object.entries(item.selectedVariations).map(([groupTitle, variations]: [string, any]) => (
+        variations.map((variation: any) => (
+            <Text key={`${groupTitle}-${variation.name}`} style={variationStyle}>
+                {variation.name}
+                {variation.price > 0 && ` (+€${variation.price.toFixed(2)})`}
+                {variation.quantity > 1 && ` x${variation.quantity}`}
+            </Text>
+        ))
+    ));
+};
+
+export const OrderConfirmationEmail = ({ order }: OrderConfirmationEmailProps) => {
     return (
         <Html>
             <Head>
                 <Font />
             </Head>
-            <Preview>Bedankt voor je bestelling bij {restaurant.name} #{order.id}</Preview>
+            <Preview>Bedankt voor je bestelling bij Nacho's Antwerp</Preview>
             <Body style={main}>
                 <Container style={container}>
-                    {/* Order Confirmation Card */}
-                    <Section style={confirmationCard}>
-                        {/* Logo */}
+                    <Section style={notificationCard}>
                         <img
                             src="https://nachosantwerp.be/img/logo-sm.png"
                             width="100"
                             height="auto"
-                            alt={restaurant.name}
+                            alt="logo"
                             style={logo}
                         />
 
-                        {/* Greeting */}
                         <Heading style={heading}>
                             Bedankt voor je bestelling!
                         </Heading>
 
-                        <Text style={orderIdText}>
-                            Bestelling #{order.id.toUpperCase()}
+                        <Text style={subText}>
+                            {order.customer.email}
                         </Text>
 
-                        {/* Order Details Card */}
                         <Section style={detailsCard}>
-                            <Heading as="h2" style={subheading}>Overzicht bestelling</Heading>
+                            <Heading as="h2" style={subheading}>Bestelling</Heading>
                             {order.items.map((item, index) => (
-                                <div key={index} style={orderItem}>
-                                    <Text style={itemText}>
-                                        <span>
-                                            <span style={itemQuantity}>{item.quantity}x</span>
-                                            {item.title}
-                                        </span>
-                                        <span style={itemPrice}>
-                                            <span style={currencySymbol}>€</span>
-                                            {item.price.toFixed(2)}
-                                        </span>
-                                    </Text>
-                                    {item.options && (
-                                        <Text style={itemOptions}>{item.options}</Text>
-                                    )}
+                                <div key={index}>
+                                    <Row style={orderItemRow}>
+                                        <Column>
+                                            <Text style={itemTitle}>{item.title}</Text>
+                                            {renderVariations(item)}
+                                            <Text style={itemQuantity}>Aantal: {item.quantity}</Text>
+                                        </Column>
+                                        <Column align="right">
+                                            <Text style={itemPrice}>€{(item.price * item.quantity).toFixed(2)}</Text>
+                                        </Column>
+                                    </Row>
+                                    {index < order.items.length - 1 && <Hr style={itemDivider} />}
                                 </div>
                             ))}
                             <Hr style={divider} />
-                            <Text style={totalPrice}>
-                                <span>Totaal:</span>
-                                <span>€{order.total.toFixed(2)}</span>
-                            </Text>
+                            <Row style={totalRow}>
+                                <Column>
+                                    <Text style={totalLabel}>Totaal</Text>
+                                </Column>
+                                <Column align="right">
+                                    <Text style={totalAmount}>€{(order.total * 0.9).toFixed(2)}</Text>
+                                </Column>
+                            </Row>
                         </Section>
 
-                        {/* Delivery/Pickup Info Card */}
                         <Section style={detailsCard}>
-                            <Heading as="h2" style={subheading}>
-                                {order.type === 'delivery' ? 'Leveringsadres' : 'Afhaaladres'}
-                            </Heading>
+                            <Heading as="h2" style={subheading}>Bezorggegevens</Heading>
                             <Text style={infoText}>
-                                {order.type === 'delivery' && customer.address
-                                    ? customer.address
-                                    : restaurant.address}
+                                {order.customer.name}<br />
+                                {order.customer.address}<br />
+                                {order.customer.postcode} {order.customer.city}
                             </Text>
-                            <Text style={estimatedTimeBox}>
-                                <svg
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    style={clockIcon}
-                                >
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path d="M12 6v6l4 2" />
-                                </svg>
-                                <span style={estimatedTimeText}>
-                                    Geschatte {order.type === 'delivery' ? 'levertijd' : 'afhaaltijd'}:{' '}
-                                    {order.type === 'delivery' ? '45-60 minuten' : '30-45 minuten'}
-                                </span>
-                            </Text>
+                            {order.customer.message && (
+                                <>
+                                    <Hr style={divider} />
+                                    <Text style={messageText}>
+                                        {order.customer.message}
+                                    </Text>
+                                </>
+                            )}
                         </Section>
 
-                        {/* Contact Info */}
-                        <Text style={footerText}>
-                            Vragen over je bestelling? Contacteer ons via
-                            <br />
-                            <Link href="tel:+32467071874" style={link}>
-                                +32 467 07 18 74
-                            </Link>
-                        </Text>
+                        <Section style={detailsCard}>
+                            <Heading as="h2" style={subheading}>Bezorging & Betaling</Heading>
+                            <Text style={infoText}>
+                                Bezorgmethode: {order.delivery_method}<br />
+                                Betaalmethode: {order.payment_method}
+                            </Text>
+                        </Section>
                     </Section>
                 </Container>
             </Body>
         </Html>
     );
-}
+};
 
 // Updated styles
 const main = {
@@ -145,13 +137,12 @@ const main = {
     padding: '40px 20px',
 };
 
-
 const container = {
     margin: '0 auto',
     maxWidth: '600px',
 };
 
-const confirmationCard = {
+const notificationCard = {
     backgroundColor: '#f8fafc',
     padding: '40px 30px',
     borderRadius: '12px',
@@ -171,7 +162,12 @@ const heading = {
     fontFamily: '"Playfair Display", Georgia, "Times New Roman", serif',
 };
 
-const orderIdText = {
+const divider = {
+    borderTop: 'dotted 4px rgba(26, 47, 51, 0.2)',
+    margin: '30px 0',
+};
+
+const subText = {
     color: '#64748b',
     fontSize: '16px',
     margin: '0 0 30px',
@@ -194,57 +190,6 @@ const subheading = {
     fontFamily: '"Playfair Display", Georgia, "Times New Roman", serif',
 };
 
-const orderItem = {
-    marginBottom: '12px',
-    color: '#64748b',
-};
-
-const itemText = {
-    fontSize: '14px',
-    color: '#64748b',
-    margin: '0 0 16px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
-};
-
-const itemQuantity = {
-    marginRight: '8px',
-};
-
-const itemOptions = {
-    fontSize: '12px',
-    margin: '4px 0 0',
-    paddingLeft: '24px',
-};
-
-const itemPrice = {
-    fontSize: '14px',
-};
-
-const currencySymbol = {
-    marginRight: '2px',
-    fontSize: '12px',
-};
-
-const divider = {
-    borderTop: 'dotted 4px rgba(26, 47, 51, 0.2)',
-    margin: '30px 0',
-};
-
-const totalPrice = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0 12px',
-    fontSize: '18px',
-    fontWeight: '700',
-    color: '#1a2f33',
-    textAlign: 'right' as const,
-    margin: '0',
-    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
-};
-
 const infoText = {
     fontSize: '16px',
     color: '#1a2f33',
@@ -252,43 +197,63 @@ const infoText = {
     margin: '0 0 12px',
 };
 
-const footerText = {
+const messageText = {
+    fontSize: '16px',
+    color: '#64748b',
+    fontStyle: 'italic',
+    margin: '0',
+};
+
+const orderItemRow = {
+    margin: '0 0 12px',
+};
+
+const itemTitle = {
+    fontSize: '16px',
+    color: '#1a2f33',
+    fontWeight: '600',
+    margin: '0 0 4px',
+};
+
+const variationStyle = {
     fontSize: '14px',
     color: '#64748b',
-    margin: '30px 0 0',
+    margin: '0 0 2px 12px',
+    fontStyle: 'italic',
 };
 
-const link = {
-    color: '#f39c12',
-    textDecoration: 'none',
+const itemQuantity = {
+    fontSize: '14px',
+    color: '#64748b',
+    margin: '4px 0 0',
 };
 
-const estimatedTimeBox = {
+const itemPrice = {
     fontSize: '16px',
-    color: '#ffffff',
-    margin: '12px 0 0',
-    backgroundColor: '#f39c12',
-    borderRadius: '5px',
-    display: 'inline-flex',
-    alignItems: 'center',
-    padding: '12px 24px',
-    position: 'relative' as const,
-    fontWeight: '800',
-    letterSpacing: '1px',
-    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
-    cursor: 'default'
+    color: '#1a2f33',
+    fontWeight: '600',
+    margin: '0',
 };
 
-const estimatedTimeText = {
-    fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
-    color: '#ffffff',
-    fontWeight: '500',
-    position: 'relative' as const,
-    top: '1px'
+const itemDivider = {
+    borderTop: 'dashed 1px rgba(26, 47, 51, 0.1)',
+    margin: '12px 0',
 };
 
-const clockIcon = {
-    marginRight: '10px',
-    width: '20px',
-    height: '20px'
+const totalRow = {
+    margin: '0',
+};
+
+const totalLabel = {
+    fontSize: '18px',
+    color: '#1a2f33',
+    fontWeight: '700',
+    margin: '0',
+};
+
+const totalAmount = {
+    fontSize: '18px',
+    color: '#1a2f33',
+    fontWeight: '700',
+    margin: '0',
 };

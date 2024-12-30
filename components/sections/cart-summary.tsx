@@ -1,9 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-
 import { useCart } from '@/hooks/useCart'
-import { CartItem } from '@/lib/types'
 import { LoadingSpinner } from '@/components/loading-spinner'
 import { getTacoTuesdayDiscount, shouldShowTacoTuesdayReminder, isTuesday } from "@/lib/utils";
 import { GiTacos } from "react-icons/gi";
@@ -21,6 +19,26 @@ const CartSummary = () => {
         return null;
     }
 
+    const renderVariations = (item: any) => {
+        if (!item.selectedVariations) return null;
+
+        return Object.entries(item.selectedVariations).map(([groupTitle, variations]: [string, any]) => (
+            <div key={groupTitle} className="tst-variation-group">
+                {variations.map((variation: any) => (
+                    <div key={`${groupTitle}-${variation.name}`} className="tst-variation-info">
+                        <span className="tst-variation-name">{variation.name}</span>
+                        {variation.price > 0 && (
+                            <span className="tst-variation-price">+€{variation.price.toFixed(2)}</span>
+                        )}
+                        {variation.quantity > 1 && (
+                            <span className="tst-variation-quantity">x{variation.quantity}</span>
+                        )}
+                    </div>
+                ))}
+            </div>
+        ));
+    };
+
     return (
         <div className="tst-pad-type-2 tst-sticky" data-margin-top="120" >
             <div className="tst-co-cart-frame">
@@ -32,7 +50,7 @@ const CartSummary = () => {
                         </div>
                     </div>
 
-                    {cartItems.map((item: CartItem, key) => (
+                    {cartItems.map((item, key) => (
                         <div className="tst-cart-item" key={key}>
                             <div className="row align-items-center">
                                 <div className="col-lg-9">
@@ -42,6 +60,9 @@ const CartSummary = () => {
                                         </div>
                                         <div className="tst-prod-description">
                                             <h6 className="tst-mb-15">{item.title}</h6>
+                                            <div className="tst-variations-summary">
+                                                {renderVariations(item)}
+                                            </div>
                                             <p className="tst-text tst-text-sm">x{item.quantity}</p>
                                         </div>
                                     </Link>

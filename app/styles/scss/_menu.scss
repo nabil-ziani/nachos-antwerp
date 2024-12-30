@@ -506,3 +506,42 @@ default card
     padding: 0 10px;
   }
 }
+
+.tst-cart-item-details {
+  flex: 1;
+  padding-right: 10px;
+
+  .tst-cart-item-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .tst-cart-item-variations {
+    margin-bottom: 5px;
+
+    .tst-variation-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 2px;
+
+      .tst-variation-name {
+        font-style: italic;
+      }
+
+      .tst-variation-price {
+        color: variables.$ac;
+        font-weight: 500;
+      }
+
+      .tst-variation-quantity {
+        background: #f1f5f9;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+    }
+  }
+}
