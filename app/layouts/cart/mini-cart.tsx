@@ -49,21 +49,48 @@ const MiniCart = () => {
         router.push('/checkout')
     }
 
+    const calculateItemTotal = (item: any) => {
+        //console.log('item in calculateItemTotal', item)
+
+        const isJarritos = item.title.toLowerCase().includes('jarritos');
+
+        if (isJarritos && item.selectedVariations) {
+            // Tel alle quantities van de variaties op
+            const totalQuantity = Object.values(item.selectedVariations)
+                .flat()
+                .reduce((total: number, variation: any) =>
+                    total + (variation.quantity || 0), 0);
+
+            // Vermenigvuldig de totale quantity met de basisprijs
+            return item.price * totalQuantity;
+        }
+
+        // Voor andere items, gebruik de bestaande logica
+        const variationsPrice = item.selectedVariations
+            ? Object.values(item.selectedVariations)
+                .flat()
+                .reduce((total: number, variation: any) =>
+                    total + (variation.price || 0) * (variation.quantity || 1), 0)
+            : 0;
+
+        return (item.price + variationsPrice) * item.quantity;
+    };
+
     const renderVariations = (item: any) => {
         if (!item.selectedVariations) return null;
 
+        const isJarritos = item.title.toLowerCase().includes('jarritos');
+
         return Object.entries(item.selectedVariations).map(([groupTitle, variations]: [string, any]) => (
-            variations.map((variation: any) => (
-                <div key={`${groupTitle}-${variation.name}`} className="tst-variation-info">
-                    <span className="tst-variation-name">{variation.name}</span>
-                    {variation.price > 0 && (
-                        <span className="tst-variation-price">+€{variation.price.toFixed(2)}</span>
-                    )}
-                    {variation.quantity > 1 && (
-                        <span className="tst-variation-quantity">x{variation.quantity}</span>
-                    )}
-                </div>
-            ))
+            <div key={groupTitle} className="tst-variations-group">
+                {variations.map((variation: any) => (
+                    <div key={`${groupTitle}-${variation.name}`} className="tst-variation-info">
+                        <span className="tst-variation-name">
+                            {variation.quantity}x {variation.name}
+                        </span>
+                    </div>
+                ))}
+            </div>
         ));
     };
 
@@ -79,26 +106,34 @@ const MiniCart = () => {
                         <p>Uw winkelmand is leeg</p>
                     </div>
                 ) : (
-                    cartItems.map((item, key) => (
-                        <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`} key={key}>
-                            <a href="#." className="remove remove_from_cart_button" data-testid={`remove-from-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`} aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
-                            <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
-                            <div className="tst-cart-item-details">
-                                <div className="tst-cart-item-title">{item.title}</div>
-                                <div className="tst-cart-item-variations">
-                                    {renderVariations(item)}
-                                </div>
-                                <span className="quantity">{item.quantity} × <span className="woocommerce-Price-amount amount">
-                                    <bdi>
-                                        <span className="text-nacho-500">
-                                            <span className="woocommerce-Price-currencySymbol">{item.currency}</span>
-                                            {(item.price + (item.selectedVariations ? Object.values(item.selectedVariations).flat().reduce((total, variation) => total + (variation.price || 0) * (variation.quantity || 1), 0) : 0)).toFixed(2)}
+                    cartItems.map((item, key) => {
+                        const isJarritos = item.title.toLowerCase().includes('jarritos');
+                        return (
+                            <li className={`woocommerce-mini-cart-item mini_cart_item mini-cart-item-${key}`} key={key}>
+                                <a href="#." className="remove remove_from_cart_button" data-testid={`remove-from-cart-${item.title.toLowerCase().replace(/\s+/g, '-')}`} aria-label="Remove this item" onClick={(e) => handleRemove(e, item.itemId)}>×</a>
+                                <img src={item.image} alt={item.title} className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" />
+                                <div className="tst-cart-item-details">
+                                    <div className="tst-cart-item-title">
+                                        {!isJarritos && item.quantity > 1 && <span className="tst-quantity-badge">{item.quantity}x </span>}
+                                        {item.title}
+                                    </div>
+                                    <div className="tst-cart-item-variations">
+                                        {renderVariations(item)}
+                                    </div>
+                                    <span className="quantity">
+                                        <span className="woocommerce-Price-amount amount">
+                                            <bdi>
+                                                <span className="text-nacho-500">
+                                                    <span className="woocommerce-Price-currencySymbol">{item.currency}</span>
+                                                    {calculateItemTotal(item).toFixed(2)}
+                                                </span>
+                                            </bdi>
                                         </span>
-                                    </bdi>
-                                </span></span>
-                            </div>
-                        </li>
-                    ))
+                                    </span>
+                                </div>
+                            </li>
+                        );
+                    })
                 )}
             </ul>
             {cartItems.length > 0 && (

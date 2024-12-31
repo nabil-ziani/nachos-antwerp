@@ -49,10 +49,44 @@ const MenuItem = ({ item }: { item: CartItem }) => {
 
   const handleQuantityChange = (groupTitle: string, optionName: string, delta: number) => {
     const key = `${groupTitle}-${optionName}`
-    setQuantities(prev => {
-      const current = prev[key] || 0
-      const newQuantity = Math.max(0, current + delta)
-      return { ...prev, [key]: newQuantity }
+    const currentQuantity = quantities[key] || 0
+    const newQuantity = Math.max(0, currentQuantity + delta)
+
+    // Update both quantities and selectedVariations in one go
+    setQuantities(prev => ({
+      ...prev,
+      [key]: newQuantity
+    }))
+
+    // Update selectedVariations with the new quantity
+    setSelectedVariations(prev => {
+      const currentSelections = prev[groupTitle] || []
+      const existingIndex = currentSelections.findIndex(v => v.name === optionName)
+      let newSelections = [...currentSelections]
+
+      if (newQuantity === 0) {
+        // Remove this variation if quantity is 0
+        newSelections = newSelections.filter(v => v.name !== optionName)
+      } else {
+        if (existingIndex >= 0) {
+          // Update existing variation with new quantity
+          newSelections[existingIndex] = {
+            name: optionName,
+            quantity: newQuantity
+          }
+        } else {
+          // Add new variation with quantity
+          newSelections.push({
+            name: optionName,
+            quantity: newQuantity
+          })
+        }
+      }
+
+      return {
+        ...prev,
+        [groupTitle]: newSelections
+      }
     })
   }
 
@@ -60,43 +94,18 @@ const MenuItem = ({ item }: { item: CartItem }) => {
     const group = item.variations?.find(g => g.title === groupTitle)
     if (!group) return
 
-    setSelectedVariations(prev => {
-      const newSelections = { ...prev }
-      const key = `${groupTitle}-${optionName}`
-
-      if (group.type === 'single') {
-        // Single selection replaces previous selection
-        newSelections[groupTitle] = [{ name: optionName, price: option.price, quantity: 1 }]
-      } else {
-        // Multiple selection handles quantities
-        const currentSelections = prev[groupTitle] || []
-        const existingIndex = currentSelections.findIndex(v => v.name === optionName)
-
-        if (existingIndex >= 0) {
-          const quantity = quantities[key] || 0
-          if (quantity === 0) {
-            // Remove if quantity is 0
-            newSelections[groupTitle] = currentSelections.filter(v => v.name !== optionName)
-          } else {
-            // Update quantity
-            newSelections[groupTitle] = currentSelections.map(v =>
-              v.name === optionName ? { ...v, quantity } : v
-            )
-          }
-        } else {
-          // Add new selection with quantity
-          if (!group.maxSelections || currentSelections.length < group.maxSelections) {
-            newSelections[groupTitle] = [...currentSelections, {
-              name: optionName,
-              price: option.price,
-              quantity: quantities[key] || 1
-            }]
-          }
-        }
-      }
-
-      return newSelections
-    })
+    if (group.type === 'single') {
+      // For single select variations (like burrito fillings)
+      setSelectedVariations(prev => ({
+        ...prev,
+        [groupTitle]: [{
+          name: optionName,
+          price: option.price,
+          quantity: 1
+        }]
+      }))
+    }
+    // We don't need the multiple type case anymore as it's handled in handleQuantityChange
   }
 
   const isVariationSelected = (groupTitle: string, optionName: string) => {
@@ -118,13 +127,27 @@ const MenuItem = ({ item }: { item: CartItem }) => {
   const handleAddToCartWithVariations = () => {
     if (!canAddToCart()) return;
 
+    console.log('handleAddToCartWithVariations - Current state:', { selectedVariations, quantities })
+
+    // Calculate total quantity from all variations
+    const totalQuantity = Object.values(selectedVariations)
+      .flat()
+      .reduce((total, variation) => total + (variation.quantity || 0), 0);
+
+    console.log('handleAddToCartWithVariations - Adding to cart:', {
+      totalQuantity,
+      selectedVariations
+    })
+
     addToCart({
       ...item,
+      quantity: totalQuantity,
       selectedVariations
     });
 
     setShowVariationsModal(false);
     setSelectedVariations({});
+    setQuantities({});
   }
 
   return (
@@ -157,7 +180,11 @@ const MenuItem = ({ item }: { item: CartItem }) => {
       <div className={`tst-popup-bg ${showVariationsModal ? "tst-active" : ""}`}>
         <div className="tst-popup-frame">
           <div className="tst-popup-body">
-            <div className="tst-close-popup" onClick={() => setShowVariationsModal(false)}>
+            <div className="tst-close-popup" onClick={() => {
+              setShowVariationsModal(false);
+              setSelectedVariations({});
+              setQuantities({});
+            }}>
               <i className="fas fa-times"></i>
             </div>
             <div className="text-center">
@@ -183,11 +210,10 @@ const MenuItem = ({ item }: { item: CartItem }) => {
                       return (
                         <div key={optionIndex} className="tst-variation-item">
                           <button
-                            className={`tst-variation-btn ${group.type === 'multiple' ? 'multi-select' : ''} ${isSelected ? 'selected' : ''
-                              }`}
+                            className={`tst-variation-btn ${group.type === 'multiple' ? 'multi-select' : ''} ${isSelected ? 'selected' : ''}`}
                             onClick={() => {
                               if (group.type === 'single') {
-                                // Toggle selection for single select
+                                // For single select variations (like burrito fillings)
                                 const isCurrentlySelected = isVariationSelected(group.title, option.name);
                                 if (isCurrentlySelected) {
                                   setSelectedVariations(prev => ({
@@ -198,8 +224,8 @@ const MenuItem = ({ item }: { item: CartItem }) => {
                                   handleVariationSelect(group.title, option.name, option);
                                 }
                               } else if (quantity === 0) {
+                                // For multiple select variations (like Jarritos)
                                 handleQuantityChange(group.title, option.name, 1);
-                                handleVariationSelect(group.title, option.name, option);
                               }
                             }}
                           >
@@ -213,10 +239,7 @@ const MenuItem = ({ item }: { item: CartItem }) => {
                             <div className="tst-quantity-controls">
                               <button
                                 className="tst-quantity-btn"
-                                onClick={() => {
-                                  handleQuantityChange(group.title, option.name, -1)
-                                  handleVariationSelect(group.title, option.name, option)
-                                }}
+                                onClick={() => handleQuantityChange(group.title, option.name, -1)}
                                 disabled={quantity === 0}
                               >
                                 -
@@ -224,10 +247,7 @@ const MenuItem = ({ item }: { item: CartItem }) => {
                               <span className="tst-quantity">{quantity}</span>
                               <button
                                 className="tst-quantity-btn"
-                                onClick={() => {
-                                  handleQuantityChange(group.title, option.name, 1)
-                                  handleVariationSelect(group.title, option.name, option)
-                                }}
+                                onClick={() => handleQuantityChange(group.title, option.name, 1)}
                               >
                                 +
                               </button>

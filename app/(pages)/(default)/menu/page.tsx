@@ -70,12 +70,6 @@ async function getMenu() {
         console.error('Error fetching menu categories:', menu_categories_err)
     }
 
-    // For debugging
-    console.log('Menu items with variations:', menu_items?.map(item => ({
-        title: item.title,
-        variations: item.variations
-    })))
-
     return { menu_items, menu_categories }
 }
 

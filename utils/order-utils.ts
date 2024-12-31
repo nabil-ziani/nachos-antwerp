@@ -30,7 +30,8 @@ export function createOrderData(
             quantity: item.quantity,
             total: item.price * item.quantity,
             currency: item.currency,
-            image: item.image
+            image: item.image,
+            selectedVariations: item.selectedVariations || null
         })),
         restaurant_id: selectedRestaurant?.id,
         notes: values.message,
