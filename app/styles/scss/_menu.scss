@@ -425,7 +425,7 @@ default card
 
     &.multi-select {
       &.selected {
-        background-color: rgba(variables.$ac, 0.15);
+        background-color: #1a2f33;
 
         &:hover {
           filter: brightness(110%);
@@ -456,7 +456,7 @@ default card
       transition: all 0.2s ease;
 
       &:hover {
-        background-color: #E4B528;
+        background-color: variables.$ac;
       }
 
       &:disabled {
