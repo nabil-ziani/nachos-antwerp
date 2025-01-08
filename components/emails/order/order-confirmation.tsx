@@ -124,6 +124,24 @@ export const OrderConfirmationEmail = ({ order }: OrderConfirmationEmailProps) =
                                 Betaalmethode: {order.payment_method}
                             </Text>
                         </Section>
+
+                        <Hr style={divider} />
+
+                        <Section style={footerSection}>
+                            <Text style={footerText}>
+                                Nacho's Antwerp
+                            </Text>
+                            <Text style={footerContact}>
+                                Diksmuidelaan 170, 2600 Berchem<br />
+                                <a href="tel:+32467071874" style={footerLink}>+32 467 07 18 74</a><br />
+                                <a href="mailto:info@nachosantwerp.be" style={footerLink}>info@nachosantwerp.be</a>
+                            </Text>
+                            <Text style={footerSocial}>
+                                <a href="https://www.instagram.com/nachosantwerp" style={socialLink}>Instagram</a>
+                                {' • '}
+                                <a href="https://www.facebook.com/profile.php?id=61550605400792" style={socialLink}>Facebook</a>
+                            </Text>
+                        </Section>
                     </Section>
                 </Container>
             </Body>
@@ -258,4 +276,41 @@ const totalAmount = {
     color: '#1a2f33',
     fontWeight: '700',
     margin: '0',
+};
+
+const footerSection = {
+    textAlign: 'center' as const,
+    marginTop: '20px',
+};
+
+const footerText = {
+    color: '#1a2f33',
+    fontSize: '18px',
+    fontWeight: '600',
+    margin: '0 0 10px',
+    fontFamily: '"Playfair Display", Georgia, "Times New Roman", serif',
+};
+
+const footerContact = {
+    color: '#64748b',
+    fontSize: '14px',
+    lineHeight: '1.6',
+    margin: '0 0 15px',
+};
+
+const footerLink = {
+    color: '#64748b',
+    textDecoration: 'none',
+};
+
+const footerSocial = {
+    color: '#64748b',
+    fontSize: '14px',
+    margin: '0',
+};
+
+const socialLink = {
+    color: '#1a2f33',
+    textDecoration: 'none',
+    fontWeight: '600',
 };

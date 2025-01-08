@@ -52,8 +52,6 @@ export const ReservationConfirmationEmail = ({ reservation }: ReservationConfirm
                             Bedankt voor je reservering bij Nacho's Antwerp. We kijken ernaar uit je te ontvangen!
                         </Text>
 
-                        <Hr style={divider} />
-
                         <Section style={detailsCard}>
                             <Heading as="h2" style={subheading}>Reserveringsdetails</Heading>
                             <Text style={infoText}>
@@ -71,16 +69,30 @@ export const ReservationConfirmationEmail = ({ reservation }: ReservationConfirm
                             )}
                         </Section>
 
+                        <Section style={detailsCard}>
+                            <Heading as="h2" style={subheading}>Belangrijk</Heading>
+                            <Text style={infoText}>
+                                Als je je reservering wilt wijzigen of annuleren, neem dan contact met ons op via telefoon of email.
+                            </Text>
+                        </Section>
+
                         <Hr style={divider} />
 
-                        <Text style={subText}>
-                            <strong>Belangrijk:</strong><br />
-                            Als je je reservering wilt wijzigen of annuleren, neem dan contact met ons op via telefoon of email.
-                        </Text>
-                        <Text style={subText}>
-                            Met vriendelijke groeten,<br />
-                            Het team van Nacho's Antwerp
-                        </Text>
+                        <Section style={footerSection}>
+                            <Text style={footerText}>
+                                Nacho's Antwerp
+                            </Text>
+                            <Text style={footerContact}>
+                                Diksmuidelaan 170, 2600 Berchem<br />
+                                <a href="tel:+32467071874" style={footerLink}>+32 467 07 18 74</a><br />
+                                <a href="mailto:info@nachosantwerp.be" style={footerLink}>info@nachosantwerp.be</a>
+                            </Text>
+                            <Text style={footerSocial}>
+                                <a href="https://www.instagram.com/nachosantwerp" style={socialLink}>Instagram</a>
+                                {' • '}
+                                <a href="https://www.facebook.com/profile.php?id=61550605400792" style={socialLink}>Facebook</a>
+                            </Text>
+                        </Section>
                     </Section>
                 </Container>
             </Body>
@@ -162,4 +174,41 @@ const messageText = {
     color: '#64748b',
     fontStyle: 'italic',
     margin: '0',
+};
+
+const footerSection = {
+    textAlign: 'center' as const,
+    marginTop: '20px',
+};
+
+const footerText = {
+    color: '#1a2f33',
+    fontSize: '18px',
+    fontWeight: '600',
+    margin: '0 0 10px',
+    fontFamily: '"Playfair Display", Georgia, "Times New Roman", serif',
+};
+
+const footerContact = {
+    color: '#64748b',
+    fontSize: '14px',
+    lineHeight: '1.6',
+    margin: '0 0 15px',
+};
+
+const footerLink = {
+    color: '#64748b',
+    textDecoration: 'none',
+};
+
+const footerSocial = {
+    color: '#64748b',
+    fontSize: '14px',
+    margin: '0',
+};
+
+const socialLink = {
+    color: '#1a2f33',
+    textDecoration: 'none',
+    fontWeight: '600',
 };
