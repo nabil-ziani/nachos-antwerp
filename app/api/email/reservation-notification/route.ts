@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 import { render } from '@react-email/render';
-import { ReservationNotificationEmail } from '@/components/emails/reservation-notification';
+import { ReservationNotificationEmail } from '@/components/emails/reservation/reservation-notification';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

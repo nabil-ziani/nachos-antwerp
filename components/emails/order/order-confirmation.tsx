@@ -11,7 +11,7 @@ import {
     Row,
     Column
 } from '@react-email/components';
-import { Font } from './custom-font';
+import { Font } from '../custom-font';
 
 interface OrderConfirmationEmailProps {
     order: {
@@ -45,12 +45,14 @@ const renderVariations = (item: any) => {
 };
 
 export const OrderConfirmationEmail = ({ order }: OrderConfirmationEmailProps) => {
+    const previewText = `Bedankt voor je bestelling bij Nacho's Antwerp`
+
     return (
         <Html>
             <Head>
                 <Font />
             </Head>
-            <Preview>Bedankt voor je bestelling bij Nacho's Antwerp</Preview>
+            <Preview>{previewText}</Preview>
             <Body style={main}>
                 <Container style={container}>
                     <Section style={notificationCard}>

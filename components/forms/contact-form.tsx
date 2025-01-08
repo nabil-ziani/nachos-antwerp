@@ -3,10 +3,10 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
-import AppData from "@/data/app.json"
 import { FormWrapper } from './layout/form-wrapper'
 import { FormInput } from './layout/form-input'
 import { contactSchema, ContactFormValues, defaultValues } from '@/lib/schemas/contact-schema'
+import { createClient } from '@/utils/supabase/client'
 
 const ContactForm = () => {
     const form = useForm<ContactFormValues>({
@@ -16,40 +16,54 @@ const ContactForm = () => {
     })
 
     const onSubmit = async (values: ContactFormValues) => {
-        const data = new FormData()
-
-        data.append('first_name', values.first_name)
-        data.append('last_name', values.last_name)
-        data.append('email', values.email)
-        data.append('phone', values.phone)
-        data.append('message', values.message)
-
         try {
-            const response = await toast.promise(
-                fetch(AppData.settings.formspreeURL, {
-                    method: 'POST',
-                    body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                }),
+            // 1. Bericht opslaan in database
+            await toast.promise(
+                (async () => {
+                    const { error } = await createClient()
+                        .from('contact_messages')
+                        .insert([values])
+                    if (error) throw error
+                })(),
                 {
-                    loading: 'Bericht versturen...',
-                    success: 'Bedankt voor je bericht!',
-                    error: 'Er ging iets mis. Probeer het opnieuw.'
+                    loading: 'Bericht opslaan...',
+                    success: 'Je bericht is succesvol verzonden!',
+                    error: 'Er ging iets mis bij het opslaan van je bericht.'
                 }
             )
 
-            if (response.ok) {
-                form.reset()
-            } else {
-                const responseData = await response.json()
-                if (Object.hasOwn(responseData, 'errors')) {
-                    toast.error(responseData["errors"].map((error: any) => error["message"]).join(", "))
-                }
-            }
+            // 2. Emails versturen (zonder blocking)
+            Promise.allSettled([
+                // Notificatie naar eigenaar
+                fetch('/api/email/contact-notification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ contact: values })
+                }),
+                // Bevestiging naar klant
+                fetch('/api/email/contact-confirmation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ contact: values })
+                })
+            ]).catch(error => {
+                console.error('Error sending emails:', error)
+                // Email fouten negeren, gebruiker heeft al succesbericht
+            })
+
+            // 3. Form resetten
+            form.reset()
         } catch (error) {
-            console.error(error)
+            console.error('Error handling contact form:', error)
+            if (error instanceof Error) {
+                toast.error(error.message)
+            } else {
+                toast.error('Er ging iets mis bij het versturen van je bericht')
+            }
         }
     }
 

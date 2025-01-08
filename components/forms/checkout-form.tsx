@@ -17,6 +17,7 @@ import { FormWrapper } from './layout/form-wrapper'
 import { toast } from 'react-hot-toast'
 import { createCheckoutSchema, defaultValues, CheckoutFormValues } from '@/lib/schemas/checkout-schema'
 import { findRestaurantByPostalCode } from '@/utils/location'
+import { PostgrestResponse } from '@supabase/supabase-js'
 
 const CheckoutForm = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -83,69 +84,80 @@ const CheckoutForm = () => {
     }
 
     const onSubmit = async (values: CheckoutFormValues) => {
-        // Check minimum order amount for delivery
-        if (values.delivery_method === 'delivery' && values.postcode) {
-            const { minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode)
-            if (minimumAmount && totalAmount < minimumAmount) {
-                throw new Error(`Voor bezorging in ${values.postcode} is het minimum bestelbedrag €${minimumAmount.toFixed(2)}`)
+        try {
+            // 1. Validatie
+            if (values.delivery_method === 'delivery' && values.postcode) {
+                const { minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode)
+                if (minimumAmount && totalAmount < minimumAmount) {
+                    throw new Error(`Voor bezorging in ${values.postcode} is het minimum bestelbedrag €${minimumAmount.toFixed(2)}`)
+                }
+            }
+
+            // 2. Details opslaan als nodig
+            if (values.remember_details) {
+                const detailsToSave = {
+                    firstname: values.firstname,
+                    lastname: values.lastname,
+                    email: values.email,
+                    tel: values.tel,
+                    company: values.company,
+                    vatNumber: values.vatNumber,
+                    city: values.city,
+                    address: values.address,
+                    postcode: values.postcode,
+                    payment_method: values.payment_method,
+                    delivery_method: values.delivery_method,
+                    message: values.message
+                }
+                localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
+            }
+
+            // 3. Order data voorbereiden
+            const orderData = createOrderData(
+                orderId,
+                values,
+                totalAmount,
+                cartItems,
+                selectedRestaurant
+            )
+
+            // 4. Order opslaan in database
+            await toast.promise(
+                (async () => {
+                    const { error } = await createClient()
+                        .from('orders')
+                        .insert([orderData])
+                    if (error) throw error
+                })(),
+                {
+                    loading: 'Bestelling opslaan...',
+                    success: 'Je bestelling is succesvol geplaatst!',
+                    error: 'Er ging iets mis bij het opslaan van je bestelling.'
+                }
+            )
+
+            // 5. Email versturen (zonder blocking)
+            fetch('/api/email/order-confirmation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ order: orderData })
+            }).catch(error => {
+                console.error('Error sending confirmation email:', error)
+                // Email fout negeren, gebruiker heeft al succesbericht
+            })
+
+            // 6. Redirect naar bevestigingspagina
+            router.push(`/order-confirmation/${orderId}`)
+        } catch (error) {
+            console.error('Error handling order:', error)
+            if (error instanceof Error) {
+                toast.error(error.message)
+            } else {
+                toast.error('Er ging iets mis tijdens het verwerken van je bestelling')
             }
         }
-
-        // Save details if requested
-        if (values.remember_details) {
-            const detailsToSave = {
-                firstname: values.firstname,
-                lastname: values.lastname,
-                email: values.email,
-                tel: values.tel,
-                company: values.company,
-                vatNumber: values.vatNumber,
-                city: values.city,
-                address: values.address,
-                postcode: values.postcode,
-                payment_method: values.payment_method,
-                delivery_method: values.delivery_method,
-                message: values.message
-            }
-            localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
-        }
-
-        // Geocode address
-        /*const address = `${values.address}, ${values.postcode} ${values.city}`;
-        const coordinates = await geocodeAddress(address);
-
-        if (!coordinates) {
-            console.error('Failed to geocode address');
-            throw new Error('Kon het adres niet valideren. Probeer het opnieuw.');
-        }*/
-
-        // Create and save order
-        const orderData = createOrderData(
-            orderId,
-            values,
-            totalAmount,
-            cartItems,
-            selectedRestaurant,
-            //coordinates
-        )
-
-        const { error: dbError } = await toast.promise(
-            async () => {
-                const result = await createClient()
-                    .from('orders')
-                    .insert([orderData])
-                return result
-            },
-            {
-                loading: 'Bestelling plaatsen...',
-                success: 'Je bestelling is succesvol geplaatst!',
-                error: 'Er ging iets mis. Probeer het opnieuw.'
-            }
-        )
-
-        if (dbError) throw dbError
-
-        router.push(`/order-confirmation/${orderId}`)
     }
 
     return (

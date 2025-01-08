@@ -21,48 +21,65 @@ const ReservationForm = () => {
 
     const onSubmit = async (values: ReservationFormValues) => {
         try {
-            // Save reservation
-            const savePromise = supabase
-                .from('reservations')
-                .insert({
-                    customer_name: `${values.firstname} ${values.lastname}`,
-                    customer_email: values.email,
-                    date: values.date,
-                    time: values.time,
-                    number_of_people: values.person,
-                    message: values.message,
-                    phone_number: values.phone,
-                    restaurant_id: selectedRestaurant?.id
-                })
-
-            // Send notification email
-            const emailPromise = fetch('/api/email/reservation-notification', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ reservation: values })
-            })
-
-            // Wait for both promises with toast notification
-            const [{ error: dbError }, emailResponse] = await toast.promise(
-                Promise.all([savePromise, emailPromise]),
+            // 1. Reservering opslaan in database
+            await toast.promise(
+                (async () => {
+                    const { error } = await supabase
+                        .from('reservations')
+                        .insert({
+                            customer_name: `${values.firstname} ${values.lastname}`,
+                            customer_email: values.email,
+                            date: values.date,
+                            time: values.time,
+                            number_of_people: values.person,
+                            message: values.message,
+                            phone_number: values.phone,
+                            restaurant_id: selectedRestaurant?.id
+                        })
+                    if (error) throw error
+                })(),
                 {
                     loading: 'Reservering opslaan...',
                     success: 'Je reservering is succesvol ontvangen!',
-                    error: 'Er ging iets mis. Probeer het opnieuw.'
+                    error: 'Er ging iets mis bij het opslaan van je reservering.'
                 }
             )
 
-            if (dbError) throw dbError
-            if (!emailResponse.ok) {
-                console.error('Error sending email:', await emailResponse.json())
-            }
+            // 2. Emails versturen (zonder blocking)
+            Promise.allSettled([
+                // Notificatie naar eigenaar
+                fetch('/api/email/reservation-notification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reservation: values })
+                }),
+                // Bevestiging naar klant
+                fetch('/api/email/reservation-confirmation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        reservation: values,
+                        restaurant: selectedRestaurant
+                    })
+                })
+            ]).catch(error => {
+                console.error('Error sending emails:', error)
+                // Email fouten negeren, gebruiker heeft al succesbericht
+            })
 
+            // 3. Form resetten
             form.reset()
         } catch (error) {
             console.error('Error handling reservation:', error)
-            toast.error('Er ging iets mis tijdens het verwerken van je reservering')
+            if (error instanceof Error) {
+                toast.error(error.message)
+            } else {
+                toast.error('Er ging iets mis tijdens het verwerken van je reservering')
+            }
         }
     }
 

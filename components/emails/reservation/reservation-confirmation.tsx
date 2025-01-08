@@ -7,30 +7,32 @@ import {
     Html,
     Preview,
     Section,
-    Text
-} from '@react-email/components';
-import { Font } from './custom-font';
+    Text,
+} from '@react-email/components'
+import { Font } from '../custom-font';
 
-interface ReservationNotificationEmailProps {
+interface ReservationConfirmationEmailProps {
     reservation: {
-        firstname: string;
-        lastname: string;
-        email: string;
-        date: string;
-        time: string;
-        person: string;
-        message: string;
-        phone: string;
-    };
+        first_name: string
+        last_name: string
+        email: string
+        phone: string
+        date: string
+        time: string
+        guests: number
+        message?: string
+    }
 }
 
-export const ReservationNotificationEmail = ({ reservation }: ReservationNotificationEmailProps) => {
+export const ReservationConfirmationEmail = ({ reservation }: ReservationConfirmationEmailProps) => {
+    const previewText = `Bedankt voor je reservering, ${reservation.first_name}!`
+
     return (
         <Html>
             <Head>
                 <Font />
             </Head>
-            <Preview>Nieuwe reservering bij Nacho's Antwerp</Preview>
+            <Preview>{previewText}</Preview>
             <Body style={main}>
                 <Container style={container}>
                     <Section style={notificationCard}>
@@ -43,35 +45,51 @@ export const ReservationNotificationEmail = ({ reservation }: ReservationNotific
                         />
 
                         <Heading style={heading}>
-                            Nieuwe reservering!
+                            Bedankt voor je reservatie, {reservation.first_name}!
                         </Heading>
 
                         <Text style={subText}>
-                            {reservation.email}
+                            Bedankt voor je reservering bij Nacho's Antwerp. We kijken ernaar uit je te ontvangen!
                         </Text>
 
+                        <Hr style={divider} />
+
                         <Section style={detailsCard}>
-                            <Heading as="h2" style={subheading}>Details</Heading>
+                            <Heading as="h2" style={subheading}>Reserveringsdetails</Heading>
                             <Text style={infoText}>
-                                {reservation.firstname} {reservation.lastname} heeft een reservering gemaakt voor {reservation.date} om {reservation.time} voor {reservation.person} personen.
+                                Datum: {new Date(reservation.date).toLocaleDateString('nl-BE')}<br />
+                                Tijd: {reservation.time}<br />
+                                Aantal personen: {reservation.guests}
                             </Text>
-                            <Text style={infoText}>
-                                Telefoonnummer: {reservation.phone}
-                            </Text>
-                            <Hr style={divider} />
-                            <Text style={subText}>
-                                {reservation.message}
-                            </Text>
+                            {reservation.message && (
+                                <>
+                                    <Hr style={divider} />
+                                    <Text style={messageText}>
+                                        {reservation.message}
+                                    </Text>
+                                </>
+                            )}
                         </Section>
+
+                        <Hr style={divider} />
+
+                        <Text style={subText}>
+                            <strong>Belangrijk:</strong><br />
+                            Als je je reservering wilt wijzigen of annuleren, neem dan contact met ons op via telefoon of email.
+                        </Text>
+                        <Text style={subText}>
+                            Met vriendelijke groeten,<br />
+                            Het team van Nacho's Antwerp
+                        </Text>
                     </Section>
                 </Container>
             </Body>
         </Html>
-    );
-};
+    )
+}
 
+export default ReservationConfirmationEmail
 
-// Updated styles
 const main = {
     backgroundColor: '#242424',
     fontFamily: '"Century Gothic", "Futura", "Trebuchet MS", Arial, sans-serif',
@@ -137,4 +155,11 @@ const infoText = {
     color: '#1a2f33',
     lineHeight: '1.5',
     margin: '0 0 12px',
+};
+
+const messageText = {
+    fontSize: '16px',
+    color: '#64748b',
+    fontStyle: 'italic',
+    margin: '0',
 };

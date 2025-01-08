@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
-import { OrderConfirmationEmail } from '@/components/emails/order-confirmation';
 import { render } from '@react-email/render';
+import { OrderConfirmationEmail } from '@/components/emails/order/order-confirmation';
 import { generateInvoice } from '@/utils/generate-invoice';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -56,6 +56,7 @@ export async function POST(request: Request) {
 
         return Response.json(data);
     } catch (error) {
+        console.error('Failed to send order confirmation email:', error);
         return Response.json({ error });
     }
 } 
