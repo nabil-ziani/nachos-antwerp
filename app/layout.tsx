@@ -3,6 +3,7 @@ import { RestaurantProvider } from '@/contexts/restaurant-context'
 import { PaymentProvider } from '@/contexts/payment-context'
 import { Suspense } from 'react'
 import Loading from './loading'
+import { Toaster } from 'react-hot-toast'
 
 const josefin_sans = Josefin_Sans({
   weight: ['100', '200', '300', '400', '500', '600', '700'],
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </PaymentProvider>
         </RestaurantProvider>
+        <Toaster position="top-right" />
       </body>
     </html>
   );

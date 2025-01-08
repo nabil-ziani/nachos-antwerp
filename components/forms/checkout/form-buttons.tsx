@@ -1,29 +1,33 @@
-import { CartItem, Restaurant } from '@/lib/types';
+'use client'
 
-import { PayconiqButton } from '@/components/payconiq-button';
+import { UseFormReturn } from 'react-hook-form'
+import { CheckoutFormValues } from '@/lib/schemas/checkout-schema'
+import { PayconiqButton } from '@/components/payconiq-button'
+import { useCart } from '@/hooks/useCart'
+import { useRestaurant } from '@/contexts/restaurant-context'
 
 interface FormButtonsProps {
-    values: any;
-    isValid: boolean;
-    isSubmitting: boolean;
-    orderId: string;
-    totalAmount: number;
-    cartItems: CartItem[];
-    selectedRestaurant: Restaurant | null;
+    form: UseFormReturn<CheckoutFormValues>
+    orderId: string
 }
 
-export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmount, cartItems, selectedRestaurant }: FormButtonsProps) => {
-    const isButtonDisabled = !isValid || isSubmitting || !selectedRestaurant;
+export const FormButtons = ({ form, orderId }: FormButtonsProps) => {
+    const { formState: { isSubmitting, isValid }, getValues } = form
+    const payment_method = form.watch('payment_method')
+    const { cartTotal: totalAmount, cartItems } = useCart()
+    const { selectedRestaurant } = useRestaurant()
+
+    const isButtonDisabled = !isValid || isSubmitting || !selectedRestaurant
 
     return (
         <div className="tst-button-group">
-            {values.payment_method === 'payconiq' ? (
+            {payment_method === 'payconiq' ? (
                 <PayconiqButton
                     amount={totalAmount}
                     orderId={orderId}
                     className={`tst-btn tst-btn-with-icon tst-m-0 ${isSubmitting ? 'loading' : ''}`}
                     disabled={isButtonDisabled}
-                    formValues={{ ...values, cartItems }}
+                    formValues={{ ...getValues(), cartItems }}
                     // TODO: Remove this code after testing
                     onPaymentCreated={(checkoutUrl) => { }}
                     onPaymentError={(error) => {
@@ -42,13 +46,14 @@ export const FormButtons = ({ values, isValid, isSubmitting, orderId, totalAmoun
                     {isSubmitting && <div className="spinner" />}
                 </PayconiqButton>
             ) : (
-                <button type="submit" className="tst-btn tst-btn-with-icon tst-m-0" disabled={isButtonDisabled} data-testid="place-order-button">
-                    <span className="tst-icon">
-                        <img src="/img/ui/icons/arrow.svg" alt="icon" />
-                    </span>
-                    <span>Plaats bestelling</span>
+                <button
+                    type="submit"
+                    className="tst-btn tst-btn-md"
+                >
+                    {form.formState.isSubmitting ? 'Bestelling plaatsen...' : 'Bestelling plaatsen'}
+                    {form.formState.isSubmitting && <div className="spinner" />}
                 </button>
             )}
         </div>
-    );
-}; 
+    )
+} 

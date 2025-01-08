@@ -31,11 +31,6 @@
             font-family: var(--font-josefin_sans);
             background-color: #fff;
 
-            &.error {
-                border: 1px solid #FF5252;
-                background-color: rgba(255, 82, 82, 0.05);
-                margin-bottom: 0.25rem;
-            }
 
             &:focus {
                 outline: none;

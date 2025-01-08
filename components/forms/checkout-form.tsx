@@ -1,33 +1,40 @@
 "use client";
 
-import { Formik } from 'formik';
-import { createClient } from '@/utils/supabase/client';
-import { useEffect, useState } from 'react';
-import { useCart } from '@/hooks/useCart';
-import { useRouter } from 'next/navigation';
-import { useRestaurant } from '@/contexts/restaurant-context';
-import { LocationConfirmation } from '@/components/location-confirmation';
-import { defaultValues, validateCheckoutForm } from '@/lib/checkout-validation';
-import { DeliveryDetails } from './checkout/delivery-details';
-import { PaymentMethods } from './checkout/payment-methods';
-import { FormButtons } from './checkout/form-buttons';
-import { CheckoutFormValues } from '@/lib/types';
-import { LoadingSpinner } from "@/components/loading-spinner";
-import { findRestaurantByPostalCode } from '@/utils/location';
-// import { geocodeAddress } from '@/utils/geocode';
-import { createOrderData } from '@/utils/order-utils';
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useCart } from '@/hooks/useCart'
+import { useRestaurant } from '@/contexts/restaurant-context'
+import { createClient } from '@/utils/supabase/client'
+import { LocationConfirmation } from '@/components/location-confirmation'
+import { DeliveryDetails } from './checkout/delivery-details'
+import { PaymentMethods } from './checkout/payment-methods'
+import { FormButtons } from './checkout/form-buttons'
+import { LoadingSpinner } from "@/components/loading-spinner"
+import { createOrderData } from '@/utils/order-utils'
+import { FormWrapper } from './layout/form-wrapper'
+import { toast } from 'react-hot-toast'
+import { createCheckoutSchema, defaultValues, CheckoutFormValues } from '@/lib/schemas/checkout-schema'
+import { findRestaurantByPostalCode } from '@/utils/location'
 
 const CheckoutForm = () => {
-    const [orderId] = useState(crypto.randomUUID())
     const [isLoading, setIsLoading] = useState(true)
-    const [initialValues, setInitialValues] = useState(defaultValues)
+    const orderId = crypto.randomUUID()
 
     const router = useRouter()
     const { cartTotal: totalAmount, cartItems } = useCart()
     const { selectedRestaurant, restaurants } = useRestaurant()
 
+    const form = useForm<CheckoutFormValues>({
+        defaultValues,
+        resolver: zodResolver(createCheckoutSchema(totalAmount, selectedRestaurant, restaurants)),
+        mode: 'onBlur'
+    })
+
+    // Load saved details
     useEffect(() => {
-        const loadSavedDetails = () => {
+        const loadSavedDetails = async () => {
             if (typeof window === 'undefined' || !selectedRestaurant) return;
 
             try {
@@ -39,21 +46,18 @@ const CheckoutForm = () => {
 
                 const parsedDetails = JSON.parse(saved)
 
-                // Validate all fields using existing validation
-                const errors = validateCheckoutForm({ values: parsedDetails, totalAmount, selectedRestaurant, restaurants })
-
-                // If there are validation errors, clear the problematic fields
-                if (Object.keys(errors).length > 0) {
-                    console.log('Validation errors:', errors)
-                    Object.keys(errors).forEach(field => {
-                        parsedDetails[field] = defaultValues[field as keyof CheckoutFormValues] || '';
-                    });
+                // Validate saved details using schema
+                try {
+                    const schema = createCheckoutSchema(totalAmount, selectedRestaurant, restaurants)
+                    await schema.parseAsync(parsedDetails)
+                    form.reset(parsedDetails)
+                } catch (error) {
+                    console.log('Validation errors:', error)
+                    // If validation fails, use default values
+                    form.reset(defaultValues)
                     // Save the cleaned details back to localStorage
-                    localStorage.setItem('user-checkout-details', JSON.stringify(parsedDetails))
+                    localStorage.setItem('user-checkout-details', JSON.stringify(defaultValues))
                 }
-
-                // Update initialValues with validated details
-                setInitialValues(prev => ({ ...prev, ...parsedDetails }))
             } catch (error) {
                 console.error('Error loading saved details:', error)
             } finally {
@@ -62,7 +66,7 @@ const CheckoutForm = () => {
         }
 
         loadSavedDetails()
-    }, [selectedRestaurant, totalAmount])
+    }, [selectedRestaurant, totalAmount, form, restaurants])
 
     // Check localStorage before rendering form
     if (isLoading) {
@@ -78,146 +82,79 @@ const CheckoutForm = () => {
         );
     }
 
-    const handleSubmit = async (values: CheckoutFormValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
-        try {
-            // Check minimum order amount for delivery orders
-            if (values.delivery_method === 'delivery' && values.postcode) {
-                const { minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode);
-                if (minimumAmount && totalAmount < minimumAmount) {
-                    const status = document.getElementById("checkoutFormStatus");
-                    if (status) {
-                        status.className = "tst-form-status error";
-                        status.innerHTML = `
-                            <h5>Minimum bestelbedrag niet bereikt</h5>
-                            <p>Voor bezorging in ${values.postcode} is het minimum bestelbedrag €${minimumAmount.toFixed(2)}</p>
-                        `;
-                    }
-                    setSubmitting(false);
-                    return;
-                }
+    const onSubmit = async (values: CheckoutFormValues) => {
+        // Check minimum order amount for delivery
+        if (values.delivery_method === 'delivery' && values.postcode) {
+            const { minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode)
+            if (minimumAmount && totalAmount < minimumAmount) {
+                throw new Error(`Voor bezorging in ${values.postcode} is het minimum bestelbedrag €${minimumAmount.toFixed(2)}`)
             }
-
-            if (values.remember_details) {
-                const detailsToSave = {
-                    firstname: values.firstname,
-                    lastname: values.lastname,
-                    email: values.email,
-                    tel: values.tel,
-                    company: values.company,
-                    vatNumber: values.vatNumber,
-                    city: values.city,
-                    address: values.address,
-                    postcode: values.postcode,
-                    payment_method: values.payment_method,
-                    delivery_method: values.delivery_method,
-                    message: values.message
-                }
-                localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
-            }
-
-            // Geocode address
-            /*const address = `${values.address}, ${values.postcode} ${values.city}`;
-            const coordinates = await geocodeAddress(address);
-
-            if (!coordinates) {
-                console.error('Failed to geocode address');
-                setSubmitting(false);
-                return;
-            }*/
-
-            const orderData = createOrderData(
-                orderId,
-                values,
-                totalAmount,
-                cartItems,
-                selectedRestaurant,
-                //coordinates
-            );
-
-            const supabase = createClient();
-            const { error: dbError } = await supabase
-                .from('orders')
-                .insert([orderData]);
-
-            if (dbError) throw dbError;
-
-            router.push(`/order-confirmation/${orderId}`);
-        } catch (error) {
-            console.error('Order submission failed:', error);
-            const status = document.getElementById("checkoutFormStatus");
-            if (status) {
-                status.className = "tst-form-status error";
-                status.innerHTML = `
-                    <h5>Er is een probleem opgetreden</h5>
-                    <p>Probeer het opnieuw of neem contact met ons op.</p>
-                `;
-            }
-        } finally {
-            setSubmitting(false);
         }
+
+        // Save details if requested
+        if (values.remember_details) {
+            const detailsToSave = {
+                firstname: values.firstname,
+                lastname: values.lastname,
+                email: values.email,
+                tel: values.tel,
+                company: values.company,
+                vatNumber: values.vatNumber,
+                city: values.city,
+                address: values.address,
+                postcode: values.postcode,
+                payment_method: values.payment_method,
+                delivery_method: values.delivery_method,
+                message: values.message
+            }
+            localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))
+        }
+
+        // Geocode address
+        /*const address = `${values.address}, ${values.postcode} ${values.city}`;
+        const coordinates = await geocodeAddress(address);
+
+        if (!coordinates) {
+            console.error('Failed to geocode address');
+            throw new Error('Kon het adres niet valideren. Probeer het opnieuw.');
+        }*/
+
+        // Create and save order
+        const orderData = createOrderData(
+            orderId,
+            values,
+            totalAmount,
+            cartItems,
+            selectedRestaurant,
+            //coordinates
+        )
+
+        const { error: dbError } = await toast.promise(
+            async () => {
+                const result = await createClient()
+                    .from('orders')
+                    .insert([orderData])
+                return result
+            },
+            {
+                loading: 'Bestelling plaatsen...',
+                success: 'Je bestelling is succesvol geplaatst!',
+                error: 'Er ging iets mis. Probeer het opnieuw.'
+            }
+        )
+
+        if (dbError) throw dbError
+
+        router.push(`/order-confirmation/${orderId}`)
     }
 
     return (
-        <>
-            <Formik
-                initialValues={initialValues}
-                validate={(values: CheckoutFormValues) => validateCheckoutForm({ values, totalAmount, selectedRestaurant, restaurants })}
-                validateOnMount={true}
-                onSubmit={handleSubmit}
-                enableReinitialize={true}
-            >
-                {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, isValid }) => (
-                    <form onSubmit={handleSubmit} id="checkoutForm" className="tst-checkout-form">
-                        <LocationConfirmation selectedRestaurant={selectedRestaurant} />
-
-                        <DeliveryDetails values={values} errors={errors} touched={touched} handleChange={handleChange} handleBlur={handleBlur} />
-
-                        <div className="tst-mb-30">
-                            <h5>Extra informatie</h5>
-                        </div>
-                        <div className="tst-group-input">
-                            <label>Opmerking</label>
-                            <textarea
-                                data-testid="checkout-message"
-                                placeholder="Extra opmerkingen"
-                                name="message"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.message}
-                            />
-                        </div>
-
-                        <div className="tst-group-input">
-                            <div className="tst-radio" data-testid="remember-details-checkbox">
-                                <input
-                                    type="checkbox"
-                                    id="remember-details"
-                                    name="remember_details"
-                                    checked={values.remember_details}
-                                    onChange={handleChange}
-                                />
-                                <label htmlFor="remember-details">Onthoud mijn gegevens voor de volgende keer</label>
-                                <div className="tst-check"></div>
-                            </div>
-                        </div>
-
-                        <PaymentMethods values={values} handleChange={handleChange} />
-
-                        <FormButtons
-                            values={values}
-                            isValid={isValid}
-                            isSubmitting={isSubmitting}
-                            orderId={orderId}
-                            totalAmount={totalAmount}
-                            cartItems={cartItems}
-                            selectedRestaurant={selectedRestaurant}
-                        />
-
-                        <div id="checkoutFormStatus" className="tst-form-status"></div>
-                    </form>
-                )}
-            </Formik>
-        </>
+        <FormWrapper form={form} onSubmit={onSubmit} className="tst-checkout-form">
+            <LocationConfirmation selectedRestaurant={selectedRestaurant} />
+            <DeliveryDetails form={form} />
+            <PaymentMethods form={form} />
+            <FormButtons form={form} orderId={orderId} />
+        </FormWrapper>
     )
 }
 
