@@ -45,7 +45,7 @@ const ReservationForm = () => {
                 }
             )
 
-            // 2. Emails versturen (zonder blocking)
+            // 2. Emails versturen
             Promise.allSettled([
                 // Notificatie naar eigenaar
                 fetch('/api/email/reservation-notification', {
@@ -68,7 +68,6 @@ const ReservationForm = () => {
                 })
             ]).catch(error => {
                 console.error('Error sending emails:', error)
-                // Email fouten negeren, gebruiker heeft al succesbericht
             })
 
             // 3. Form resetten

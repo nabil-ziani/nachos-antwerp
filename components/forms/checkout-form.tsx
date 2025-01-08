@@ -17,7 +17,6 @@ import { FormWrapper } from './layout/form-wrapper'
 import { toast } from 'react-hot-toast'
 import { createCheckoutSchema, defaultValues, CheckoutFormValues } from '@/lib/schemas/checkout-schema'
 import { findRestaurantByPostalCode } from '@/utils/location'
-import { PostgrestResponse } from '@supabase/supabase-js'
 
 const CheckoutForm = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -136,7 +135,7 @@ const CheckoutForm = () => {
                 }
             )
 
-            // 5. Email versturen (zonder blocking)
+            // 5. Email versturen
             fetch('/api/email/order-confirmation', {
                 method: 'POST',
                 headers: {
@@ -145,7 +144,6 @@ const CheckoutForm = () => {
                 body: JSON.stringify({ order: orderData })
             }).catch(error => {
                 console.error('Error sending confirmation email:', error)
-                // Email fout negeren, gebruiker heeft al succesbericht
             })
 
             // 6. Redirect naar bevestigingspagina
