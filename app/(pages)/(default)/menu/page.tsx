@@ -6,8 +6,8 @@ import ScrollHint from "@/app/layouts/scroll-hint"
 
 import PageBanner from "@/components/page-banner"
 import { createClient } from "@/utils/supabase/server"
-import { MenuItemWithCategory } from "@/types"
 import { Tables } from "@/types/database.types"
+import { adaptMenuItem } from "@/utils/adapters"
 
 const MenuGrid = dynamic(() => import("@/components/menu/menu-grid"))
 
@@ -49,17 +49,18 @@ const Menu = async () => {
 async function getMenu() {
     const supabase = await createClient()
 
-    const { data: menu_items, error: menu_items_err } = await supabase
+    const { data: raw_menu_items, error: menu_items_err } = await supabase
         .from('menu_items')
         .select(`
             *,
             category(*)
         `)
-        .returns<MenuItemWithCategory[]>()
 
     if (menu_items_err) {
         console.error('Error fetching menu items:', menu_items_err)
     }
+
+    const menu_items = raw_menu_items?.map(item => adaptMenuItem(item)) || null
 
     const { data: menu_categories, error: menu_categories_err } = await supabase
         .from('menu_categories')

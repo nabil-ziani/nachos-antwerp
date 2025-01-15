@@ -14,11 +14,11 @@ import { Tables } from './database.types'
 // Menu types
 export type MenuCategory = Tables<'menu_categories'>
 
-export type MenuItem = PrismaMenuItem & {
+export interface MenuItem extends Omit<PrismaMenuItem, 'variations'> {
     variations?: VariationGroup[]
 }
 
-export type MenuItemWithCategory = MenuItem & {
+export interface MenuItemWithCategory extends MenuItem {
     category: MenuCategory
 }
 

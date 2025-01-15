@@ -48,7 +48,7 @@ const MenuGrid = ({ categories, items, columns = 2 }: MenuGridProps) => {
                                     itemId: item.id,
                                     title: item.title,
                                     description: item.description ?? '',
-                                    image: item.image_url,
+                                    image: item.imageUrl,
                                     price: item.price,
                                     currency: item.currency,
                                     quantity: 1,
