@@ -13,7 +13,8 @@ import { Font } from '../custom-font';
 
 interface ReservationConfirmationEmailProps {
     reservation: {
-        customerName: string
+        firstName: string
+        lastName: string
         customerEmail: string
         phoneNumber: string
         date: string
@@ -24,7 +25,8 @@ interface ReservationConfirmationEmailProps {
 }
 
 export const ReservationConfirmationEmail = ({ reservation }: ReservationConfirmationEmailProps) => {
-    const customerFirstName = reservation.customerName.split(' ')[0]
+    const customerName = `${reservation.firstName} ${reservation.lastName}`
+    const customerFirstName = customerName.split(' ')[0]
     const previewText = `Bedankt voor je reservering, ${customerFirstName}!`
 
     return (

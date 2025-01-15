@@ -1,4 +1,3 @@
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -115,7 +114,8 @@ model Reservation {
     id             String      @id @default(uuid())
     restaurant     Restaurant? @relation(fields: [restaurantId], references: [id])
     restaurantId   String?     @map("restaurant_id")
-    customerName   String      @map("customer_name")
+    firstName      String      @map("first_name")
+    lastName       String      @map("last_name")
     customerEmail  String      @map("customer_email")
     phoneNumber    String?     @map("phone_number")
     date           String

@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
 export const reservationSchema = z.object({
-    customerName: z.string().min(2, 'Naam is verplicht'),
+    firstName: z.string().min(2, 'Voornaam is verplicht'),
+    lastName: z.string().min(2, 'Familienaam is verplicht'),
     customerEmail: z.string().email('Ongeldig emailadres'),
     phoneNumber: z.string().min(10, 'Ongeldig telefoonnummer'),
     date: z.string().min(1, 'Datum is verplicht'),
@@ -13,7 +14,8 @@ export const reservationSchema = z.object({
 export type ReservationFormValues = z.infer<typeof reservationSchema>
 
 export const defaultValues: ReservationFormValues = {
-    customerName: '',
+    firstName: '',
+    lastName: '',
     customerEmail: '',
     phoneNumber: '',
     date: '',

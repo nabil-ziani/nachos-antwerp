@@ -13,7 +13,8 @@ import { Font } from '../custom-font';
 
 interface ReservationNotificationEmailProps {
     reservation: {
-        customerName: string;
+        firstName: string;
+        lastName: string;
         customerEmail: string;
         phoneNumber: string;
         date: string;
@@ -56,7 +57,7 @@ export const ReservationNotificationEmail = ({ reservation }: ReservationNotific
                         <Section style={detailsCard}>
                             <Heading as="h2" style={subheading}>Details</Heading>
                             <Text style={infoText}>
-                                {reservation.customerName} heeft een reservering gemaakt voor {reservation.date} om {reservation.time} voor {reservation.numberOfPeople} personen.
+                                {reservation.firstName} {reservation.lastName} heeft een reservering gemaakt voor {reservation.date} om {reservation.time} voor {reservation.numberOfPeople} personen.
                             </Text>
 
                             <Hr style={divider} />

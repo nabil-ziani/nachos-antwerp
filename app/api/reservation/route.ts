@@ -11,8 +11,14 @@ export async function POST(request: Request) {
 
         const reservation = await prisma.reservation.create({
             data: {
-                ...validatedData,
+                firstName: validatedData.firstName,
+                lastName: validatedData.lastName,
+                customerEmail: validatedData.customerEmail,
+                phoneNumber: validatedData.phoneNumber,
+                date: validatedData.date,
+                time: validatedData.time,
                 numberOfPeople: parseInt(validatedData.numberOfPeople),
+                message: validatedData.message,
                 restaurantId: process.env.RESTAURANT_ID
             }
         })

@@ -80,11 +80,19 @@ const ReservationForm = () => {
     return (
         <FormWrapper form={form} onSubmit={onSubmit} className="tst-reservation-form">
             <div className="row">
-                <div className="col-12">
+                <div className="col-12 col-md-4">
                     <FormInput
-                        name="customerName"
+                        name="firstName"
                         type="text"
-                        placeholder="Naam"
+                        placeholder="Voornaam"
+                        required
+                    />
+                </div>
+                <div className="col-12 col-md-4">
+                    <FormInput
+                        name="lastName"
+                        type="text"
+                        placeholder="Familienaam"
                         required
                     />
                 </div>
@@ -96,7 +104,7 @@ const ReservationForm = () => {
                         required
                     />
                 </div>
-                <div className="col-6 col-md-3">
+                <div className="col-12 col-md-3">
                     <FormInput
                         name="numberOfPeople"
                         type="select"
@@ -113,7 +121,7 @@ const ReservationForm = () => {
                         ]}
                     />
                 </div>
-                <div className="col-6 col-md-3">
+                <div className="col-12 col-md-3">
                     <FormInput
                         name="date"
                         type="date"
@@ -121,7 +129,7 @@ const ReservationForm = () => {
                         required
                     />
                 </div>
-                <div className="col-6 col-md-3">
+                <div className="col-12 col-md-3">
                     <FormInput
                         name="time"
                         type="select"
@@ -142,7 +150,7 @@ const ReservationForm = () => {
                         ]}
                     />
                 </div>
-                <div className="col-6 col-md-3">
+                <div className="col-12 col-md-3">
                     <FormInput
                         name="phoneNumber"
                         type="tel"
