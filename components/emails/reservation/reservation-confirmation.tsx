@@ -13,19 +13,19 @@ import { Font } from '../custom-font';
 
 interface ReservationConfirmationEmailProps {
     reservation: {
-        first_name: string
-        last_name: string
-        email: string
-        phone: string
+        customerName: string
+        customerEmail: string
+        phoneNumber: string
         date: string
         time: string
-        guests: number
+        numberOfPeople: string
         message?: string
     }
 }
 
 export const ReservationConfirmationEmail = ({ reservation }: ReservationConfirmationEmailProps) => {
-    const previewText = `Bedankt voor je reservering, ${reservation.first_name}!`
+    const customerFirstName = reservation.customerName.split(' ')[0]
+    const previewText = `Bedankt voor je reservering, ${customerFirstName}!`
 
     return (
         <Html>
@@ -45,7 +45,7 @@ export const ReservationConfirmationEmail = ({ reservation }: ReservationConfirm
                         />
 
                         <Heading style={heading}>
-                            Bedankt voor je reservatie, {reservation.first_name}!
+                            Bedankt voor je reservatie, {customerFirstName}!
                         </Heading>
 
                         <Text style={subText}>
@@ -57,7 +57,7 @@ export const ReservationConfirmationEmail = ({ reservation }: ReservationConfirm
                             <Text style={infoText}>
                                 Datum: {new Date(reservation.date).toLocaleDateString('nl-BE')}<br />
                                 Tijd: {reservation.time}<br />
-                                Aantal personen: {reservation.guests}
+                                Aantal personen: {reservation.numberOfPeople}
                             </Text>
                             {reservation.message && (
                                 <>

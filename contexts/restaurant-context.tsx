@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect } from 'react'
-import { Restaurant } from '@/lib/types'
+import { Restaurant } from '@/types'
 import { createClient } from '@/utils/supabase/client'
 import { checkGeolocationPermission, LocationPermissionState } from '@/utils/location'
 

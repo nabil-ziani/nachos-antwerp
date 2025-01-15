@@ -6,7 +6,6 @@ import toast from 'react-hot-toast'
 import { FormWrapper } from './layout/form-wrapper'
 import { FormInput } from './layout/form-input'
 import { contactSchema, ContactFormValues, defaultValues } from '@/lib/schemas/contact-schema'
-import { createClient } from '@/utils/supabase/client'
 
 const ContactForm = () => {
     const form = useForm<ContactFormValues>({
@@ -17,14 +16,20 @@ const ContactForm = () => {
 
     const onSubmit = async (values: ContactFormValues) => {
         try {
-            // 1. Bericht opslaan in database
+            // 1. Bericht opslaan in database en notificatie versturen
             await toast.promise(
-                (async () => {
-                    const { error } = await createClient()
-                        .from('contact_messages')
-                        .insert([values])
-                    if (error) throw error
-                })(),
+                fetch('/api/email/contact-notification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(values)
+                }).then(async (response) => {
+                    if (!response.ok) {
+                        const error = await response.json()
+                        throw new Error(error.message)
+                    }
+                }),
                 {
                     loading: 'Bericht opslaan...',
                     success: 'Je bericht is succesvol verzonden!',
@@ -32,26 +37,15 @@ const ContactForm = () => {
                 }
             )
 
-            // 2. Emails versturen
-            Promise.allSettled([
-                // Notificatie naar eigenaar
-                fetch('/api/email/contact-notification', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ contact: values })
-                }),
-                // Bevestiging naar klant
-                fetch('/api/email/contact-confirmation', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ contact: values })
-                })
-            ]).catch(error => {
-                console.error('Error sending emails:', error)
+            // 2. Bevestiging naar klant
+            fetch('/api/email/contact-confirmation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ contact: values })
+            }).catch(error => {
+                console.error('Error sending confirmation email:', error)
             })
 
             // 3. Form resetten
@@ -71,7 +65,7 @@ const ContactForm = () => {
             <div className="row">
                 <div className="col-lg-6">
                     <FormInput
-                        name="first_name"
+                        name="firstName"
                         type="text"
                         placeholder="Voornaam"
                         required
@@ -79,7 +73,7 @@ const ContactForm = () => {
                 </div>
                 <div className="col-lg-6">
                     <FormInput
-                        name="last_name"
+                        name="lastName"
                         type="text"
                         placeholder="Familienaam"
                         required

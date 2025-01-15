@@ -15,18 +15,35 @@ import { Font } from '../custom-font';
 
 interface OrderConfirmationEmailProps {
     order: {
-        items: any[];
-        total: number;
-        customer: {
-            name: string;
-            email: string;
-            address: string;
-            postcode: string;
+        orderId: string;
+        amount: number;
+        customerName: string;
+        customerEmail: string;
+        customerPhone: string;
+        customerCompany: string | null;
+        customerVatNumber: string | null;
+        deliveryMethod: 'pickup' | 'delivery';
+        orderItems: {
+            title: string;
+            price: number;
+            quantity: number;
+            selectedVariations?: {
+                [groupTitle: string]: {
+                    name: string;
+                    price: number;
+                    quantity: number;
+                }[];
+            };
+        }[];
+        paymentMethod: 'cash' | 'payconiq';
+        paymentStatus: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
+        notes: string | null;
+        deliveryAddress: {
+            street: string;
             city: string;
-            message?: string;
-        };
-        delivery_method: string;
-        payment_method: string;
+            postcode: string;
+        } | null;
+        restaurantId: string;
     };
 }
 
@@ -57,45 +74,45 @@ export const OrderConfirmationEmail = ({ order }: OrderConfirmationEmailProps) =
                 <Container style={container}>
                     <Section style={notificationCard}>
                         <img
-                            src="https://nachosantwerp.be/img/logo-sm.png"
-                            width="100"
+                            src="https://tacosanto.be/img/logo/logo-dark.png"
+                            width="200"
                             height="auto"
-                            alt="logo"
+                            alt="Taco Santo"
                             style={logo}
                         />
-
-                        <Heading style={heading}>
+                        <Heading as="h1" style={heading}>
                             Bedankt voor je bestelling!
                         </Heading>
-
                         <Text style={subText}>
-                            {order.customer.email}
+                            We hebben je bestelling #{order.orderId} goed ontvangen.
                         </Text>
 
                         <Section style={detailsCard}>
                             <Heading as="h2" style={subheading}>Bestelling</Heading>
-                            {order.items.map((item, index) => (
+                            {order.orderItems.map((item, index) => (
                                 <div key={index}>
                                     <Row style={orderItemRow}>
                                         <Column>
                                             <Text style={itemTitle}>{item.title}</Text>
-                                            {renderVariations(item)}
+                                            {item.selectedVariations && renderVariations(item)}
                                             <Text style={itemQuantity}>Aantal: {item.quantity}</Text>
                                         </Column>
                                         <Column align="right">
                                             <Text style={itemPrice}>€{(item.price * item.quantity).toFixed(2)}</Text>
                                         </Column>
                                     </Row>
-                                    {index < order.items.length - 1 && <Hr style={itemDivider} />}
+                                    {index < order.orderItems.length - 1 && <Hr style={itemDivider} />}
                                 </div>
                             ))}
+
                             <Hr style={divider} />
+
                             <Row style={totalRow}>
                                 <Column>
                                     <Text style={totalLabel}>Totaal</Text>
                                 </Column>
                                 <Column align="right">
-                                    <Text style={totalAmount}>€{(order.total * 0.9).toFixed(2)}</Text>
+                                    <Text style={totalAmount}>€{order.amount.toFixed(2)}</Text>
                                 </Column>
                             </Row>
                         </Section>
@@ -103,15 +120,21 @@ export const OrderConfirmationEmail = ({ order }: OrderConfirmationEmailProps) =
                         <Section style={detailsCard}>
                             <Heading as="h2" style={subheading}>Bezorggegevens</Heading>
                             <Text style={infoText}>
-                                {order.customer.name}<br />
-                                {order.customer.address}<br />
-                                {order.customer.postcode} {order.customer.city}
+                                {order.customerName}<br />
+                                {order.customerPhone}<br />
+                                {order.customerEmail}
                             </Text>
-                            {order.customer.message && (
+                            {order.deliveryAddress && (
+                                <Text style={infoText}>
+                                    {order.deliveryAddress.street}<br />
+                                    {order.deliveryAddress.postcode} {order.deliveryAddress.city}
+                                </Text>
+                            )}
+                            {order.notes && (
                                 <>
                                     <Hr style={divider} />
                                     <Text style={messageText}>
-                                        {order.customer.message}
+                                        {order.notes}
                                     </Text>
                                 </>
                             )}
@@ -120,8 +143,8 @@ export const OrderConfirmationEmail = ({ order }: OrderConfirmationEmailProps) =
                         <Section style={detailsCard}>
                             <Heading as="h2" style={subheading}>Bezorging & Betaling</Heading>
                             <Text style={infoText}>
-                                Bezorgmethode: {order.delivery_method}<br />
-                                Betaalmethode: {order.payment_method}
+                                Bezorgmethode: {order.deliveryMethod === 'delivery' ? 'Levering' : 'Afhalen'}<br />
+                                Betaalmethode: {order.paymentMethod === 'cash' ? 'Cash' : 'Payconiq'}
                             </Text>
                         </Section>
 
@@ -129,17 +152,28 @@ export const OrderConfirmationEmail = ({ order }: OrderConfirmationEmailProps) =
 
                         <Section style={footerSection}>
                             <Text style={footerText}>
-                                Nacho's Antwerp
+                                Vragen over je bestelling?
                             </Text>
                             <Text style={footerContact}>
-                                Diksmuidelaan 170, 2600 Berchem<br />
-                                <a href="tel:+32467071874" style={footerLink}>+32 467 07 18 74</a><br />
-                                <a href="mailto:info@nachosantwerp.be" style={footerLink}>info@nachosantwerp.be</a>
+                                Bel of WhatsApp ons op{' '}
+                                <a href="tel:+32468198849" style={footerLink}>
+                                    +32 468 19 88 49
+                                </a>
+                                <br />
+                                Of mail naar{' '}
+                                <a href="mailto:info@tacosanto.be" style={footerLink}>
+                                    info@tacosanto.be
+                                </a>
                             </Text>
                             <Text style={footerSocial}>
-                                <a href="https://www.instagram.com/nachosantwerp" style={socialLink}>Instagram</a>
-                                {' • '}
-                                <a href="https://www.facebook.com/profile.php?id=61550605400792" style={socialLink}>Facebook</a>
+                                Volg ons op{' '}
+                                <a href="https://www.instagram.com/tacosanto.be" style={socialLink}>
+                                    Instagram
+                                </a>
+                                {' '}en{' '}
+                                <a href="https://www.facebook.com/tacosanto.be" style={socialLink}>
+                                    Facebook
+                                </a>
                             </Text>
                         </Section>
                     </Section>
@@ -252,30 +286,27 @@ const itemPrice = {
     fontSize: '16px',
     color: '#1a2f33',
     fontWeight: '600',
-    margin: '0',
 };
 
 const itemDivider = {
-    borderTop: 'dashed 1px rgba(26, 47, 51, 0.1)',
+    borderTop: 'solid 1px #e2e8f0',
     margin: '12px 0',
 };
 
 const totalRow = {
-    margin: '0',
+    marginTop: '12px',
 };
 
 const totalLabel = {
     fontSize: '18px',
     color: '#1a2f33',
-    fontWeight: '700',
-    margin: '0',
+    fontWeight: '600',
 };
 
 const totalAmount = {
     fontSize: '18px',
     color: '#1a2f33',
-    fontWeight: '700',
-    margin: '0',
+    fontWeight: '600',
 };
 
 const footerSection = {

@@ -11,7 +11,7 @@ interface DeliveryDetailsProps {
 export const DeliveryDetails = ({ form }: DeliveryDetailsProps) => {
     const { watch } = form
     const company = watch('company')
-    const delivery_method = watch('delivery_method')
+    const deliveryMethod = watch('deliveryMethod')
 
     return (
         <>
@@ -21,7 +21,7 @@ export const DeliveryDetails = ({ form }: DeliveryDetailsProps) => {
             <div className="row">
                 <div className="col-lg-6">
                     <FormInput
-                        name="firstname"
+                        name="firstName"
                         label="Voornaam"
                         required
                         placeholder="Voornaam"
@@ -30,7 +30,7 @@ export const DeliveryDetails = ({ form }: DeliveryDetailsProps) => {
                 </div>
                 <div className="col-lg-6">
                     <FormInput
-                        name="lastname"
+                        name="lastName"
                         label="Familienaam"
                         required
                         placeholder="Familienaam"
@@ -78,7 +78,7 @@ export const DeliveryDetails = ({ form }: DeliveryDetailsProps) => {
                     <FormInput
                         name="postcode"
                         label="Postcode"
-                        required={delivery_method === 'delivery'}
+                        required={deliveryMethod === 'delivery'}
                         placeholder="2600"
                         autoComplete="postal-code"
                     />
@@ -87,7 +87,7 @@ export const DeliveryDetails = ({ form }: DeliveryDetailsProps) => {
                     <FormInput
                         name="city"
                         label="Gemeente"
-                        required={delivery_method === 'delivery'}
+                        required={deliveryMethod === 'delivery'}
                         placeholder="Berchem"
                         autoComplete="address-level2"
                     />
@@ -96,7 +96,7 @@ export const DeliveryDetails = ({ form }: DeliveryDetailsProps) => {
                     <FormInput
                         name="address"
                         label="Adres"
-                        required={delivery_method === 'delivery'}
+                        required={deliveryMethod === 'delivery'}
                         placeholder="Diksmuidelaan 170"
                         autoComplete="street-address"
                     />

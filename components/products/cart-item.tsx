@@ -2,7 +2,7 @@
 "use client";
 
 import { useCart } from "@/hooks/useCart";
-import { CartItem as CartItemType } from "@/lib/types";
+import { CartItem as CartItemType } from "@/types";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 

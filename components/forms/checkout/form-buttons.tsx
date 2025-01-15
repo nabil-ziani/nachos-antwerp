@@ -13,7 +13,7 @@ interface FormButtonsProps {
 
 export const FormButtons = ({ form, orderId }: FormButtonsProps) => {
     const { formState: { isSubmitting, isValid }, getValues } = form
-    const payment_method = form.watch('payment_method')
+    const paymentMethod = form.watch('paymentMethod')
     const { cartTotal: totalAmount, cartItems } = useCart()
     const { selectedRestaurant } = useRestaurant()
 
@@ -21,7 +21,7 @@ export const FormButtons = ({ form, orderId }: FormButtonsProps) => {
 
     return (
         <div className="tst-button-group">
-            {payment_method === 'payconiq' ? (
+            {paymentMethod === 'payconiq' ? (
                 <PayconiqButton
                     amount={totalAmount}
                     orderId={orderId}

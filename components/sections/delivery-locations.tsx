@@ -23,7 +23,7 @@ export function DeliveryLocationsSection() {
                             <p className="tst-text mb-3">{restaurant.address}</p>
                             <div className="tst-postal-codes">
                                 <strong>Bezorging mogelijk in:</strong>
-                                <p>{restaurant.allowed_postalcodes?.join(', ')}</p>
+                                <p>{restaurant.allowedPostalcodes?.join(', ')}</p>
                             </div>
                         </div>
                     </div>

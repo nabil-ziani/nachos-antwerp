@@ -1,4 +1,4 @@
-import { Restaurant } from '@/lib/types'
+import { Restaurant } from '@/types'
 
 // Helper function to calculate distance between two points in km
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -71,18 +71,18 @@ export function findNearestRestaurant(restaurants: Restaurant[], userLat: number
 
 export function findRestaurantByPostalCode(restaurants: Restaurant[], selectedRestaurant: Restaurant | null, postalCode: string) {
     // First check current restaurant
-    if (selectedRestaurant?.allowed_postalcodes?.includes(postalCode)) {
-        const minimumAmount = selectedRestaurant.delivery_minimums?.[postalCode] || null;
+    if (selectedRestaurant?.allowedPostalcodes?.includes(postalCode)) {
+        const minimumAmount = selectedRestaurant.deliveryMinimums?.[postalCode] || null;
         return { restaurant: selectedRestaurant, minimumAmount, switchRequired: false };
     }
 
     // Check other restaurants
     const availableRestaurant = restaurants.find(r =>
-        r.allowed_postalcodes?.includes(postalCode)
+        r.allowedPostalcodes?.includes(postalCode)
     );
 
     if (availableRestaurant) {
-        const minimumAmount = availableRestaurant.delivery_minimums?.[postalCode] || null;
+        const minimumAmount = availableRestaurant.deliveryMinimums?.[postalCode] || null;
         return {
             restaurant: availableRestaurant,
             minimumAmount,

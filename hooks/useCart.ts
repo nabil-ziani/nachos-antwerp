@@ -1,6 +1,6 @@
 'use client'
 
-import { CartItem } from '@/lib/types'
+import { CartItem } from '@/types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 

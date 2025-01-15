@@ -13,8 +13,8 @@ import { Font } from '../custom-font';
 
 interface ContactNotificationEmailProps {
     contact: {
-        first_name: string
-        last_name: string
+        firstName: string
+        lastName: string
         email: string
         phone: string
         message: string
@@ -22,7 +22,7 @@ interface ContactNotificationEmailProps {
 }
 
 export const ContactNotificationEmail = ({ contact }: ContactNotificationEmailProps) => {
-    const previewText = `Nieuw bericht van ${contact.first_name} ${contact.last_name}`
+    const previewText = `Nieuw bericht van ${contact.firstName} ${contact.lastName}`
 
     return (
         <Html>
@@ -56,7 +56,7 @@ export const ContactNotificationEmail = ({ contact }: ContactNotificationEmailPr
                         <Section style={detailsCard}>
                             <Heading as="h2" style={subheading}>Details</Heading>
                             <Text style={infoText}>
-                                {contact.first_name} {contact.last_name} heeft je een bericht gestuurd.
+                                {contact.firstName} {contact.lastName} heeft je een bericht gestuurd.
                             </Text>
 
                             <Hr style={divider} />

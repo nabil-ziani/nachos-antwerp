@@ -5,7 +5,7 @@ import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
 
 import { useCart } from "@/hooks/useCart"
-import { CartItem, VariationGroup, VariationOption, CartItemVariation } from "@/lib/types"
+import { CartItem, VariationGroup, VariationOption, CartItemVariation } from "@/types"
 
 const MenuItem = ({ item }: { item: CartItem }) => {
   const [img, setImg] = useState(false)

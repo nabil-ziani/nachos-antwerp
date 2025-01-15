@@ -85,7 +85,7 @@ const CheckoutForm = () => {
     const onSubmit = async (values: CheckoutFormValues) => {
         try {
             // 1. Validatie
-            if (values.delivery_method === 'delivery' && values.postcode) {
+            if (values.deliveryMethod === 'delivery' && values.postcode) {
                 const { minimumAmount } = findRestaurantByPostalCode(restaurants, selectedRestaurant, values.postcode)
                 if (minimumAmount && totalAmount < minimumAmount) {
                     throw new Error(`Voor bezorging in ${values.postcode} is het minimum bestelbedrag €${minimumAmount.toFixed(2)}`)
@@ -93,10 +93,10 @@ const CheckoutForm = () => {
             }
 
             // 2. Details opslaan als nodig
-            if (values.remember_details) {
+            if (values.rememberDetails) {
                 const detailsToSave = {
-                    firstname: values.firstname,
-                    lastname: values.lastname,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
                     email: values.email,
                     tel: values.tel,
                     company: values.company,
@@ -104,8 +104,8 @@ const CheckoutForm = () => {
                     city: values.city,
                     address: values.address,
                     postcode: values.postcode,
-                    payment_method: values.payment_method,
-                    delivery_method: values.delivery_method,
+                    paymentMethod: values.paymentMethod,
+                    deliveryMethod: values.deliveryMethod,
                     message: values.message
                 }
                 localStorage.setItem('user-checkout-details', JSON.stringify(detailsToSave))

@@ -3,14 +3,12 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
-import { createClient } from '@/utils/supabase/client'
 import { useRestaurant } from '@/contexts/restaurant-context'
 import { FormWrapper } from './layout/form-wrapper'
 import { FormInput } from './layout/form-input'
 import { reservationSchema, ReservationFormValues, defaultValues } from '@/lib/schemas/reservation-schema'
 
 const ReservationForm = () => {
-    const supabase = createClient()
     const { selectedRestaurant } = useRestaurant()
 
     const form = useForm<ReservationFormValues>({
@@ -23,21 +21,18 @@ const ReservationForm = () => {
         try {
             // 1. Reservering opslaan in database
             await toast.promise(
-                (async () => {
-                    const { error } = await supabase
-                        .from('reservations')
-                        .insert({
-                            customer_name: `${values.firstname} ${values.lastname}`,
-                            customer_email: values.email,
-                            date: values.date,
-                            time: values.time,
-                            number_of_people: values.person,
-                            message: values.message,
-                            phone_number: values.phone,
-                            restaurant_id: selectedRestaurant?.id
-                        })
-                    if (error) throw error
-                })(),
+                fetch('/api/reservation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(values)
+                }).then(async (response) => {
+                    if (!response.ok) {
+                        const error = await response.json()
+                        throw new Error(error.message)
+                    }
+                }),
                 {
                     loading: 'Reservering opslaan...',
                     success: 'Je reservering is succesvol ontvangen!',
@@ -85,25 +80,17 @@ const ReservationForm = () => {
     return (
         <FormWrapper form={form} onSubmit={onSubmit} className="tst-reservation-form">
             <div className="row">
-                <div className="col-6 col-md-4">
+                <div className="col-12">
                     <FormInput
-                        name="firstname"
+                        name="customerName"
                         type="text"
-                        placeholder="Voornaam"
-                        required
-                    />
-                </div>
-                <div className="col-6 col-md-4">
-                    <FormInput
-                        name="lastname"
-                        type="text"
-                        placeholder="Familienaam"
+                        placeholder="Naam"
                         required
                     />
                 </div>
                 <div className="col-12 col-md-4">
                     <FormInput
-                        name="email"
+                        name="customerEmail"
                         type="email"
                         placeholder="Email"
                         required
@@ -111,7 +98,7 @@ const ReservationForm = () => {
                 </div>
                 <div className="col-6 col-md-3">
                     <FormInput
-                        name="person"
+                        name="numberOfPeople"
                         type="select"
                         placeholder="Aantal Personen"
                         required
@@ -157,7 +144,7 @@ const ReservationForm = () => {
                 </div>
                 <div className="col-6 col-md-3">
                     <FormInput
-                        name="phone"
+                        name="phoneNumber"
                         type="tel"
                         placeholder="Telefoonnummer"
                         required

@@ -1,12 +1,12 @@
 import { z } from 'zod'
-import { Restaurant } from '../types'
+import { Restaurant, DeliveryMethod, PaymentMethod } from '@/types'
 import { findRestaurantByPostalCode } from '@/utils/location'
 
 // Helper function to create a context-aware validator
 const createContextValidator = (totalAmount: number, selectedRestaurant: Restaurant | null, restaurants: Restaurant[]) => {
     return z.object({
-        firstname: z.string().min(1, 'Voornaam is verplicht'),
-        lastname: z.string().min(1, 'Familienaam is verplicht'),
+        firstName: z.string().min(1, 'Voornaam is verplicht'),
+        lastName: z.string().min(1, 'Familienaam is verplicht'),
         email: z.string().min(1, 'Email is verplicht').email('Ongeldige mailadres'),
         tel: z.string().min(1, 'Telefoonnummer is verplicht'),
         company: z.string().default(''),
@@ -30,7 +30,7 @@ const createContextValidator = (totalAmount: number, selectedRestaurant: Restaur
             }),
         city: z.string().default('')
             .superRefine((val, ctx) => {
-                if ((ctx as any).parent.delivery_method === 'delivery' && !val) {
+                if ((ctx as any).parent.deliveryMethod === DeliveryMethod.delivery && !val) {
                     ctx.addIssue({
                         code: z.ZodIssueCode.custom,
                         message: 'Stad is verplicht voor bezorging'
@@ -39,7 +39,7 @@ const createContextValidator = (totalAmount: number, selectedRestaurant: Restaur
             }),
         address: z.string().default('')
             .superRefine((val, ctx) => {
-                if ((ctx as any).parent.delivery_method === 'delivery' && !val) {
+                if ((ctx as any).parent.deliveryMethod === DeliveryMethod.delivery && !val) {
                     ctx.addIssue({
                         code: z.ZodIssueCode.custom,
                         message: 'Adres is verplicht voor bezorging'
@@ -48,7 +48,7 @@ const createContextValidator = (totalAmount: number, selectedRestaurant: Restaur
             }),
         postcode: z.string().default('')
             .superRefine((val, ctx) => {
-                if ((ctx as any).parent.delivery_method === 'delivery') {
+                if ((ctx as any).parent.deliveryMethod === DeliveryMethod.delivery) {
                     if (!val) {
                         ctx.addIssue({
                             code: z.ZodIssueCode.custom,
@@ -74,7 +74,7 @@ const createContextValidator = (totalAmount: number, selectedRestaurant: Restaur
                             return
                         }
                         // Check if restaurant delivers to this postal code
-                        if (!selectedRestaurant.allowed_postalcodes?.includes(val)) {
+                        if (!selectedRestaurant.allowedPostalcodes?.includes(val)) {
                             ctx.addIssue({
                                 code: z.ZodIssueCode.custom,
                                 message: `We bezorgen niet in ${val}.`
@@ -84,25 +84,25 @@ const createContextValidator = (totalAmount: number, selectedRestaurant: Restaur
                 }
             }),
         message: z.string().default(''),
-        payment_method: z.enum(['cash', 'payconiq']),
-        delivery_method: z.enum(['pickup', 'delivery'])
+        paymentMethod: z.nativeEnum(PaymentMethod),
+        deliveryMethod: z.nativeEnum(DeliveryMethod)
             .superRefine((val, ctx) => {
-                if (!selectedRestaurant && val === 'delivery') {
+                if (!selectedRestaurant && val === DeliveryMethod.delivery) {
                     ctx.addIssue({
                         code: z.ZodIssueCode.custom,
                         message: 'Selecteer eerst een restaurant'
                     })
                 }
             }),
-        remember_details: z.boolean().default(true)
+        rememberDetails: z.boolean().default(true)
     })
 }
 
 export type CheckoutFormValues = z.infer<ReturnType<typeof createContextValidator>>
 
 export const defaultValues: CheckoutFormValues = {
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     tel: '',
     company: '',
@@ -111,9 +111,9 @@ export const defaultValues: CheckoutFormValues = {
     address: '',
     postcode: '',
     message: '',
-    payment_method: 'cash',
-    delivery_method: 'pickup',
-    remember_details: true
+    paymentMethod: PaymentMethod.cash,
+    deliveryMethod: DeliveryMethod.pickup,
+    rememberDetails: true
 }
 
 export const createCheckoutSchema = (totalAmount: number, selectedRestaurant: Restaurant | null, restaurants: Restaurant[]) => {

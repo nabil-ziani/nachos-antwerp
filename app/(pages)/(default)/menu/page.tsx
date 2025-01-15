@@ -6,7 +6,7 @@ import ScrollHint from "@/app/layouts/scroll-hint"
 
 import PageBanner from "@/components/page-banner"
 import { createClient } from "@/utils/supabase/server"
-import { MenuItemWithCategory } from "@/lib/types"
+import { MenuItemWithCategory } from "@/types"
 import { Tables } from "@/types/database.types"
 
 const MenuGrid = dynamic(() => import("@/components/menu/menu-grid"))

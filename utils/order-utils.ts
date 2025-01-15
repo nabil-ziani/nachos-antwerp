@@ -1,4 +1,4 @@
-import { CheckoutFormValues, CartItem, Restaurant } from '@/lib/types';
+import { CheckoutFormValues, CartItem, Restaurant } from '@/types';
 
 export function createOrderData(
     orderId: string,
@@ -9,22 +9,22 @@ export function createOrderData(
     //coordinates: { latitude: number; longitude: number } | null
 ) {
     return {
-        order_id: orderId,
-        payment_method: values.payment_method,
-        payment_status: values.payment_method === 'cash' ? 'completed' : 'pending',
+        orderId: orderId,
+        paymentMethod: values.paymentMethod,
+        paymentStatus: values.paymentMethod === 'cash' ? 'completed' : 'pending',
         amount: totalAmount,
-        customer_name: `${values.firstname} ${values.lastname}`,
-        customer_email: values.email,
-        customer_phone: values.tel,
-        customer_company: values.company,
-        customer_vatnumber: values.vatNumber,
-        delivery_method: values.delivery_method,
-        delivery_address: values.delivery_method === 'delivery' ? {
+        customerName: `${values.firstName} ${values.lastName}`,
+        customerEmail: values.email,
+        customerPhone: values.tel,
+        customerCompany: values.company,
+        customerVatNumber: values.vatNumber,
+        deliveryMethod: values.deliveryMethod,
+        deliveryAddress: values.deliveryMethod === 'delivery' ? {
             street: values.address,
             city: values.city,
             postcode: values.postcode
         } : null,
-        order_items: cartItems.map(item => ({
+        orderItems: cartItems.map(item => ({
             title: item.title,
             price: item.price,
             quantity: item.quantity,
@@ -33,7 +33,7 @@ export function createOrderData(
             image: item.image,
             selectedVariations: item.selectedVariations || null
         })),
-        restaurant_id: selectedRestaurant?.id,
+        restaurantId: selectedRestaurant?.id,
         notes: values.message,
         //latitude: coordinates?.latitude || null,
         //longitude: coordinates?.longitude || null,

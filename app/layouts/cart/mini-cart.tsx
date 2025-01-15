@@ -1,6 +1,5 @@
 "use client"
 
-import Link from 'next/link'
 import { useCart } from "@/hooks/useCart"
 import { useRouter } from 'next/navigation'
 import { useState, useRef, useEffect, MouseEvent } from 'react'
@@ -10,6 +9,8 @@ const MiniCart = () => {
     const [isNavigating, setIsNavigating] = useState(false)
     const { cartItems, cartTotal, removeFromCart, setMiniCart } = useCart()
     const miniCartRef = useRef<HTMLDivElement>(null);
+
+    console.log('cartItems', cartItems)
 
     useEffect(() => {
         const cartNumberEl = document.querySelector('.tst-cart-number')

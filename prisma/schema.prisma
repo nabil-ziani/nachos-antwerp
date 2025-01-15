@@ -1,0 +1,142 @@
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+}
+
+// Enums
+enum DeliveryMethod {
+    pickup
+    delivery
+}
+
+enum PaymentMethod {
+    payconiq
+    cash
+}
+
+enum PaymentStatus {
+    pending
+    processing
+    completed
+    failed
+    cancelled
+}
+
+enum OrderStatus {
+    pending
+    accepted
+    completed
+    cancelled
+}
+
+// Models
+model Restaurant {
+    id                 String        @id @default(uuid())
+    name               String
+    address            String
+    phone              String
+    latitude           Float?
+    longitude          Float?
+    allowedPostalcodes String[]
+    deliveryMinimums   Json? // Stored as JSON: { "2000": 20, "2600": 25 }
+    orders             Order[]
+    reservations       Reservation[]
+    createdAt          DateTime      @default(now())
+    updatedAt          DateTime      @updatedAt
+
+    @@map("restaurant")
+}
+
+model MenuCategory {
+    id          String     @id @default(uuid())
+    name        String
+    slug        String     @unique
+    subtitle    String
+    description String?
+    menuItems   MenuItem[]
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+
+    @@map("menu_categories")
+}
+
+model MenuItem {
+    id          String       @id @default(uuid())
+    title       String
+    description String?
+    extraInfo   String?      @map("extra_info")
+    price       Float
+    currency    String       @default("€")
+    imageUrl    String       @map("image_url")
+    variations  Json? // Stored as JSON for flexible variation structure
+    category    MenuCategory @relation(fields: [categoryId], references: [id])
+    categoryId  String       @map("category")
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    isAvailable Boolean      @default(true) // New field for Sanity integration
+
+    @@map("menu_items")
+}
+
+model Order {
+    id                String         @id @default(uuid())
+    orderId           String         @unique // External ID for customer reference
+    restaurant        Restaurant     @relation(fields: [restaurantId], references: [id])
+    restaurantId      String         @map("restaurant_id")
+    customerName      String         @map("customer_name")
+    customerEmail     String         @map("customer_email")
+    customerPhone     String         @map("customer_phone")
+    customerCompany   String?        @map("customer_company")
+    customerVatNumber String?        @map("customer_vatnumber")
+    amount            Float
+    orderItems        Json           @map("order_items") // Stored as JSON for flexibility
+    deliveryMethod    DeliveryMethod
+    paymentMethod     PaymentMethod
+    paymentStatus     PaymentStatus
+    status            OrderStatus    @default(pending)
+    notes             String?
+    deliveryAddress   Json?          @map("delivery_address")
+    latitude          Float?
+    longitude         Float?
+    printed           Boolean?
+    createdAt         DateTime       @default(now())
+    updatedAt         DateTime       @updatedAt
+
+    @@map("orders")
+}
+
+model Reservation {
+    id             String      @id @default(uuid())
+    restaurant     Restaurant? @relation(fields: [restaurantId], references: [id])
+    restaurantId   String?     @map("restaurant_id")
+    customerName   String      @map("customer_name")
+    customerEmail  String      @map("customer_email")
+    phoneNumber    String?     @map("phone_number")
+    date           String
+    time           String
+    numberOfPeople Int         @map("number_of_people")
+    message        String?
+    createdAt      DateTime    @default(now())
+    updatedAt      DateTime    @updatedAt
+
+    @@map("reservations")
+}
+
+model ContactMessage {
+    id        String   @id @default(uuid())
+    firstName String   @map("first_name")
+    lastName  String   @map("last_name")
+    email     String
+    phone     String
+    message   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("contact_messages")
+}

@@ -13,8 +13,8 @@ import { Font } from '../custom-font';
 
 interface ContactConfirmationEmailProps {
     contact: {
-        first_name: string
-        last_name: string
+        firstName: string
+        lastName: string
         email: string
         phone: string
         message: string
@@ -22,7 +22,7 @@ interface ContactConfirmationEmailProps {
 }
 
 export const ContactConfirmationEmail = ({ contact }: ContactConfirmationEmailProps) => {
-    const previewText = `Bedankt voor je bericht, ${contact.first_name}!`
+    const previewText = `Bedankt voor je bericht, ${contact.firstName}!`
 
     return (
         <Html>
@@ -42,7 +42,7 @@ export const ContactConfirmationEmail = ({ contact }: ContactConfirmationEmailPr
                         />
 
                         <Heading style={heading}>
-                            Bedankt voor je bericht, {contact.first_name}!
+                            Bedankt voor je bericht, {contact.firstName}!
                         </Heading>
 
                         <Text style={subText}>

@@ -4,7 +4,7 @@ import { SliderProps } from "@/app/common/slider-props"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import MenuItem from "@/components/menu/menu-item"
-import { MenuCategory, MenuItemWithCategory } from "@/lib/types";
+import { MenuCategory, MenuItemWithCategory } from "@/types";
 
 interface MenuFilteredProps {
     heading?: any
@@ -48,7 +48,7 @@ const MenuFiltered = ({ heading = 0, categories, items }: MenuFilteredProps) => 
                                             <MenuItem item={{
                                                 itemId: item.id,
                                                 title: item.title,
-                                                description: item.description,
+                                                description: item.description ?? '',
                                                 image: item.image_url,
                                                 price: item.price,
                                                 currency: item.currency,

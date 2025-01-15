@@ -6,7 +6,7 @@ import { usePayment } from "@/contexts/payment-context"
 import { useRestaurant } from "@/contexts/restaurant-context"
 // import { geocodeAddress } from '@/utils/geocode';
 import { createOrderData } from "@/utils/order-utils"
-import { CheckoutFormValues } from "@/lib/types"
+import { CheckoutFormValues } from "@/types"
 
 interface PayconiqButtonProps {
     amount: number
@@ -56,7 +56,7 @@ export function PayconiqButton({ amount, orderId, className, onPaymentCreated, o
 
             // Get coordinates of customer address
             /*let coordinates = null
-            if (formValues.delivery_method === 'delivery') {
+            if (formValues.deliveryMethod === 'delivery') {
                 const address = `${formValues.address}, ${formValues.postcode} ${formValues.city}`;
                 coordinates = await geocodeAddress(address);
 

@@ -1,4 +1,4 @@
-import { Restaurant } from '@/lib/types';
+import { Restaurant } from '@/types';
 
 interface LocationConfirmationProps {
     selectedRestaurant: Restaurant | null;

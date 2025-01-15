@@ -9,8 +9,8 @@ interface PaymentMethodsProps {
 
 export const PaymentMethods = ({ form }: PaymentMethodsProps) => {
     const { register, watch } = form
-    const delivery_method = watch('delivery_method')
-    const payment_method = watch('payment_method')
+    const deliveryMethod = watch('deliveryMethod')
+    const paymentMethod = watch('paymentMethod')
 
     return (
         <>
@@ -23,7 +23,7 @@ export const PaymentMethods = ({ form }: PaymentMethodsProps) => {
                         type="radio"
                         id="pickup"
                         value="pickup"
-                        {...register('delivery_method')}
+                        {...register('deliveryMethod')}
                     />
                     <label htmlFor="pickup">Afhalen</label>
                     <div className="tst-check"></div>
@@ -33,7 +33,7 @@ export const PaymentMethods = ({ form }: PaymentMethodsProps) => {
                         type="radio"
                         id="delivery"
                         value="delivery"
-                        {...register('delivery_method')}
+                        {...register('deliveryMethod')}
                     />
                     <label htmlFor="delivery">Levering</label>
                     <div className="tst-check"></div>
@@ -49,7 +49,7 @@ export const PaymentMethods = ({ form }: PaymentMethodsProps) => {
                         type="radio"
                         id="cash"
                         value="cash"
-                        {...register('payment_method')}
+                        {...register('paymentMethod')}
                     />
                     <label htmlFor="cash">Cash</label>
                     <div className="tst-check"></div>
@@ -59,7 +59,7 @@ export const PaymentMethods = ({ form }: PaymentMethodsProps) => {
                         type="radio"
                         id="payconiq"
                         value="payconiq"
-                        {...register('payment_method')}
+                        {...register('paymentMethod')}
                     />
                     <label htmlFor="payconiq">Payconiq</label>
                     <div className="tst-check"></div>

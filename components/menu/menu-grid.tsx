@@ -1,7 +1,7 @@
 "use client"
 
 import MenuItem from "@/components/menu/menu-item"
-import { MenuCategory, MenuItemWithCategory } from "@/lib/types";
+import { MenuCategory, MenuItemWithCategory } from "@/types";
 
 interface MenuGridProps {
     items: MenuItemWithCategory[] | null
@@ -47,7 +47,7 @@ const MenuGrid = ({ categories, items, columns = 2 }: MenuGridProps) => {
                                 <MenuItem item={{
                                     itemId: item.id,
                                     title: item.title,
-                                    description: item.description,
+                                    description: item.description ?? '',
                                     image: item.image_url,
                                     price: item.price,
                                     currency: item.currency,
